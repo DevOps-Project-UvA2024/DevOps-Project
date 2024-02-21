@@ -1,5 +1,5 @@
 #!/bin/bash
 cd /var/www/html/devopsportal
 sudo apt update
-sudo apt install nodejs npm
+sudo apt install nodejs npm -y
 npm install
