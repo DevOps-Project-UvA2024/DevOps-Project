@@ -83,7 +83,7 @@ const SignUp = () => {
   };
 
   const redirectToSignIn = () => {
-    navigate('/signin'); // Adjust the path as needed
+    navigate('/signin'); 
   };
 
   return (
