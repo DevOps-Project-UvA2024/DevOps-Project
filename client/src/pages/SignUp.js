@@ -68,9 +68,9 @@ const SignUp = () => {
       <Form
         name="register"
         onFinish={handleFinish}
-        layout="vertical"
         onFinishFailed={handleFinishFailed}
         autoComplete="off"
+        layout="vertical"
       >
         <Form.Item
           label="Username"

@@ -14,8 +14,6 @@ const CenteredFlexContainer = styled.div`
   background-color: #f0f2f5; 
 `;
 
-
-
 const StyledSignInContainer = styled.div`
   padding: 20px;
   margin: 0;
@@ -34,24 +32,28 @@ const SignIn = () => {
 
   const navigate = useNavigate(); // Hook to navigate
 
-
-  const onFinish = async (values) => {
+  const handleFinish = async (values) => {
     try {
-      const response = await fetch('/api/signin', {
+      // Using Fetch API
+      const response = await fetch('/api/users/auth/signin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(values),
       });
-      if (!response.ok) throw new Error('SignIn request failed');
-      const data = await response.json();
-      message.success(data.message || 'Signed In successfully');
-      // Optionally reset form or redirect user
+
+    const data = await response.json();
+    console.log(data);
+
     } catch (error) {
-      console.error('SignIn error:', error);
-      message.error('SignIn failed, please try again.');
+      console.error('Registration error:', error);
     }
+  };
+
+  // Form submission failed handler
+  const handleFinishFailed = (errorInfo) => {
+    console.log('Failed:', errorInfo);
   };
 
   const redirectToSignUp = () => {
@@ -64,7 +66,9 @@ const SignIn = () => {
       <StyledFormTitle>Sign In</StyledFormTitle>
       <Form
         name="signin"
-        onFinish={onFinish}
+        onFinish={handleFinish}
+        onFinishFailed={handleFinishFailed}
+        autoComplete="off"
         layout="vertical"
       >
         
