@@ -3,6 +3,8 @@ const path = require('path');
 const app = express();
 const checkAuth = require('./middleware/auth');
 const authRouter = require('./routes/authRouter');
+const cors = require('cors');
+app.use(cors());
 const cookieParser = require('cookie-parser');
 
 // Serve static files from the React app
@@ -26,3 +28,4 @@ const port = process.env.PORT || 3001;
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+
