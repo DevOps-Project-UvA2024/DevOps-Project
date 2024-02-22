@@ -39,7 +39,7 @@ const SignUp = () => {
   };
 
   return (
-    <StyledSignUpContainer>
+    <StyledSignUpContainer class="container">
       <StyledFormTitle>Sign Up</StyledFormTitle>
       <Form
         name="register"
