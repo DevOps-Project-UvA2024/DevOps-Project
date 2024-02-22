@@ -15,7 +15,8 @@ const CenteredFlexContainer = styled.div`
 `;
 
 
-const StyledSignUpContainer = styled.div`
+
+const StyledSignInContainer = styled.div`
   padding: 20px;
   margin: 0;
   width:50%;
@@ -29,50 +30,44 @@ const StyledFormTitle = styled.h1`
   color: #333;
 `;
 
-const SignUp = () => {
+const SignIn = () => {
 
-const navigate = useNavigate(); // Hook to navigate
+  const navigate = useNavigate(); // Hook to navigate
 
 
   const onFinish = async (values) => {
     try {
-      const response = await fetch('/api/register', {
+      const response = await fetch('/api/signin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(values),
       });
-      if (!response.ok) throw new Error('Signup request failed');
+      if (!response.ok) throw new Error('SignIn request failed');
       const data = await response.json();
-      message.success(data.message || 'Registered successfully');
+      message.success(data.message || 'Signed In successfully');
       // Optionally reset form or redirect user
     } catch (error) {
-      console.error('Signup error:', error);
-      message.error('Signup failed, please try again.');
+      console.error('SignIn error:', error);
+      message.error('SignIn failed, please try again.');
     }
   };
 
-  const redirectToSignIn = () => {
-    navigate('/signin'); // Adjust the path as needed
+  const redirectToSignUp = () => {
+    navigate('/signup'); // Adjust the path as needed
   };
 
   return (
     <CenteredFlexContainer>
-    <StyledSignUpContainer class="container">
-      <StyledFormTitle>Sign Up</StyledFormTitle>
+    <StyledSignInContainer class="container">
+      <StyledFormTitle>Sign In</StyledFormTitle>
       <Form
-        name="register"
+        name="signin"
         onFinish={onFinish}
         layout="vertical"
       >
-        <Form.Item
-          label="Username"
-          name="username"
-          rules={[{ required: true, message: 'Please input your username!' }]}
-        >
-          <Input />
-        </Form.Item>
+        
 
         <Form.Item
           label="Email"
@@ -93,20 +88,19 @@ const navigate = useNavigate(); // Hook to navigate
 
         <Form.Item>
           <Button type="primary" htmlType="submit">
-            Register
+            Sign In
           </Button>
         </Form.Item>
 
         <Form.Item>
-          <Button type="link" onClick={redirectToSignIn}>
-            Already have an account? Sign In
+          <Button type="link" onClick={redirectToSignUp}>
+            Don't have an account yet? Sign Up
           </Button>
         </Form.Item>
-
       </Form>
-    </StyledSignUpContainer>
+    </StyledSignInContainer>
     </CenteredFlexContainer>
   );
 };
 
-export default SignUp;
+export default SignIn;
