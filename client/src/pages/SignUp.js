@@ -82,6 +82,10 @@ const SignUp = () => {
     navigate('/signin'); 
   };
 
+  const redirectToSignIn = () => {
+    navigate('/signin'); // Adjust the path as needed
+  };
+
   return (
     <CenteredFlexContainer>
     <StyledSignUpContainer className="container">
