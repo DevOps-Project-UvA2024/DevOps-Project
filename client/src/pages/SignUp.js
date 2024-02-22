@@ -31,7 +31,8 @@ const StyledFormTitle = styled.h1`
 
 const SignUp = () => {
 
-const navigate = useNavigate(); // Hook to navigate
+// page navigation 
+const navigate = useNavigate(); 
 
 
   const onFinish = async (values) => {
@@ -43,10 +44,12 @@ const navigate = useNavigate(); // Hook to navigate
         },
         body: JSON.stringify(values),
       });
-      if (!response.ok) throw new Error('Signup request failed');
+      if (!response.ok) throw new Error('Signup failed');
       const data = await response.json();
+      
       message.success(data.message || 'Registered successfully');
-      // Optionally reset form or redirect user
+      navigate('/signin');
+      
     } catch (error) {
       console.error('Signup error:', error);
       message.error('Signup failed, please try again.');
@@ -54,7 +57,7 @@ const navigate = useNavigate(); // Hook to navigate
   };
 
   const redirectToSignIn = () => {
-    navigate('/signin'); // Adjust the path as needed
+    navigate('/signin'); 
   };
 
   return (
