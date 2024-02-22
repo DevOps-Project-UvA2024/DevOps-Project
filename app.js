@@ -8,7 +8,7 @@ const http = require("http");
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var authRouter = require('./routes/auth')
+var authRouter = require('./routes/auth');
 
 var app = express();
 const server = http.createServer(app);
@@ -57,7 +57,7 @@ try {
   console.log("Server running");
   });
 
-  app.use("auth", routes);
+  app.use("auth", authRouter);
 
 }
 catch (err) {
