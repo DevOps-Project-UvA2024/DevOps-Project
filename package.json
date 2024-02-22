@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
-  },
+    "build": "cd client && npm install && npm run build",
+    "start": "npm run build && node app.js"
+  },  
   "dependencies": {
     "amazon-cognito-identity-js": "^6.3.7",
     "amazon-cognito-js": "^1.1.0",
@@ -26,5 +27,8 @@
   "main": "app.js",
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
 }
