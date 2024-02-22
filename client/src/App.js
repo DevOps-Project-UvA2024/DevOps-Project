@@ -1,16 +1,19 @@
 import React from 'react';
-import MessageDisplay from './pages/MessageDisplay'; // Import the component
-import MessageDisplay2 from './pages/MessageDisplay2';
+import SignUp from './pages/SignUp';
+import 'antd/dist/reset.css'
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <MessageDisplay /> 
-        <MessageDisplay2 /> 
+        <SignUp /> 
+        
       </header>
     </div>
   );
 }
 
 export default App;
+
+
+
