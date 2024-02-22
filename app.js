@@ -3,6 +3,7 @@ const path = require('path');
 const app = express();
 const checkAuth = require('./middleware/auth');
 const authRouter = require('./routes/authRouter');
+const cookieParser = require('cookie-parser');
 const cors = require('cors');
 app.use(cors());
 const cookieParser = require('cookie-parser');
@@ -10,12 +11,17 @@ const cookieParser = require('cookie-parser');
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'client/build')));
 app.use(express.json());
+app.use(cookieParser());
 app.use(cors());
 app.use(cookieParser());
 
 // API Calls
 app.use('/api/users/auth',authRouter);
 app.use('/api/users/auth',authRouter);
+
+app.get('/protected-resource', checkAuth, (req, res) => {
+  res.json({ message: 'This is a protected resource accessible only to authenticated users.' });
+});
 
 app.get('/protected-resource', checkAuth, (req, res) => {
   res.json({ message: 'This is a protected resource accessible only to authenticated users.' });
