@@ -1,6 +1,8 @@
 #!/bin/bash
 cd /var/www/html/devopsportal
 
+sudo npm install pm2
+
 # Start the application with PM2
 pm2 start app.js --name "devopsportal"
 
