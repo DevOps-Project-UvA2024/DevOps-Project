@@ -2,12 +2,15 @@ const express = require('express');
 const path = require('path');
 const app = express();
 const messageRouter = require('./routes/messageRouter');
+const authRouter = require('./routes/authRouter');
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'client/build')));
+app.use(express.json());
 
 // API Calls
 app.use('/api', messageRouter);
+app.use('/api/users/auth',authRouter);
 
 // The "catchall" handler: for any request that doesn't match one above, send back React's index.html file.
 app.get('*', (req, res) => {
