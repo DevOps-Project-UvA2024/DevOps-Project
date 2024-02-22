@@ -5,8 +5,9 @@
   "scripts": {
     "build": "cd client && npm install && npm run build",
     "start": "npm run build && node app.js"
-  },  
+  },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.515.0",
     "amazon-cognito-identity-js": "^6.3.7",
     "amazon-cognito-js": "^1.1.0",
     "aws-sdk": "^2.1563.0",
