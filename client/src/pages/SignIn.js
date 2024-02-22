@@ -15,7 +15,6 @@ const CenteredFlexContainer = styled.div`
 `;
 
 
-
 const StyledSignInContainer = styled.div`
   padding: 20px;
   margin: 0;
