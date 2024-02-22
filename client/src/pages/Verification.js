@@ -33,7 +33,7 @@ const CodeVerification = () => {
   
     const onFinish = async () => {
       try {
-        const response = await fetch('/api/verify', {
+        const response = await fetch('/api/codeVerification', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ const CodeVerification = () => {
               name="code"
               rules={[{ required: true, message: 'Please input your code!' }]}
             >
-              <InputNumber min={1} max={9999} onChange={setCode} />
+              <InputNumber min={1} max={9999} defaultValue={1234} onChange={setCode} />
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">
