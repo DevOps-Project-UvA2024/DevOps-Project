@@ -38,12 +38,12 @@ const checkAuth = (req, res, next) => {
     const token = req.cookies['accessToken']; // Assuming you set the token as 'accessToken' cookie
 
     if (!token) {
-        return res.status(401).send('Token not provided');
+        return res.status(401).json({ message : 'Token not provided', isAuthenticated: false});
     }
 
     jwt.verify(token, getKey, { algorithms: ['RS256'] }, function(err, decoded) {
         if (err) {
-            return res.status(401).send('Token is invalid');
+            return res.status(401).json({ message : 'Token is invalid', isAuthenticated: false});
         }
         req.user = decoded; // Add decoded user to request
         next();

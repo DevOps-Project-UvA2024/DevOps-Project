@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Form, Input, Button, message } from 'antd';
+import { Form, Input, Button } from 'antd';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
@@ -75,7 +75,7 @@ const SignIn = () => {
 
         <Form.Item
           label="Email"
-          name="email"
+          name="username"
           rules={[{ type: 'email', message: 'The input is not a valid email!' }, { required: true, message: 'Please input your email!' }]}
         >
           <Input />
