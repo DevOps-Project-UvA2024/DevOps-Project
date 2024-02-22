@@ -37,7 +37,6 @@ const signIn = async (username, password) => {
 
     try {
         const data = await client.send(new InitiateAuthCommand(params));
-        console.log(data)
         return data.AuthenticationResult; // Contains tokens
     } catch (error) {
         throw error;

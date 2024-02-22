@@ -17,9 +17,9 @@ router.post('/signup', async (req, res) => {
 router.post('/signin', async (req, res) => {
     try {
         const authResult = await signIn(req.body.username, req.body.password);
-        console.log(authResult)
-        // Use result as needed, for example, return tokens
-        res.json({ success: true, tokens: authResult });
+        res.cookie('accessToken', authResult.AccessToken, { httpOnly: true, secure: true, sameSite: 'strict' });
+        res.cookie('idToken', authResult.IdToken, { httpOnly: true, secure: true, sameSite: 'strict' });
+        res.status(200).json({ message: 'Authentication successful' });
     } catch (error) {
         res.status(400).send(error.message);
     }
@@ -37,5 +37,12 @@ router.post('/verify', async (req, res) => {
         res.status(400).json({ message: "Failed to verify user", error: error.message });
     }
 });
+
+router.get('/logout', (req, res) => {
+    res.clearCookie('accessToken');
+    res.clearCookie('idToken');
+    res.json({ message: 'Logged out successfully' });
+});
+
 
 module.exports = router;
