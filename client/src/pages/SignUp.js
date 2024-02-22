@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Form, Input, Button, message } from 'antd';
+import { Form, Input, Button } from 'antd';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,7 +13,6 @@ const CenteredFlexContainer = styled.div`
   width: 100vw; 
   background-color: #f0f2f5; 
 `;
-
 
 const StyledSignUpContainer = styled.div`
   padding: 20px;
@@ -31,29 +30,31 @@ const StyledFormTitle = styled.h1`
 
 const SignUp = () => {
 
-// page navigation 
-const navigate = useNavigate(); 
+  // page navigation 
+  const navigate = useNavigate(); 
 
-
-  const onFinish = async (values) => {
+  const handleFinish = async (values) => {
     try {
-      const response = await fetch('/api/register', {
+      // Using Fetch API
+      const response = await fetch('/api/users/auth/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(values),
       });
-      if (!response.ok) throw new Error('Signup failed');
-      const data = await response.json();
-      
-      message.success(data.message || 'Registered successfully');
-      navigate('/signin');
-      
+
+    const data = await response.json();
+    console.log(data);
+
     } catch (error) {
-      console.error('Signup error:', error);
-      message.error('Signup failed, please try again.');
+      console.error('Registration error:', error);
     }
+  };
+
+  // Form submission failed handler
+  const handleFinishFailed = (errorInfo) => {
+    console.log('Failed:', errorInfo);
   };
 
   const redirectToSignIn = () => {
@@ -62,16 +63,18 @@ const navigate = useNavigate();
 
   return (
     <CenteredFlexContainer>
-    <StyledSignUpContainer class="container">
+    <StyledSignUpContainer className="container">
       <StyledFormTitle>Sign Up</StyledFormTitle>
       <Form
         name="register"
-        onFinish={onFinish}
+        onFinish={handleFinish}
         layout="vertical"
+        onFinishFailed={handleFinishFailed}
+        autoComplete="off"
       >
         <Form.Item
           label="Username"
-          name="username"
+          name="name"
           rules={[{ required: true, message: 'Please input your username!' }]}
         >
           <Input />
@@ -80,7 +83,8 @@ const navigate = useNavigate();
         <Form.Item
           label="Email"
           name="email"
-          rules={[{ type: 'email', message: 'The input is not a valid email!' }, { required: true, message: 'Please input your email!' }]}
+          rules={[{ type: 'email', message: 'The input is not a valid email!' }, 
+          { required: true, message: 'Please input your email!' }]}
         >
           <Input />
         </Form.Item>

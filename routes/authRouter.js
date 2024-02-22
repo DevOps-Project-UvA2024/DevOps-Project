@@ -38,7 +38,7 @@ router.post('/verify', async (req, res) => {
     }
 });
 
-router.get('/logout', (req, res) => {
+router.get('/signout', (req, res) => {
     res.clearCookie('accessToken');
     res.clearCookie('idToken');
     res.json({ message: 'Logged out successfully' });
