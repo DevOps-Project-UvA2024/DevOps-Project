@@ -3,6 +3,8 @@ import React from 'react';
 import { Form, Input, Button, message } from 'antd';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import PasswordChecklist from "react-password-checklist"
+
 
 
 const CenteredFlexContainer = styled.div`
@@ -44,6 +46,8 @@ const navigate = useNavigate();
         },
         body: JSON.stringify(values),
       });
+
+
       if (!response.ok) throw new Error('Signup failed');
       const data = await response.json();
       
@@ -80,7 +84,8 @@ const navigate = useNavigate();
         <Form.Item
           label="Email"
           name="email"
-          rules={[{ type: 'email', message: 'The input is not a valid email!' }, { required: true, message: 'Please input your email!' }]}
+          rules={[{ type: 'email', message: 'The input is not a valid email!' }, 
+          { required: true, message: 'Please input your email!' }]}
         >
           <Input />
         </Form.Item>
@@ -93,6 +98,23 @@ const navigate = useNavigate();
         >
           <Input.Password />
         </Form.Item>
+
+        <Form.Item
+          label="Re-enter password"
+          name="password2"
+          rules={[
+            { required: true, message: 'Please input your password!' },
+            { min: 8, message: 'Password must be at least 8 characters.' },
+            { pattern: /(?=.*[0-9])/, message: 'Password must contain a number.' },
+            { pattern: /(?=.*[!@#$%^&*])/, message: 'Password must contain a special character.' },
+            { pattern: /(?=.*[A-Z])/, message: 'Password must contain an uppercase letter.' }
+          
+          ]}
+          hasFeedback
+        >
+          <Input.Password />
+        </Form.Item>
+        
 
         <Form.Item>
           <Button type="primary" htmlType="submit">
