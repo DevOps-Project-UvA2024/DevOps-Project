@@ -1,4 +1,3 @@
 #!/bin/bash
-# This script could vary significantly based on how you start/stop your app.
-# Example using pm2:
-pm2 stop all || true
+pm2 stop eduapp || true # Avoids errors if app is not running
+

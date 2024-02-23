@@ -7,6 +7,7 @@
     "start": "npm run build && node app.js"
   },
   "dependencies": {
+    "@aws-sdk/client-cognito-identity-provider": "^3.515.0",
     "amazon-cognito-identity-js": "^6.3.7",
     "amazon-cognito-js": "^1.1.0",
     "antd": "^5.14.1",
@@ -22,6 +23,7 @@
     "jade": "^0.29.0",
     "jsonwebtoken": "^9.0.2",
     "jwk-to-pem": "^2.0.5",
+    "jwks-rsa": "^3.1.0",
     "morgan": "~1.9.1",
     "node-fetch": "^3.3.2",
     "request": "^2.88.2"
