@@ -3,6 +3,8 @@ import React from 'react';
 import { Form, Input, Button } from 'antd';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { useAuth, AuthStatus } from '../AuthProvider';
+import { Navigate } from 'react-router-dom';
 
 
 const CenteredFlexContainer = styled.div`
@@ -32,6 +34,12 @@ const SignIn = () => {
 
   const navigate = useNavigate(); // Hook to navigate
 
+  const { authStatus } = useAuth();
+
+  if (authStatus === AuthStatus.SignedIn) {
+    return <Navigate to="/greeting" replace />;
+  }
+
   const handleFinish = async (values) => {
     try {
       // Using Fetch API
@@ -43,8 +51,9 @@ const SignIn = () => {
         body: JSON.stringify(values),
       });
 
-    const data = await response.json();
-    console.log(data);
+      const data = await response.json();
+      console.log(data);
+      window.location.reload();
 
     } catch (error) {
       console.error('Registration error:', error);
@@ -62,12 +71,13 @@ const SignIn = () => {
 
   return (
     <CenteredFlexContainer>
-    <StyledSignInContainer class="container">
+    <StyledSignInContainer className="container">
       <StyledFormTitle>Sign In</StyledFormTitle>
       <Form
         name="signin"
         onFinish={handleFinish}
         onFinishFailed={handleFinishFailed}
+        
         autoComplete="off"
         layout="vertical"
       >

@@ -3,7 +3,8 @@ import React from 'react';
 import { Form, Input, Button } from 'antd';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-
+import { useAuth, AuthStatus } from '../AuthProvider';
+import { Navigate } from 'react-router-dom';
 
 const CenteredFlexContainer = styled.div`
   display: flex;
@@ -31,7 +32,14 @@ const StyledFormTitle = styled.h1`
 const SignUp = () => {
 
   // page navigation 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
+  
+  const { authStatus } = useAuth();
+
+  if (authStatus === AuthStatus.SignedIn) {
+    // User is signed in, redirect them to /greeting
+    return <Navigate to="/greeting" replace />;
+  }
 
   const handleFinish = async (values) => {
     try {
