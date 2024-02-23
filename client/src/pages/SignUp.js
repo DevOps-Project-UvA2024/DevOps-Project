@@ -38,6 +38,10 @@ const SignUp = () => {
   
   const { authStatus } = useAuth();
 
+  const [password, setPassword] = React.useState("");
+  const [password2, setPassword2] = React.useState("");
+
+
   if (authStatus === AuthStatus.SignedIn) {
     // User is signed in, redirect them to /greeting
     return <Navigate to="/greeting" replace />;
@@ -103,26 +107,37 @@ const SignUp = () => {
           label="Password"
           name="password"
           rules={[{ required: true, message: 'Please input your password!' }]}
-          hasFeedback
-        >
-          <Input.Password />
+          hasFeedback>
+          <Input.Password onChange={(e) => setPassword(e.target.value)} />
         </Form.Item>
 
         <Form.Item
-          label="Re-enter password"
-          name="password2"
-          rules={[
-            { required: true, message: 'Please input your password!' },
-            { min: 8, message: 'Password must be at least 8 characters.' },
-            { pattern: /(?=.*[0-9])/, message: 'Password must contain a number.' },
-            { pattern: /(?=.*[!@#$%^&*])/, message: 'Password must contain a special character.' },
-            { pattern: /(?=.*[A-Z])/, message: 'Password must contain an uppercase letter.' }
-          
-          ]}
-          hasFeedback
-        >
-          <Input.Password />
+            label="Re-enter password"
+            name="password2"
+            dependencies={['password']}
+            rules={[
+              { required: true, message: 'Please confirm your password!' },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue('password') === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                },
+              }),
+            ]}
+            hasFeedback
+          >
+          <Input.Password onChange={(e) => setPassword2(e.target.value)} />
         </Form.Item>
+
+        <PasswordChecklist
+            rules={["minLength","specialChar","number","capital","match"]}
+            minLength={8}
+            value={password}
+            valueAgain={password2}
+            onChange={(isValid) => {}}
+          />
         
 
         <Form.Item>

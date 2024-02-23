@@ -7,8 +7,7 @@ import Verification from './pages/Verification'
 import 'antd/dist/reset.css'
 import {AuthProvider} from './AuthProvider';
 import PrivateRoute from './PrivateRoute';
-import SignIn from './pages/SignIn';
-import SignUp from './pages/SignUp';
+
 import Greeting from './pages/Greeting';
 
 const App = () => {
