@@ -1,8 +1,10 @@
 
 import React from 'react';
-import { Form, Input, Button, message } from 'antd';
+import { Form, Input, Button } from 'antd';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { useAuth, AuthStatus } from '../AuthProvider';
+import { Navigate } from 'react-router-dom';
 
 
 const CenteredFlexContainer = styled.div`
@@ -33,24 +35,35 @@ const SignIn = () => {
 
   const navigate = useNavigate(); // Hook to navigate
 
+  const { authStatus } = useAuth();
 
-  const onFinish = async (values) => {
+  if (authStatus === AuthStatus.SignedIn) {
+    return <Navigate to="/greeting" replace />;
+  }
+
+  const handleFinish = async (values) => {
     try {
-      const response = await fetch('/api/signin', {
+      // Using Fetch API
+      const response = await fetch('/api/users/auth/signin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(values),
       });
-      if (!response.ok) throw new Error('SignIn request failed');
+
       const data = await response.json();
-      message.success(data.message || 'Signed In successfully');
-      // Optionally reset form or redirect user
+      console.log(data);
+      window.location.reload();
+
     } catch (error) {
-      console.error('SignIn error:', error);
-      message.error('SignIn failed, please try again.');
+      console.error('Registration error:', error);
     }
+  };
+
+  // Form submission failed handler
+  const handleFinishFailed = (errorInfo) => {
+    console.log('Failed:', errorInfo);
   };
 
   const redirectToSignUp = () => {
@@ -59,18 +72,21 @@ const SignIn = () => {
 
   return (
     <CenteredFlexContainer>
-    <StyledSignInContainer class="container">
+    <StyledSignInContainer className="container">
       <StyledFormTitle>Sign In</StyledFormTitle>
       <Form
         name="signin"
-        onFinish={onFinish}
+        onFinish={handleFinish}
+        onFinishFailed={handleFinishFailed}
+        
+        autoComplete="off"
         layout="vertical"
       >
         
 
         <Form.Item
           label="Email"
-          name="email"
+          name="username"
           rules={[{ type: 'email', message: 'The input is not a valid email!' }, { required: true, message: 'Please input your email!' }]}
         >
           <Input />
