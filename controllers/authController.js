@@ -1,6 +1,7 @@
 // signup.js using AWS SDK v3
 const { client } = require('../cognito-config');
-const { SignUpCommand, InitiateAuthCommand, ConfirmSignUpCommand } = require("@aws-sdk/client-cognito-identity-provider");
+const { SignUpCommand, InitiateAuthCommand, ConfirmSignUpCommand, ResendConfirmationCodeCommand,
+    ConfirmForgotPasswordCommand, ForgotPasswordCommand } = require("@aws-sdk/client-cognito-identity-provider");
 require('dotenv').config();
 
 const signUp = async (email, password, name) => {
@@ -58,4 +59,53 @@ const verifyUser = async (email, code) => {
     }
 };
 
-module.exports = { signIn, signUp, verifyUser };
+const resendConfirmationCode = async (email) => {
+    try {
+        const command = new ResendConfirmationCodeCommand({
+        ClientId: process.env.COGNITO_CLIENT_ID,
+        Username: email,
+        });
+        const response = await client.send(command);
+        console.log("Confirmation code resent successfully:", response);
+    } catch (error) {
+        console.error("Error resending confirmation code:", error);
+    }
+}
+
+// Password reset
+const initiateReset = async (email) => {
+    const params = {
+      ClientId: process.env.COGNITO_CLIENT_ID,
+      Username: email,
+    };
+  
+    try {
+      const command = new ForgotPasswordCommand(params);
+      const response = await client.send(command);
+      console.log("Password reset initiated:", response);
+    } catch (error) {
+      console.error("Error initiating password reset:", error);
+    }
+};
+
+const confirmReset = async (email, verificationCode, newPassword) => {
+    const params = {
+        ClientId: process.env.COGNITO_CLIENT_ID, // Cognito User Pool App Client ID
+        Username: email,
+        ConfirmationCode: verificationCode, // The code the user received
+        Password: newPassword,
+    };
+
+    try {
+        const command = new ConfirmForgotPasswordCommand(params);
+        const response = await client.send(command);
+        console.log("Password reset confirmed:", response);
+        return response;
+    } catch (error) {
+        console.error("Error confirming new password:", error);
+        throw error;
+    }
+};
+  
+
+module.exports = { signIn, signUp, verifyUser, resendConfirmationCode, initiateReset, confirmReset };

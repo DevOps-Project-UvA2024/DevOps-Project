@@ -6,6 +6,7 @@ import PrivateRoute from './PrivateRoute';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import Greeting from './pages/Greeting';
+import PasswordReset from './pages/PasswordReset';
 
 const App = () => {
   return (
@@ -14,12 +15,10 @@ const App = () => {
         <Routes>
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
+          <Route path="/reset-password" element={<PasswordReset />} />
           <Route element={<PrivateRoute />}>
-            {/* Nested routes inside ProtectedRoute will require authentication */}
             <Route path="/greeting" element={<Greeting />} />
-            {/* Add more protected routes here */}
           </Route>
-          {/* Define other public routes as needed */}
         </Routes>
       </AuthProvider>
     </Router>
