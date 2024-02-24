@@ -41,7 +41,6 @@ router.post('/verify', async (req, res) => {
 // Resend Verification code
 router.post('/resend-verification', async (req, res) => {
     const { email } = req.body;
-    console.log(req.body)
     try {
         const result = await resendConfirmationCode(email);
         res.json({ message: "Successfully resent verification email", details: result });
