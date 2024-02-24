@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
-import { Form, InputNumber, Button, message } from 'antd';
-
-
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Form, Button, Alert, Input, message } from 'antd';
 const CenteredFlexContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -28,9 +26,18 @@ const StyledFormTitle = styled.h1`
 `;
 
 const CodeVerification = () => {
-    const [code, setCode] = useState();
-    const navigate = useNavigate(); // Use this for redirecting after successful verification
-  
+    const [code, setCode] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [email, setEmail] = useState('');
+
+    useEffect(() => {
+      if (location.state?.email) {
+        setEmail(location.state.email);
+      }
+    }, [location.state?.email]); // Dependency array
+    
     const onFinish = async () => {
       try {
         const response = await fetch('/api/verify', {
@@ -38,34 +45,71 @@ const CodeVerification = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ code }),
+          body: JSON.stringify({ email, code }),
         });
         if (!response.ok) throw new Error('Code verification failed');
-        const data = await response.json();
-        message.success(data.message || 'Code verified successfully');
-        navigate('/nextPage'); // Replace '/nextPage' with the actual path you want to navigate to
+        navigate('/signin', { state: { successMessage: 'Verification successful. Please sign in.' } });
       } catch (error) {
-        console.error('Verification error:', error);
-        message.error('Verification failed, please try again.');
+        console.error(error);
+        setErrorMessage(error);
       }
     };
+
+    const resetVerification = async () => {
+      try {
+        console.log(email)
+        if (email === '') throw new Error('Email was empty');
+        const response = await fetch('/api/resend-verification', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email }),
+        });
+        if (!response.ok) throw new Error('Error while resending verification');
+        message.success('Verification email resent!');      
+      } catch (error) {
+        console.error(error);
+        message.error(error.message);
+      }
+    }
   
     return (
       <CenteredFlexContainer>
         <StyledCodeVerificationContainer>
           <StyledFormTitle>Verfication Code</StyledFormTitle>
+          {errorMessage && (
+            <Alert
+              message={errorMessage}
+              type="error"
+              showIcon
+              closable
+              onClose={() => setErrorMessage('')}
+            />
+          )}
           <Form onFinish={onFinish} layout="vertical">
+            <Form.Item
+              label="Email"
+              name="email"
+              initialValue={email}
+              rules={[{ type: 'email', message: 'The input is not a valid email!' }, { required: true, message: 'Please input your email!' }]}
+            >
+              <Input onChange={setEmail}/>
             <Form.Item
               label="Verification Code"
               name="code"
               rules={[{ required: true, message: 'Please input your code!' }]}
             >
-              <InputNumber min={1} max={9999} onChange={setCode} />
+              <Input onChange={setCode} />
             </Form.Item>
-            <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Verify Code
-              </Button>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Button type="primary" htmlType="submit">
+                  Verify Code
+                </Button>
+                <Button type="link" onClick={resetVerification}>
+                  Resend Verification
+                </Button>
+              </div>
             </Form.Item>
           </Form>
         </StyledCodeVerificationContainer>

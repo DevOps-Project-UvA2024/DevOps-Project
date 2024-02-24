@@ -39,9 +39,9 @@ const SignUp = () => {
   const { authStatus } = useAuth();
   const [errorMessage, setErrorMessage] = useState('');
 
-
   const [password, setPassword] = React.useState("");
   const [password2, setPassword2] = React.useState("");
+  const [email, setEmail] = useState('');
 
 
   if (authStatus === AuthStatus.SignedIn) {
@@ -61,7 +61,7 @@ const SignUp = () => {
       if (!response.ok) {
         throw response; 
       }
-      navigate('/signin', { state: { successMessage: 'Signup successful. Please sign in.' } });
+      navigate('/verify-account', { state: { email: email} });
     })
     .then(data => {
       console.log('Sign-up successful:', data);
@@ -76,14 +76,6 @@ const SignUp = () => {
   // Form submission failed handler
   const handleFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
-  };
-
-  const redirectToSignIn = () => {
-    navigate('/signin'); 
-  };
-
-  const redirectToSignIn = () => {
-    navigate('/signin'); 
   };
 
   return (
@@ -120,7 +112,7 @@ const SignUp = () => {
           rules={[{ type: 'email', message: 'The input is not a valid email!' }, 
           { required: true, message: 'Please input your email!' }]}
         >
-          <Input />
+          <Input onChange={(e) => setEmail(e.target.value)} />
         </Form.Item>
 
         <Form.Item
@@ -167,7 +159,7 @@ const SignUp = () => {
         </Form.Item>
 
         <Form.Item>
-          <Button type="link" onClick={redirectToSignIn}>
+          <Button type="link" onClick={() => navigate('/signin')}>
             Already have an account? Sign In
           </Button>
         </Form.Item>

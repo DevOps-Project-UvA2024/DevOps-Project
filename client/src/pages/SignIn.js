@@ -139,6 +139,12 @@ const SignIn = () => {
         </Form.Item>
 
         <Form.Item>
+          <Button type="link" onClick={() => navigate("/verify-account")}>
+            Have you been verified?
+          </Button>
+        </Form.Item>
+
+        <Form.Item>
           <Button type="link" onClick={redirectToSignUp}>
             Don't have an account yet? Sign Up
           </Button>
