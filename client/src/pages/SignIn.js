@@ -1,10 +1,9 @@
 
-import React from 'react';
-import { Form, Input, Button } from 'antd';
+import React, { useState } from 'react';
+import { Form, Input, Button, Alert } from 'antd';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth, AuthStatus } from '../AuthProvider';
-import { Navigate } from 'react-router-dom';
 
 
 const CenteredFlexContainer = styled.div`
@@ -34,6 +33,9 @@ const StyledFormTitle = styled.h1`
 const SignIn = () => {
 
   const navigate = useNavigate(); // Hook to navigate
+  const [errorMessage, setErrorMessage] = useState('');
+  const location = useLocation();
+  const successMessage = location.state?.successMessage;
 
   const { authStatus } = useAuth();
 
@@ -42,23 +44,29 @@ const SignIn = () => {
   }
 
   const handleFinish = async (values) => {
-    try {
-      // Using Fetch API
-      const response = await fetch('/api/users/auth/signin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values),
-      });
 
-      const data = await response.json();
-      console.log(data);
-      window.location.reload();
-
-    } catch (error) {
-      console.error('Registration error:', error);
-    }
+    fetch('/api/users/auth/signin', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(values),
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw response; 
+      }
+      window.location.reload(); 
+    })
+    .then(data => {
+      console.log('Sign-in successful:', data);
+    })
+    .catch(async (errorResponse) => {
+      console.log(errorMessage)
+      const error = await errorResponse.json(); 
+      console.error('Sign-in error:', error);
+      setErrorMessage(error);
+    });
   };
 
   // Form submission failed handler
@@ -74,6 +82,23 @@ const SignIn = () => {
     <CenteredFlexContainer>
     <StyledSignInContainer className="container">
       <StyledFormTitle>Sign In</StyledFormTitle>
+      {errorMessage && (
+        <Alert
+          message={errorMessage}
+          type="error"
+          showIcon
+          closable
+          onClose={() => setErrorMessage('')} // Allow users to close the alert
+        />
+      )}
+      {successMessage && (
+        <Alert
+          message={successMessage}
+          type="success"
+          showIcon
+          closable
+        />
+      )}
       <Form
         name="signin"
         onFinish={handleFinish}
@@ -104,6 +129,12 @@ const SignIn = () => {
         <Form.Item>
           <Button type="primary" htmlType="submit">
             Sign In
+          </Button>
+        </Form.Item>
+
+        <Form.Item>
+          <Button type="link" onClick={() => navigate("/reset-password")}>
+            Forgot password?
           </Button>
         </Form.Item>
 

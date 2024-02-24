@@ -1,6 +1,6 @@
 
-import React from 'react';
-import { Form, Input, Button } from 'antd';
+import React, { useState } from 'react';
+import { Form, Input, Button, Alert } from 'antd';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import PasswordChecklist from "react-password-checklist"
@@ -37,6 +37,8 @@ const SignUp = () => {
   const navigate = useNavigate();
   
   const { authStatus } = useAuth();
+  const [errorMessage, setErrorMessage] = useState('');
+
 
   const [password, setPassword] = React.useState("");
   const [password2, setPassword2] = React.useState("");
@@ -48,22 +50,27 @@ const SignUp = () => {
   }
 
   const handleFinish = async (values) => {
-    try {
-      // Using Fetch API
-      const response = await fetch('/api/users/auth/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values),
-      });
-
-    const data = await response.json();
-    console.log(data);
-
-    } catch (error) {
-      console.error('Registration error:', error);
-    }
+    fetch('api/users/auth/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(values),
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw response; 
+      }
+      navigate('/signin', { state: { successMessage: 'Signup successful. Please sign in.' } });
+    })
+    .then(data => {
+      console.log('Sign-up successful:', data);
+    })
+    .catch(async (errorResponse) => {
+      const error = await errorResponse.json(); 
+      console.error('Sign-up error:', error);
+      setErrorMessage(error);
+    });
   };
 
   // Form submission failed handler
@@ -79,6 +86,15 @@ const SignUp = () => {
     <CenteredFlexContainer>
     <StyledSignUpContainer className="container">
       <StyledFormTitle>Sign Up</StyledFormTitle>
+      {errorMessage && (
+        <Alert
+          message={errorMessage}
+          type="error"
+          showIcon
+          closable
+          onClose={() => setErrorMessage('')} // Allow users to close the alert
+        />
+      )}
       <Form
         name="register"
         onFinish={handleFinish}
