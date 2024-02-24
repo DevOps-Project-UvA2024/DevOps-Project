@@ -17,6 +17,7 @@ const App = () => {
         <Routes>
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
+          <Route path="/verify-account" element={<Verification />} />
           <Route element={<PrivateRoute />}>
             {/* Nested routes inside ProtectedRoute will require authentication */}
             <Route path="/greeting" element={<Greeting />} />
