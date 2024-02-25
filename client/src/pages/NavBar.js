@@ -1,4 +1,5 @@
 import {Link, useMatch, useResolvedPath} from "react-router-dom"
+import "../styles/navbar.css"
 
 const NavBar = () => {
     const path = window.location.pathname
@@ -6,8 +7,8 @@ const NavBar = () => {
         <nav className="nav">
             <Link to="/" className="site-title">Student Portal</Link>
             <ul>
-                <CustomLink to="/masters">
-                    Masters
+                <CustomLink to="/courses">
+                    Courses
                 </CustomLink>
                 <CustomLink to="/account">
                     Account

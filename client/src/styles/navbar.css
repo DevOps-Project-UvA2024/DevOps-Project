@@ -3,7 +3,7 @@
     font-family: "Nunito", sans-serif;
 }
 body {
-    margin:0
+    margin:0;
 }
 
 .nav{
@@ -13,6 +13,7 @@ body {
     justify-content: space-between;
     align-items: stretch;
     gap:2rem;
+
 }
 
     .nav a{
@@ -40,10 +41,12 @@ body {
 
     .nav .site-title{
         font-size: 2rem;
+        padding: 0.5rem
     }
 
     .nav li.active{
         background-color: #2d56b3;
+        font-weight: 600;
     }
 
     .nav li:hover{

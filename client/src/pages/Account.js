@@ -1,8 +1,8 @@
 const Account = () => {
     return (
-       <h1>
+       <h2>
         Account Information
-       </h1>
+       </h2>
 
     );
 };
