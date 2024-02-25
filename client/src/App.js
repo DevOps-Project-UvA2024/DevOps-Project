@@ -7,25 +7,29 @@ import Verification from './pages/Verification'
 import 'antd/dist/reset.css'
 import {AuthProvider} from './AuthProvider';
 import PrivateRoute from './PrivateRoute';
-
+import NavBar from './pages/NavBar';
 import Greeting from './pages/Greeting';
 import PasswordReset from './pages/PasswordReset';
 
 const App = () => {
   return (
-    <Router>
-      <AuthProvider>
-        <Routes>
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/reset-password" element={<PasswordReset />} />
-          <Route path="/verify-account" element={<Verification />} />
-          <Route element={<PrivateRoute />}>
-            <Route path="/greeting" element={<Greeting />} />
-          </Route>
-        </Routes>
-      </AuthProvider>
-    </Router>
+    
+    <div className='App'>
+      <NavBar/>
+    </div>
+    // <Router>
+    //   <AuthProvider>
+    //     <Routes>
+    //       <Route path="/signup" element={<SignUp />} />
+    //       <Route path="/signin" element={<SignIn />} />
+    //       <Route path="/reset-password" element={<PasswordReset />} />
+    //       <Route path="/verify-account" element={<Verification />} />
+    //       <Route element={<PrivateRoute />}>
+    //         <Route path="/greeting" element={<Greeting />} />
+    //       </Route>
+    //     </Routes>
+    //   </AuthProvider>
+    // </Router>
   );
 };
 
