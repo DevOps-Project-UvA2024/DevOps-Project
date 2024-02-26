@@ -132,24 +132,21 @@ const SignIn = () => {
           </Button>
         </Form.Item>
 
-        <Form.Item>
-          <Button type="link" onClick={() => navigate("/reset-password")}>
-            Forgot password?
-          </Button>
-        </Form.Item>
-
-        <Form.Item>
-          <Button type="link" onClick={() => navigate("/verify-account")}>
-            Have you been verified?
-          </Button>
-        </Form.Item>
-
-        <Form.Item>
-          <Button type="link" onClick={redirectToSignUp}>
-            Don't have an account yet? Sign Up
-          </Button>
-        </Form.Item>
       </Form>
+
+
+      <Button type="link" onClick={() => navigate("/reset-password")}>
+            Forgot password?
+      </Button>
+
+      <Button type="link" onClick={() => navigate("/verify-account")}>
+        Have you been verified?
+      </Button>
+
+      <Button type="link" onClick={redirectToSignUp}>
+        Don't have an account yet? Sign Up
+      </Button>
+
     </StyledSignInContainer>
     </CenteredFlexContainer>
   );
