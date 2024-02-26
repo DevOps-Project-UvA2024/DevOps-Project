@@ -35,10 +35,11 @@ const App = () => {
 
 
           <Route element={<WithNavBar />}>
-            <Route path="/courses" element={<Courses />} /> 
-            <Route path="/account" element={<Acc />} />
+            
             <Route element={<PrivateRoute />}>
               <Route path="/greeting" element={<Greeting />} />
+              <Route path="/courses" element={<Courses />} /> 
+              <Route path="/account" element={<Acc />} />
             </Route>
           </Route>
         </Routes>

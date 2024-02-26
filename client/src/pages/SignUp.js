@@ -46,7 +46,7 @@ const SignUp = () => {
 
   if (authStatus === AuthStatus.SignedIn) {
     // User is signed in, redirect them to /greeting
-    return <Navigate to="/greeting" replace />;
+    return <Navigate to="/courses" replace />;
   }
 
   const handleFinish = async (values) => {
