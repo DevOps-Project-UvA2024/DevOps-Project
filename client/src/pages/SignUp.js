@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { Form, Input, Button, Alert } from 'antd';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import PasswordChecklist from "react-password-checklist"
+
 import { useAuth, AuthStatus } from '../AuthProvider';
 import { Navigate } from 'react-router-dom';
 
@@ -37,10 +39,14 @@ const SignUp = () => {
   const { authStatus } = useAuth();
   const [errorMessage, setErrorMessage] = useState('');
 
+  const [password, setPassword] = React.useState("");
+  const [password2, setPassword2] = React.useState("");
+  const [email, setEmail] = useState('');
+
 
   if (authStatus === AuthStatus.SignedIn) {
     // User is signed in, redirect them to /greeting
-    return <Navigate to="/greeting" replace />;
+    return <Navigate to="/courses" replace />;
   }
 
   const handleFinish = async (values) => {
@@ -55,7 +61,7 @@ const SignUp = () => {
       if (!response.ok) {
         throw response; 
       }
-      navigate('/signin', { state: { successMessage: 'Signup successful. Please sign in.' } });
+      navigate('/verify-account', { state: { email: email} });
     })
     .then(data => {
       console.log('Sign-up successful:', data);
@@ -70,10 +76,6 @@ const SignUp = () => {
   // Form submission failed handler
   const handleFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
-  };
-
-  const redirectToSignIn = () => {
-    navigate('/signin'); 
   };
 
   return (
@@ -110,17 +112,45 @@ const SignUp = () => {
           rules={[{ type: 'email', message: 'The input is not a valid email!' }, 
           { required: true, message: 'Please input your email!' }]}
         >
-          <Input />
+          <Input onChange={(e) => setEmail(e.target.value)} />
         </Form.Item>
 
         <Form.Item
           label="Password"
           name="password"
           rules={[{ required: true, message: 'Please input your password!' }]}
-          hasFeedback
-        >
-          <Input.Password />
+          hasFeedback>
+          <Input.Password onChange={(e) => setPassword(e.target.value)} />
         </Form.Item>
+
+        <Form.Item
+            label="Re-enter password"
+            name="password2"
+            dependencies={['password']}
+            rules={[
+              { required: true, message: 'Please confirm your password!' },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue('password') === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                },
+              }),
+            ]}
+            hasFeedback
+          >
+          <Input.Password onChange={(e) => setPassword2(e.target.value)} />
+        </Form.Item>
+
+        <PasswordChecklist
+            rules={["minLength","specialChar","number","capital","match"]}
+            minLength={8}
+            value={password}
+            valueAgain={password2}
+            onChange={(isValid) => {}}
+          />
+        
 
         <Form.Item>
           <Button type="primary" htmlType="submit">
@@ -129,7 +159,7 @@ const SignUp = () => {
         </Form.Item>
 
         <Form.Item>
-          <Button type="link" onClick={redirectToSignIn}>
+          <Button type="link" onClick={() => navigate('/signin')}>
             Already have an account? Sign In
           </Button>
         </Form.Item>

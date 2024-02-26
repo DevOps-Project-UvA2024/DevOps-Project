@@ -4,6 +4,7 @@ import { Form, Input, Button, Alert } from 'antd';
 import styled from 'styled-components';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth, AuthStatus } from '../AuthProvider';
+import "../styles/verification_style.css"
 
 
 const CenteredFlexContainer = styled.div`
@@ -14,6 +15,7 @@ const CenteredFlexContainer = styled.div`
   width: 100vw; 
   background-color: #f0f2f5; 
 `;
+
 
 const StyledSignInContainer = styled.div`
   padding: 20px;
@@ -131,18 +133,23 @@ const SignIn = () => {
           </Button>
         </Form.Item>
 
-        <Form.Item>
-          <Button type="link" onClick={() => navigate("/reset-password")}>
-            Forgot password?
-          </Button>
-        </Form.Item>
-
-        <Form.Item>
-          <Button type="link" onClick={redirectToSignUp}>
-            Don't have an account yet? Sign Up
-          </Button>
-        </Form.Item>
       </Form>
+
+      <div className='verificationButtons'> 
+        <Button type="link" onClick={() => navigate("/reset-password")}>
+              Forgot password?
+        </Button>
+
+        <Button type="link" onClick={() => navigate("/verify-account")}>
+          You haven't been verified yet?
+        </Button>
+
+        <Button type="link" onClick={redirectToSignUp}>
+          Don't have an account yet? Sign Up
+        </Button>
+      </div>
+      
+
     </StyledSignInContainer>
     </CenteredFlexContainer>
   );
