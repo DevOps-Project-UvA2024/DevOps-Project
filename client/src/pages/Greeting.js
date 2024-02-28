@@ -8,7 +8,7 @@ const Greeting = () => {
 
   return (
     <div>
-      {state.user ? <h1>Hello, {state.user.name}</h1> : <p>Loading user info...</p>}
+      {state.user ? <h1>Hello, {state.user.username}</h1> : <p>Loading user info...</p>}
     </div>
   );
 };

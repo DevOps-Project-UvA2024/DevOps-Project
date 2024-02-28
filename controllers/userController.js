@@ -17,7 +17,11 @@ const fetchUserInfoFromCognito = async (accessToken) => {
       }, {});
 
       const userInfo = await db.User.findOne({
-        where: { email:attributes.email }
+        where: { email:attributes.email },
+        include: [{
+          model: db.Role,
+          attributes: ['name'] // Specify the attributes you want to include from the Role model
+        }]
       });
       
       return userInfo; // Return only the user attributes object
