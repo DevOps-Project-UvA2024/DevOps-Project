@@ -25,6 +25,14 @@ const Courses = () => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+import { PlusCircleTwoTone } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
+
+
+
+
+const Courses = () => {
+  const navigate = useNavigate();
 
   const columns = [
   const columns = [
