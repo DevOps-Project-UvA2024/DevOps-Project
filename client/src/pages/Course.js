@@ -55,13 +55,25 @@ const Course = () => {
         dataIndex: 'upload_date',
         key: 'upload_date',
         sorter: (a, b) => a.uploadedby.localeCompare(b.uploadedby),
+        render: (text) => {
+          const date = new Date(text);
+          const formattedDate = new Intl.DateTimeFormat('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            timeZoneName: 'short'
+          }).format(date);
+          return formattedDate;
+        }
 
       },
       {
         title: 'Rating',
-        dataIndex: 'rating',
+        dataIndex: 'aggregate_voting',
         key: 'rating',
-        render: rating => <Rate disabled defaultValue={rating} />,
+        render: aggregate_voting => <Rate disabled allowHalf defaultValue={Number(aggregate_voting)} />,
       },
       {
         title: 'Your Rating',
@@ -118,7 +130,7 @@ const Course = () => {
           dispatch({ type: 'SET_FILES', payload: data });
       })
       .catch(error => console.error('Error fetching courses:', error));
-    }, [dispatch]);
+    }, [dispatch, course_id]);
     
   
     

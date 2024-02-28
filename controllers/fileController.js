@@ -4,24 +4,25 @@ const fetchCoursesFiles = async (course_id) => {
   
     try {
      
-    console.log(course_id);
-
     const allCoursesWithFiles = await db.File.findAll({
-        where: { course_id: course_id },
-        include: [
-            {
-          model: db.Course,
-          attributes: ['name']}
-        ,
+      where: { course_id: 1 },
+      include: [
         {
-            model: db.User,
-            attributes: ['username'], 
-          },
-    ]
+          model: db.Voting,
+          as: 'votings',
+          attributes: []
+        }, {
+          model: db.User,
+          attributes: ['username']
+        }],
+      attributes: [
+          'id',
+          'name',
+          'upload_date',
+          [db.Sequelize.fn('AVG', db.Sequelize.col('votings.voting')), 'aggregate_voting']
+        ],
+        group: ['file.id']
       });
-
-
-     console.log(allCoursesWithFiles);
       
       return allCoursesWithFiles;
     } catch (error) {
