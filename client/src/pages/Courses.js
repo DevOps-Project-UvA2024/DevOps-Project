@@ -101,19 +101,19 @@ const Courses = () => {
                 label="Course Name"
                 name="course"
                 rules={[{ required: true, message: 'Please enter the course\'s name' }]}>
-                <Input />
+                <Input allowClear/>
               </Form.Item>
               <Form.Item
                 label="Department"
                 name="department"
                 rules={[{ required: true, message: 'Please input the department of the course!' }]}>
-                <Input />
+                <Input allowClear/>
               </Form.Item>
               <Form.Item
                 label="Description"
                 name="description"
                 rules={[{ required: true, message: 'Please enter a description!' }]}>
-                <TextArea rows={4} placeholder="Enter a description for the course"/>
+                <TextArea rows={4} placeholder="Enter a description for the course" allowClear/>
               </Form.Item>
             </Form>
           </Modal>
