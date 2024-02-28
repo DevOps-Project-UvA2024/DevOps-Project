@@ -31,7 +31,6 @@ const Courses = () => {
 
   ];
 
-const Courses = () => {
   const { state, dispatch } = useContext(StoreContext);
 
   useEffect(() => {
