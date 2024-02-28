@@ -10,7 +10,7 @@ const Greeting = () => {
     })
     .then(response => response.json())
     .then(data => {
-      setUserName(data.name); // Assuming 'name' is the attribute holding the user's name
+      setUserName(data.username); // Assuming 'name' is the attribute holding the user's name
     })
     .catch(error => console.error('Error fetching user info:', error));
   }, []);

@@ -8,6 +8,10 @@ const checkAuth = require('./middleware/auth');
 const authRouter = require('./routes/authRouter');
 const userRouter = require('./routes/userRouter');
 
+const db = require('./models/index.js');
+///////////////// REMOVE IN PRODUCTION! IT DROPS THE TABLES! OMG! //////////////////////
+db.sequelize.sync();
+
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'client/build')));
 app.use(express.json());

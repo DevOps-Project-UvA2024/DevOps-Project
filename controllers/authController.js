@@ -38,7 +38,7 @@ const signIn = async (username, password) => {
 
     try {
         const data = await client.send(new InitiateAuthCommand(params));
-        return data.AuthenticationResult; // Contains tokens
+        return data.AuthenticationResult; // Contains tokens and the user returned from the mysql
     } catch (error) {
         throw error;
     }
