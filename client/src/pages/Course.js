@@ -21,8 +21,7 @@ const Course = () => {
         title: 'Department',
         dataIndex: 'department',
         key: 'department',
-      }
-  
+      }  
   
     ];
   
@@ -31,37 +30,36 @@ const Course = () => {
         key: '1',
         name: 'Artificial Intelligence',
         id: 32,
-        department: 'Faculty of Science',
-        tags: ['science'],
+        department: 'Faculty of Science'        
       },
       {
         key: '2',
         name: 'Software Engineering',
         id: 42,
-        department: 'Faculty of Science',
-        tags: ['science'],
+        department: 'Faculty of Science'
       },
       {
         key: '3',
-        name: 'Archaelogy',
-        
+        name: 'Archaelogy',     
+        id: 402,   
         department: 'Faculty of Humanities'
         
       },
     ]
   
     return (
-      <div className="container-table">
-  
+      <div className="container-table">  
         <div className='table-container'>
           <div className='add-course-btn'>
             <h2>Available Courses</h2>
             <PlusCircleTwoTone className='add-button'></PlusCircleTwoTone>
+
+
+
+                
           </div>
-          <Table columns={columns} dataSource={data}/>
-  
-        </div>
-  
+          <Table columns={columns} dataSource={data}/>  
+        </div>  
       </div>
     );
   }
