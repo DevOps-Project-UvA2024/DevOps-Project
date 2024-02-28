@@ -1,74 +1,43 @@
-import React from 'react';
+import React, { useEffect, useContext } from 'react';
 import { Table, Tag } from 'antd';
 import "../styles/tables_style.css"
-
+import StoreContext from '../store/StoreContext';
 
 const columns = [
     {
       title: 'Name',
       dataIndex: 'name',
-      key: 'name',
-      render: (text) => <a>{text}</a>,
-    },
-    {
-      title: 'Id',
-      dataIndex: 'id',
-      key: 'id',
+      key: 'name'
     },
     {
       title: 'Department',
       dataIndex: 'department',
       key: 'department',
-    },
-    {
-      title: 'Tags',
-      key: 'tags',
-      dataIndex: 'tags',
-      render: (_, { tags }) => (
-        <>
-          {tags.map((tag) => {
-            let color = tag.length > 5 ? 'geekblue' : 'green';
-            if (tag === 'loser') {
-              color = 'volcano';
-            }
-            return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          })}
-        </>
-      ),
     }
   ];
-  const data = [
-    {
-      key: '1',
-      name: 'Artificial Intelligence',
-      id: 32,
-      department: 'Faculty of Science',
-      tags: ['science'],
-    },
-    {
-      key: '2',
-      name: 'Software Engineering',
-      id: 42,
-      department: 'Faculty of Science',
-      tags: ['science'],
-    },
-    {
-      key: '3',
-      name: 'Archaelogy',
-      id: 602,
-      department: 'Faculty of Humanities',
-      tags: ['humanities'],
-    },
-  ]
 
-const Courses = () => 
-<div className="container-table">
-    <h2>Available Courses</h2>
-    <Table columns={columns} dataSource={data}/>
-</div>
+const Courses = () => {
+  const { state, dispatch } = useContext(StoreContext);
+
+  useEffect(() => {
+    // Fetch user info from the backend
+    fetch('/api/courses')
+    .then(response => response.json())
+    .then(data => {
+        dispatch({ type: 'SET_COURSES', payload: data });
+    })
+    .catch(error => console.error('Error fetching courses:', error));
+  }, [dispatch]);
+
+  console.log(state.courses)
+
+  return (
+    <div className="container-table">
+      <h2>Available Courses</h2>
+      <Table columns={columns} dataSource={state.courses} rowKey={"id"}/>
+    </div>
+  )
+}
+
 
 export default Courses
