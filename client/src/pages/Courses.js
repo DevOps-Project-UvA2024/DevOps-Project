@@ -1,46 +1,31 @@
 import React from 'react';
 import { Space, Table, Tag } from 'antd';
 import "../styles/tables_style.css"
+import { PlusCircleTwoTone } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 
 
-const columns = [
+
+
+const Courses = () => {
+  const navigate = useNavigate();
+
+  const columns = [
     {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
-      render: (text) => <a>{text}</a>,
-    },
-    {
-      title: 'Id',
-      dataIndex: 'id',
-      key: 'id',
+      render: (text, record) => <a onClick={(e) => { e.preventDefault(); navigate(`/courses/course`); }}>{text}</a>,
     },
     {
       title: 'Department',
       dataIndex: 'department',
       key: 'department',
-    },
-    {
-      title: 'Tags',
-      key: 'tags',
-      dataIndex: 'tags',
-      render: (_, { tags }) => (
-        <>
-          {tags.map((tag) => {
-            let color = tag.length > 5 ? 'geekblue' : 'green';
-            if (tag === 'loser') {
-              color = 'volcano';
-            }
-            return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          })}
-        </>
-      ),
     }
+
+
   ];
+
   const data = [
     {
       key: '1',
@@ -59,17 +44,27 @@ const columns = [
     {
       key: '3',
       name: 'Archaelogy',
-      id: 602,
-      department: 'Faculty of Humanities',
-      tags: ['humanities'],
+      
+      department: 'Faculty of Humanities'
+      
     },
   ]
 
-const Courses = () => 
-<div className="container-table">
-    <h2>Available Courses</h2>
-    <Table columns={columns} dataSource={data}/>
+  return (
+    <div className="container-table">
 
-</div>
+      <div className='table-container'>
+        <div className='add-course-btn'>
+          <h2>Available Courses</h2>
+          <PlusCircleTwoTone className='add-button'></PlusCircleTwoTone>
+        </div>
+        <Table columns={columns} dataSource={data}/>
+
+      </div>
+
+    </div>
+  );
+}
+
 
 export default Courses

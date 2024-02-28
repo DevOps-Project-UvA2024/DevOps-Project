@@ -7,6 +7,7 @@
     "start": "npm run build && node app.js"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.3.0",
     "@aws-sdk/client-cognito-identity-provider": "^3.515.0",
     "amazon-cognito-identity-js": "^6.3.7",
     "amazon-cognito-js": "^1.1.0",
