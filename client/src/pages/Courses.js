@@ -1,48 +1,22 @@
-import React, { useEffect, useContext } from 'react';
-import { Table } from 'antd';
+import React, { useEffect, useContext, useState } from 'react';
 import "../styles/tables_style.css"
 import StoreContext from '../store/StoreContext';
 import { useNavigate } from 'react-router-dom';
-import { Button, Modal, Form, Input, Alert, Space, Table, Tag } from 'antd';
-
-
+import { Button, Modal, Form, Input, Table } from 'antd';
 
 const Courses = () => {
 
   const navigate = useNavigate();
   const {TextArea} = Input;
-
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [form] = Form.useForm();
 
   const showModal = () => {
     setIsModalOpen(true);
   };
 
   const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-import { PlusCircleTwoTone } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
-import { Button, Modal, Form, Input, Alert, Space, Table, Tag } from 'antd';
-
-
-
-const Courses = () => {
-
-  const navigate = useNavigate();
-  const {TextArea} = Input;
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleOk = () => {
+    console.log(form.getFieldsValue())
     setIsModalOpen(false);
   };
 
@@ -50,15 +24,13 @@ const Courses = () => {
     setIsModalOpen(false);
   };
 
-  const columns = [
   const columns = [
     {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
-      render: (text, record) => <a onClick={(e) => { 
+      render: (text, record) => <a href="/" onClick={(e) => { 
         e.preventDefault(); 
-        //console.log(record);
         navigate(`/courses/${record.id}`); 
       }}>{text}</a>,
     },
@@ -92,7 +64,9 @@ const Courses = () => {
             Add course 
           </Button>
           <Modal title="Add a new course" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-            <Form>
+            <Form
+              form={form}
+            >
               <Form.Item
                 label="Course Name"
                 name="course"
@@ -114,7 +88,7 @@ const Courses = () => {
             </Form>
           </Modal>
         </div>
-        <Table columns={columns} dataSource={data}/>
+        <Table columns={columns} dataSource={state.courses} rowKey={"id"}/>
       </div>
     </div>
   )

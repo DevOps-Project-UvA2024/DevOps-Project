@@ -1,5 +1,5 @@
-import Reactz,  { useState } from 'react';
-import { Space, Table, Button, Rate, Checkbox , Modal, Form, Input} from 'antd';
+import React,  { useState } from 'react';
+import { Table, Button, Rate, Checkbox , Modal} from 'antd';
 import { DownloadOutlined,StarOutlined } from '@ant-design/icons';
 import "../styles/tables_style.css"
 
