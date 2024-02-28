@@ -1,23 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext } from 'react';
+import StoreContext from '../store/StoreContext';
 
 const Greeting = () => {
-  const [userName, setUserName] = useState('');
+  const { state } = useContext(StoreContext);
 
-  useEffect(() => {
-    // Fetch user info from the backend
-    fetch('/api/users/user/user-info', {
-      credentials: 'include' // Important for including cookies in the request
-    })
-    .then(response => response.json())
-    .then(data => {
-      setUserName(data.name); // Assuming 'name' is the attribute holding the user's name
-    })
-    .catch(error => console.error('Error fetching user info:', error));
-  }, []);
+  console.log(state)
 
   return (
     <div>
-      {userName ? <h1>Hello, {userName}</h1> : <p>Loading user info...</p>}
+      {state.user ? <h1>Hello, {state.user.name}</h1> : <p>Loading user info...</p>}
     </div>
   );
 };

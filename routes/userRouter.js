@@ -11,7 +11,7 @@ router.get('/user-info', async (req, res) => {
 
   try {
     const userInfo = await fetchUserInfoFromCognito(accessToken);
-    res.json(userInfo); // Send back the user's information
+    res.json(userInfo); // Sends back the user information
   } catch (error) {
     res.status(400).json({ message: "Failed to fetch user information", error: error.toString() });
   }

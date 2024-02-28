@@ -26,9 +26,11 @@
     "jwk-to-pem": "^2.0.5",
     "jwks-rsa": "^3.1.0",
     "morgan": "~1.9.1",
+    "mysql2": "^3.9.2",
     "node-fetch": "^3.3.2",
     "react-router-dom": "^6.22.1",
-    "request": "^2.88.2"
+    "request": "^2.88.2",
+    "sequelize": "^6.37.1"
   },
   "main": "app.js",
   "author": "",
