@@ -5,12 +5,19 @@ const fetchCoursesFiles = async (course_id) => {
     try {
      
     console.log(course_id);
+
     const allCoursesWithFiles = await db.File.findAll({
         where: { course_id: course_id },
-        include: [{
+        include: [
+            {
           model: db.Course,
-          attributes: ['name'], 
-        }]
+          attributes: ['name']}
+        ,
+        {
+            model: db.User,
+            attributes: ['username'], 
+          },
+    ]
       });
 
 

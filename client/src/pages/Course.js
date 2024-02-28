@@ -46,14 +46,14 @@ const Course = () => {
       },
       {
         title: 'Uploaded By',
-        dataIndex: 'uploadedby',
         key: 'uploadedby',
         sorter: (a, b) => a.uploadedby.localeCompare(b.uploadedby),
+        render: (_, record ) => record.User.username
       },
       {
         title: 'Date',
-        dataIndex: 'date',
-        key: 'date',
+        dataIndex: 'upload_date',
+        key: 'upload_date',
         sorter: (a, b) => a.uploadedby.localeCompare(b.uploadedby),
 
       },
@@ -107,28 +107,28 @@ const Course = () => {
     const urlPath = window.location.pathname; 
     const urlparams = urlPath.split('/'); 
     const course_id = urlparams.pop() || 'default'; 
-    console.log(course_id); 
+    //console.log(course_id); 
 
     useEffect(() => {
       // Fetch user info from the backend
       fetch(`/api/files/${course_id}`)
       .then(response => response.json())
       .then(data => {
-          console.log(data);
+          console.log(data);  
           dispatch({ type: 'SET_FILES', payload: data });
       })
       .catch(error => console.error('Error fetching courses:', error));
     }, [dispatch]);
     
   
-    console.log(state.files);
+    
     return (
       <div className="container-table">  
         <div className='table-container'>
           <div className='add-course-btn'>
             <h2>Files</h2>                
           </div>
-          <Table columns={columns} dataSource={state.files}/>  
+          <Table columns={columns} dataSource={state.files} rowKey={"id"}/>  
           <Modal  title="File Rating" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
             <div className='modal-rating'>
                 <p>What is your rating for {selectedName}?</p>
