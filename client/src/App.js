@@ -11,9 +11,9 @@ import Greeting from './pages/Greeting';
 import PasswordReset from './pages/PasswordReset';
 import Courses from './pages/Courses';
 import Acc from './pages/Account';
-import { Account } from 'aws-sdk';
 import WithNavBar from './pages/WithNavBar';
 import WithoutNavBar from './pages/WithoutNavBar';
+import Course from './pages/Course';
 
 const App = () => {
   
@@ -40,6 +40,8 @@ const App = () => {
               <Route path="/greeting" element={<Greeting />} />
               <Route path="/courses" element={<Courses />} /> 
               <Route path="/account" element={<Acc />} />
+              <Route path="/courses/:courseid" element={<Course />} />
+
             </Route>
           </Route>
         </Routes>
