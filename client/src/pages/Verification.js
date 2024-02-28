@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Form, Button, Alert, Input, message } from 'antd';
+
 const CenteredFlexContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -26,26 +27,28 @@ const StyledFormTitle = styled.h1`
 `;
 
 const CodeVerification = () => {
-    const [code, setCode] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
     const location = useLocation();
-    const [email, setEmail] = useState('');
+
+    const [form] = Form.useForm();
 
     useEffect(() => {
-      if (location.state?.email) {
-        setEmail(location.state.email);
-      }
-    }, [location.state?.email]); // Dependency array
+      
+      form.setFieldsValue({
+        email: location.state?.email
+      });
+  
+    }, [form, location.state?.email]);
     
-    const onFinish = async () => {
+    const onFinish = async (values) => {
       try {
-        const response = await fetch('/api/verify', {
+        const response = await fetch('api/users/auth/verify', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ email, code }),
+          body: JSON.stringify(values),
         });
         if (!response.ok) throw new Error('Code verification failed');
         navigate('/signin', { state: { successMessage: 'Verification successful. Please sign in.' } });
@@ -56,15 +59,14 @@ const CodeVerification = () => {
     };
 
     const resetVerification = async () => {
+      const email = form.getFieldValue('email');
       try {
-        console.log(email)
-        if (email === '') throw new Error('Email was empty');
-        const response = await fetch('/api/resend-verification', {
+        const response = await fetch('api/users/auth/resend-verification', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ email }),
+          body: JSON.stringify({email: email}),
         });
         if (!response.ok) throw new Error('Error while resending verification');
         message.success('Verification email resent!');      
@@ -87,20 +89,21 @@ const CodeVerification = () => {
               onClose={() => setErrorMessage('')}
             />
           )}
-          <Form onFinish={onFinish} layout="vertical">
+          <Form form={form} onFinish={onFinish} layout="vertical">
             <Form.Item
               label="Email"
               name="email"
-              initialValue={email}
-              rules={[{ type: 'email', message: 'The input is not a valid email!' }, { required: true, message: 'Please input your email!' }]}
+              rules={[{ type: 'email', message: 'The input is not a valid email!' }, 
+              { required: true, message: 'Please input your email!' }]}
             >
-              <Input onChange={setEmail}/>
+              <Input />
+            </Form.Item>
             <Form.Item
               label="Verification Code"
               name="code"
               rules={[{ required: true, message: 'Please input your code!' }]}
             >
-              <Input onChange={setCode} />
+              <Input />
             </Form.Item>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Button type="primary" htmlType="submit">
@@ -110,7 +113,6 @@ const CodeVerification = () => {
                   Resend Verification
                 </Button>
               </div>
-            </Form.Item>
           </Form>
         </StyledCodeVerificationContainer>
       </CenteredFlexContainer>

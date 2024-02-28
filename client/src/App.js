@@ -1,4 +1,5 @@
 import React from 'react';
+// eslint-disable-next-line
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import SignUp from './pages/SignUp';
 import SignIn from './pages/SignIn'
@@ -6,7 +7,6 @@ import Verification from './pages/Verification'
 import 'antd/dist/reset.css'
 import {AuthProvider} from './AuthProvider';
 import PrivateRoute from './PrivateRoute';
-import NavBar from './pages/NavBar';
 import Greeting from './pages/Greeting';
 import PasswordReset from './pages/PasswordReset';
 import Courses from './pages/Courses';
@@ -30,8 +30,6 @@ const App = () => {
             <Route path="/reset-password" element={<PasswordReset />} />
             <Route path="/verify-account" element={<Verification />} />
           </Route>
-
-
 
           <Route element={<WithNavBar />}>
             
