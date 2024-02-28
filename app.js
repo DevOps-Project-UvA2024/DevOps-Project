@@ -10,6 +10,7 @@ const isAdmin = require('./middleware/isAdmin.js');
 const authRouter = require('./routes/authRouter');
 const userRouter = require('./routes/userRouter');
 const courseRouter = require('./routes/courseRouter.js');
+const fileRouter = require('./routes/fileRouter.js');
 const adminRouter = require('./routes/adminRouter.js');
 const fileRouter = require('./routes/fileRouter.js');
 

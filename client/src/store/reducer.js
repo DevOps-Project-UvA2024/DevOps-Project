@@ -31,6 +31,12 @@ export function reducer(state, action) {
                 ...state,
                 files: []
             };
+        case 'SET_FILES':
+            return {
+                ...state,
+                files: action.payload
+            };
+        
         case 'LOGOUT':
             return { ...state, user: null };
         default:
