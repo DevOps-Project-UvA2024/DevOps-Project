@@ -1,6 +1,8 @@
-import React,  { useState } from 'react';
+import React, { useEffect, useContext, useState }from 'react';
 import { Table, Button, Rate, Checkbox , Modal} from 'antd';
 import { DownloadOutlined,StarOutlined } from '@ant-design/icons';
+import StoreContext from '../store/StoreContext';
+
 import "../styles/tables_style.css"
 
 
@@ -11,6 +13,9 @@ const Course = () => {
     const onChange = (checked, recordKey) => {
       console.log(`checked = ${checked}, key = ${recordKey}`);
     };
+
+    const { state, dispatch } = useContext(StoreContext);
+
 
     // modal
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -94,42 +99,36 @@ const Course = () => {
       }  
     ];
 
-    const data = [
-      {
-        key: '1',
-        name: 'Programming Basics.pdf',
-        date: '2024-02-28 15:00:29',
-        uploadedby: 'Mariana',
-        rating:3,
-        status: false
-      },
-      {
-        key: '2',
-        name: 'AProgramming Basics.pdf',
-        date: '2023-02-28 15:00:29',
-        uploadedby: 'AMariana',
-        rating:5,
-        status: true
-
-      }
-      
-    ];
-
-
     
     const handleRateChange = (value) => {
       //setModalRating(value);
     };
+
+    const urlPath = window.location.pathname; 
+    const urlparams = urlPath.split('/'); 
+    const course_id = urlparams.pop() || 'default'; 
+    console.log(course_id); 
+
+    useEffect(() => {
+      // Fetch user info from the backend
+      fetch(`/api/files/${course_id}`)
+      .then(response => response.json())
+      .then(data => {
+          console.log(data);
+          dispatch({ type: 'SET_FILES', payload: data });
+      })
+      .catch(error => console.error('Error fetching courses:', error));
+    }, [dispatch]);
     
   
-    
+    console.log(state.files);
     return (
       <div className="container-table">  
         <div className='table-container'>
           <div className='add-course-btn'>
             <h2>Files</h2>                
           </div>
-          <Table columns={columns} dataSource={data}/>  
+          <Table columns={columns} dataSource={state.files}/>  
           <Modal  title="File Rating" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
             <div className='modal-rating'>
                 <p>What is your rating for {selectedName}?</p>

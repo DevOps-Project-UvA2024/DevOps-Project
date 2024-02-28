@@ -15,6 +15,7 @@ const fetchUserInfoFromCognito = async (accessToken) => {
         acc[attr.Name] = attr.Value;
         return acc;
       }, {});
+      
 
       const userInfo = await db.User.findOne({
         where: { email:attributes.email }
