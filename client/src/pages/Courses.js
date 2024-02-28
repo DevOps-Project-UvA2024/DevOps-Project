@@ -1,8 +1,8 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useContext, useState, useRef } from 'react';
 import "../styles/tables_style.css"
 import StoreContext from '../store/StoreContext';
 import { useNavigate } from 'react-router-dom';
-import { Button, Modal, Form, Input, Table } from 'antd';
+import { Button, Modal, Form, Input, Table, message, Pagination } from 'antd';
 
 const Courses = () => {
 
@@ -10,13 +10,28 @@ const Courses = () => {
   const {TextArea} = Input;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
+  const formRef = useRef(null);
 
   const showModal = () => {
     setIsModalOpen(true);
   };
 
-  const handleOk = () => {
-    console.log(form.getFieldsValue())
+  const handleSubmit = async (values) => {
+    try {
+      const response = await fetch('api/admin/courses/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error('Error creating course');
+      form.resetFields();
+      message.success(`Successfully added course category ${result.message[0].name}`);
+    } catch (error) {
+      message.error(error);
+    }
     setIsModalOpen(false);
   };
 
@@ -29,6 +44,7 @@ const Courses = () => {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
+      sorter: (a, b) => a.name.localeCompare(b.name),
       render: (text, record) => <a href="/" onClick={(e) => { 
         e.preventDefault(); 
         navigate(`/courses/${record.id}`); 
@@ -38,6 +54,7 @@ const Courses = () => {
       title: 'Department',
       dataIndex: 'department',
       key: 'department',
+      sorter: (a, b) => a.name.localeCompare(b.name),
     }
   ];
 
@@ -53,7 +70,14 @@ const Courses = () => {
     .catch(error => console.error('Error fetching courses:', error));
   }, [dispatch]);
 
-  console.log(state.courses)
+  const customFooter = [
+    <Button key="back" onClick={handleCancel}>
+      Cancel
+    </Button>,
+    <Button key="submit" type="primary" onClick={() => formRef.current.submit()}>
+      Submit
+    </Button>,
+  ];
 
   return (
     <div className="container-table">
@@ -63,9 +87,15 @@ const Courses = () => {
           <Button type="primary" onClick={showModal}>
             Add course 
           </Button>
-          <Modal title="Add a new course" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+          <Modal 
+            title="Add a new course" 
+            open={isModalOpen} 
+            onCancel={handleCancel}
+            footer={customFooter} >
             <Form
               form={form}
+              ref={formRef}
+              onFinish={handleSubmit}
             >
               <Form.Item
                 label="Course Name"
@@ -88,7 +118,9 @@ const Courses = () => {
             </Form>
           </Modal>
         </div>
-        <Table columns={columns} dataSource={state.courses} rowKey={"id"}/>
+        <Table columns={columns} dataSource={state.courses} rowKey={"id"} 
+            pagination={{ defaultPageSize: 10, showSizeChanger: true}}
+          />
       </div>
     </div>
   )

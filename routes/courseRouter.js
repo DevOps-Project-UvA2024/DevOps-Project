@@ -3,7 +3,6 @@ const router = express.Router();
 const { fetchAllCourses } = require('../controllers/courseController');
 
 router.get('/', async (req, res) => {
-
   try {
     const courseInfo = await fetchAllCourses();
     res.json(courseInfo);
