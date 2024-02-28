@@ -1,19 +1,29 @@
 import React, { useEffect, useContext } from 'react';
-import { Table, Tag } from 'antd';
+import { Table } from 'antd';
 import "../styles/tables_style.css"
 import StoreContext from '../store/StoreContext';
+import { useNavigate } from 'react-router-dom';
 
-const columns = [
+
+
+
+const Courses = () => {
+  const navigate = useNavigate();
+
+  const columns = [
     {
       title: 'Name',
       dataIndex: 'name',
-      key: 'name'
+      key: 'name',
+      render: (text, record) => <a onClick={(e) => { e.preventDefault(); navigate(`/courses/course`); }}>{text}</a>,
     },
     {
       title: 'Department',
       dataIndex: 'department',
       key: 'department',
     }
+
+
   ];
 
 const Courses = () => {

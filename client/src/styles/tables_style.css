@@ -4,4 +4,21 @@
 
 .container-table{
     margin: 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+
+}
+
+.add-course-btn{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem;
+}
+
+.add-button{
+    font-size: 30px;
+}
+.add-button:hover{
+    cursor: pointer;
 }
