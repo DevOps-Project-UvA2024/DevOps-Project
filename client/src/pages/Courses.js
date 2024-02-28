@@ -1,5 +1,5 @@
 import React from 'react';
-import { Space, Table, Tag } from 'antd';
+import { Table, Tag } from 'antd';
 import "../styles/tables_style.css"
 
 
@@ -69,7 +69,6 @@ const Courses = () =>
 <div className="container-table">
     <h2>Available Courses</h2>
     <Table columns={columns} dataSource={data}/>
-
 </div>
 
 export default Courses
