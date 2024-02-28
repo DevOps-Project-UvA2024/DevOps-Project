@@ -63,9 +63,7 @@ const SignIn = () => {
       console.log('Sign-in successful:', data);
     })
     .catch(async (errorResponse) => {
-      console.log(errorMessage)
       const error = await errorResponse.json(); 
-      console.error('Sign-in error:', error);
       setErrorMessage(error);
     });
   };
