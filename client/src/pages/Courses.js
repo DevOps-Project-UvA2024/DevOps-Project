@@ -1,30 +1,16 @@
-import React, { useState , useEffect, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
+import { Table } from 'antd';
 import "../styles/tables_style.css"
-import StoreContext from '../store/StoreContext';import { PlusCircleTwoTone } from '@ant-design/icons';
+import StoreContext from '../store/StoreContext';
 import { useNavigate } from 'react-router-dom';
-import { Button, Modal, Form, Input, Alert, Space, Table, Tag } from 'antd';
+
 
 
 
 const Courses = () => {
-
   const navigate = useNavigate();
-  const {TextArea} = Input;
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
+  const columns = [
   const columns = [
     {
       title: 'Name',
@@ -41,6 +27,8 @@ const Courses = () => {
       dataIndex: 'department',
       key: 'department',
     }
+
+
   ];
 
 const Courses = () => {
