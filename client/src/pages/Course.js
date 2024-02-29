@@ -38,6 +38,7 @@ const Course = () => {
     };
 
     const { state, dispatch } = useContext(StoreContext);
+    
     let locale = {
       emptyText: 'This course has no files yet!',
     };
