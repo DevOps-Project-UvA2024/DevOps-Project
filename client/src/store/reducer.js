@@ -1,7 +1,7 @@
 export const initialState = {
     user: null, 
-    courses: null,
-    files: null,
+    courses: [],
+    files: [],
   };
   
 export function reducer(state, action) {
@@ -19,9 +19,13 @@ export function reducer(state, action) {
         case 'SET_FILES':
             return {
                 ...state,
-                files: action.payload
+                files: [...action.payload]
             };
-        
+        case 'RESET_FILES':
+            return {
+                ...state,
+                files: []
+            };
         case 'LOGOUT':
             return { ...state, user: null };
         default:

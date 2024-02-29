@@ -1,27 +1,18 @@
 const { GetUserCommand } = require("@aws-sdk/client-cognito-identity-provider");
 const { client } = require("../cognito-config"); // Adjust the path as necessary
+const { fetchUserEmailFromCognito } = require("../utils/userUtils.js")
 
 const db = require('../models/index.js');
 
-const fetchUserInfoFromCognito = async (accessToken) => {
-    const command = new GetUserCommand({
-      AccessToken: accessToken,
-    });
-  
+const fetchUserInfoFromCognito = async (req) => {
     try {
-      const { UserAttributes } = await client.send(command);
-      // Convert the array of attributes into a more accessible object format
-      const attributes = UserAttributes.reduce((acc, attr) => {
-        acc[attr.Name] = attr.Value;
-        return acc;
-      }, {});
-      
+      const loggedUserEmail = await fetchUserEmailFromCognito(req)
 
       const userInfo = await db.User.findOne({
-        where: { email:attributes.email }
+        where: { email:loggedUserEmail }
       });
       
-      return userInfo; // Return only the user attributes object
+      return userInfo;
     } catch (error) {
       console.error("Error fetching user info from Cognito:", error);
       throw error;

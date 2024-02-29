@@ -1,5 +1,5 @@
-import React, { useEffect, useContext, useState }from 'react';
-import { Table, Button, Rate, Checkbox , Modal} from 'antd';
+import React, { useEffect, useContext, useState, useCallback }from 'react';
+import { Table, Button, Rate, Checkbox , Modal, message} from 'antd';
 import { DownloadOutlined,StarOutlined } from '@ant-design/icons';
 import StoreContext from '../store/StoreContext';
 
@@ -16,26 +16,55 @@ const Course = () => {
 
     const { state, dispatch } = useContext(StoreContext);
 
-
     // modal
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedName, setSelectedName] = useState('');
-    const [modalRating, setModalRating] = useState(0); 
+    const [modalRating, setModalRating] = useState(0);
+    const [ratingOkText, setRatingOkText] = useState("Rate") ;
+    const [modalFileId, setModalFileId] = useState(null);
 
-    const showNameModal = (name, yourate) => {
-      setSelectedName(name);
-      setModalRating(yourate);
+    const showNameModal = async (file_name, file_id) => {
+
+      const response = await fetch(`/api/files/rating/${file_id}`);
+      const data = await response.json();
+      setModalFileId(file_id);
+      setSelectedName(file_name);
+      setModalRating(data !== null 
+        ? Math.round(Number(data.voting) * 2) / 2
+        : 0);
+      setRatingOkText(data !== null ? "Modify Rate" : "Rate");
       setIsModalOpen(true);
     };
 
-    const handleOk = () => {
-      setIsModalOpen(false);
+    const handleOk = async () => {
+      try {
+        const response = await fetch(`/api/files/rating/${modalFileId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json', 
+          },
+          body: JSON.stringify({ rating: modalRating }),
+        });
+    
+        if (!response.ok) {
+          throw new Error("There was an error while rating");
+        }
+        const result = await response.json(); 
+        message.success(`Successfully rated file ${selectedName}`);
+        
+        dispatch({ type: 'RESET_FILES' });
+        fetchFiles(course_id);
+
+        setIsModalOpen(false);
+        return result; 
+      } catch (error) {
+        console.error(error);
+      }
     };
 
     const handleCancel = () => {
       setIsModalOpen(false);
     };
-
   
     const columns = [
       {
@@ -73,7 +102,7 @@ const Course = () => {
         title: 'Rating',
         dataIndex: 'aggregate_voting',
         key: 'rating',
-        render: aggregate_voting => <Rate disabled allowHalf defaultValue={Number(aggregate_voting)} />,
+        render: aggregate_voting => <Rate disabled allowHalf defaultValue={Math.round(Number(aggregate_voting) * 2) / 2} />,
       },
       {
         title: 'Your Rating',
@@ -82,7 +111,7 @@ const Course = () => {
         align:'center',
         render: (_, record) => (
           <>
-            <Button  onClick={() => showNameModal(record.name)}><StarOutlined />Rate</Button>
+            <Button  onClick={() => showNameModal(record.name, record.id)}><StarOutlined />Rate</Button>
           </>
         ),
 
@@ -111,28 +140,23 @@ const Course = () => {
       }  
     ];
 
-    
-    const handleRateChange = (value) => {
-      //setModalRating(value);
-    };
-
     const urlPath = window.location.pathname; 
     const urlparams = urlPath.split('/'); 
     const course_id = urlparams.pop() || 'default'; 
-    //console.log(course_id); 
 
-    useEffect(() => {
-      // Fetch user info from the backend
+    const fetchFiles = useCallback((course_id) => {
       fetch(`/api/files/${course_id}`)
-      .then(response => response.json())
-      .then(data => {
-          console.log(data);  
+        .then(response => response.json())
+        .then(data => {
+          dispatch({ type: 'RESET_FILES' });
           dispatch({ type: 'SET_FILES', payload: data });
-      })
-      .catch(error => console.error('Error fetching courses:', error));
-    }, [dispatch, course_id]);
+        })
+        .catch(error => console.error('Error fetching files:', error));
+    }, [dispatch]);
     
-  
+    useEffect(() => {
+      fetchFiles(course_id);
+    }, [course_id, fetchFiles]);
     
     return (
       <div className="container-table">  
@@ -140,14 +164,18 @@ const Course = () => {
           <div className='add-course-btn'>
             <h2>Files</h2>                
           </div>
-          <Table columns={columns} dataSource={state.files} rowKey={"id"}/>  
-          <Modal  title="File Rating" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+          <Table columns={columns} dataSource={[...state.files]} rowKey={"id"}/>  
+          <Modal  
+            title="File Rating" 
+            open={isModalOpen} 
+            onOk={handleOk} 
+            okText={ratingOkText}
+            onCancel={handleCancel}
+          >
             <div className='modal-rating'>
                 <p>What is your rating for {selectedName}?</p>
-                <Rate onChange={handleRateChange} value={modalRating} />
+                <Rate allowHalf onChange={(value) => setModalRating(value)} value={modalRating} />
             </div>
-         
-
           </Modal> 
 
         </div>  
