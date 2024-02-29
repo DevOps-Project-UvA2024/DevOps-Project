@@ -1,13 +1,37 @@
 import React, { useEffect, useContext, useState, useCallback }from 'react';
-import { Table, Button, Rate, Checkbox , Modal, message, Tooltip} from 'antd';
+import { Table, Button, Rate, Checkbox , Modal, message, Tooltip, Upload} from 'antd';
 import { DownloadOutlined,StarOutlined } from '@ant-design/icons';
-import StoreContext from '../store/StoreContext';
-
+import { InboxOutlined } from '@ant-design/icons';
 import "../styles/tables_style.css"
+import StoreContext from '../store/StoreContext';
+const { Dragger } = Upload;
+
+
 
 
 const Course = () => {
     
+  const props = {
+    name: 'file',
+    multiple: true,
+    action: 'https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188',
+    onChange(info) {
+      const { status } = info.file;
+      if (status !== 'uploading') {
+        console.log(info.file, info.fileList);
+      }
+      if (status === 'done') {
+        message.success(`${info.file.name} file uploaded successfully.`);
+      } else if (status === 'error') {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+    },
+    onDrop(e) {
+      console.log('Dropped files', e.dataTransfer.files);
+    },
+  };
+
+
     // Handle changes in file visibility
     const onChange = async (checked, fileId) => {
       try {
@@ -38,7 +62,7 @@ const Course = () => {
     };
 
     const { state, dispatch } = useContext(StoreContext);
-    
+
     let locale = {
       emptyText: 'This course has no files yet!',
     };
@@ -46,6 +70,7 @@ const Course = () => {
 
     // modal
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
     const [selectedName, setSelectedName] = useState('');
     const [modalRating, setModalRating] = useState(0);
     const [ratingOkText, setRatingOkText] = useState("Rate") ;
@@ -174,6 +199,7 @@ const Course = () => {
         title: 'Status',
         dataIndex: 'status',
         key: 'status',
+        align: 'center',
         hidden: !state.user || state.user.role_id !== 2,
         render: (text, record) => (
           <Checkbox 
@@ -203,12 +229,41 @@ const Course = () => {
     useEffect(() => {
       fetchFiles(course_id);
     }, [course_id, fetchFiles]);
+
+    const showModal = () => {
+      setIsModalOpen(true);
+    };
+
+    const showUploadModal = () => {
+      setIsUploadModalOpen(true);
+    }
+
+    const handleUploadOk = () => {
+      setIsUploadModalOpen(false);
+    };
+
+    const handleUploadCancel = () => {
+      setIsUploadModalOpen(false);
+    };
     
     return (
       <div className="container-table">  
         <div className='table-container'>
           <div className='add-course-btn'>
-            <h2>Files</h2>                
+            <h2>Files</h2>  
+            <Button type="primary" onClick={showUploadModal}>
+              Upload File 
+            </Button> 
+            <Modal title="Upload" open={isUploadModalOpen} onOk={handleUploadOk} onCancel={handleUploadCancel}>
+              <p>Please upload a file here.</p>  
+              <Dragger {...props}>
+                <p className="ant-upload-drag-icon">
+                  <InboxOutlined />
+                </p>
+                <p className="ant-upload-text">Click or drag file to this area to upload</p>
+                
+              </Dragger>           
+            </Modal>             
           </div>
           <Table locale={locale} columns={columns} dataSource={[...state.files]} rowKey={"id"}/>  
           <Modal  
@@ -216,8 +271,7 @@ const Course = () => {
             open={isModalOpen} 
             onOk={handleOk} 
             okText={ratingOkText}
-            onCancel={handleCancel}
-          >
+            onCancel={handleCancel}>            
             <div className='modal-rating'>
                 <p>What is your rating for {selectedName}?</p>
                 <Rate allowHalf onChange={(value) => setModalRating(value)} value={modalRating} />
