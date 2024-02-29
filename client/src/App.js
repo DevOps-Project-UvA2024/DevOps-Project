@@ -1,6 +1,6 @@
 import React from 'react';
 // eslint-disable-next-line
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import SignUp from './pages/SignUp';
 import SignIn from './pages/SignIn'
 import Verification from './pages/Verification'
@@ -25,6 +25,8 @@ const App = () => {
     
       <AuthProvider>
         <Routes>
+        <Route path="/" element={<Navigate replace to="/signin" />} />
+
         <Route element={<WithoutNavBar />}>
             <Route path="/signup" element={<SignUp />} />
             <Route path="/signin" element={<SignIn />} />
