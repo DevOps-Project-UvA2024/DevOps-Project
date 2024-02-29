@@ -1,18 +1,42 @@
 export const initialState = {
     user: null, 
-    courses: null,
-    files: null,
+    courses: [],
+    files: [],
   };
   
 export function reducer(state, action) {
     switch (action.type) {
         case 'SET_USER_INFO':
-            return { ...state, user: action.payload };
+            return { 
+                ...state, 
+                user: action.payload 
+            };
         case 'SET_COURSES':
             return {
                 ...state,
-                courses: action.payload
-            }
+                courses: [...action.payload]
+            };
+        case 'RESET_COURSES':
+            return {
+                ...state,
+                courses: []
+            };
+        case 'SET_FILES':
+            return {
+                ...state,
+                files: [...action.payload]
+            };
+        case 'RESET_FILES':
+            return {
+                ...state,
+                files: []
+            };
+        case 'SET_FILES':
+            return {
+                ...state,
+                files: action.payload
+            };
+        
         case 'LOGOUT':
             return { ...state, user: null };
         default:

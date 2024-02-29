@@ -1,6 +1,6 @@
 import React from 'react';
 // eslint-disable-next-line
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import SignUp from './pages/SignUp';
 import SignIn from './pages/SignIn'
 import Verification from './pages/Verification'
@@ -13,6 +13,7 @@ import Courses from './pages/Courses';
 import Acc from './pages/Account';
 import WithNavBar from './pages/WithNavBar';
 import WithoutNavBar from './pages/WithoutNavBar';
+import Course from './pages/Course';
 
 const App = () => {
   
@@ -21,9 +22,10 @@ const App = () => {
     <>
     <div className="container">
        
-    
       <AuthProvider>
         <Routes>
+        <Route path="/" element={<Navigate replace to="/signin" />} />
+
         <Route element={<WithoutNavBar />}>
             <Route path="/signup" element={<SignUp />} />
             <Route path="/signin" element={<SignIn />} />
@@ -37,6 +39,8 @@ const App = () => {
               <Route path="/greeting" element={<Greeting />} />
               <Route path="/courses" element={<Courses />} /> 
               <Route path="/account" element={<Acc />} />
+              <Route path="/courses/:courseid" element={<Course />} />
+
             </Route>
           </Route>
         </Routes>

@@ -30,7 +30,7 @@ db.File.belongsTo(db.Course, { foreignKey: 'course_id' });
 db.File.belongsTo(db.User, { foreignKey: 'uploader_id' });
 
 db.User.hasMany(db.Voting, { foreignKey: 'student_id' });
-db.File.hasMany(db.Voting, { foreignKey: 'file_id' });
+db.File.hasMany(db.Voting, { as: 'votings', foreignKey: 'file_id' });
 db.Voting.belongsTo(db.User, { foreignKey: 'student_id' });
 db.Voting.belongsTo(db.File, { foreignKey: 'file_id' });
 

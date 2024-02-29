@@ -1,12 +1,11 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect  } from 'react';
 import { Form, Input, Button, Alert } from 'antd';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import PasswordChecklist from "react-password-checklist"
-
 import { useAuth, AuthStatus } from '../AuthProvider';
 import { Navigate } from 'react-router-dom';
+import {allowedDomains} from '../utils';
 
 const CenteredFlexContainer = styled.div`
   display: flex;
@@ -38,10 +37,16 @@ const SignUp = () => {
   
   const { authStatus } = useAuth();
   const [errorMessage, setErrorMessage] = useState('');
-
   const [password, setPassword] = React.useState("");
   const [password2, setPassword2] = React.useState("");
   const [email, setEmail] = useState('');
+  const [isEmailDomainValid, setIsEmailDomainValid] = useState(true);
+
+  useEffect(() => {
+    if (email) {
+      checkEmailDomain(email);
+    }
+  }, [email]);
 
 
   if (authStatus === AuthStatus.SignedIn) {
@@ -78,6 +83,17 @@ const SignUp = () => {
     console.log('Failed:', errorInfo);
   };
 
+  // Check if email domain corresponds to the allowed Domains
+  const checkEmailDomain = (email) => {
+    const domain = email.split('@')[1];
+    if (domain && !allowedDomains.includes(domain)) {
+      setIsEmailDomainValid(false);
+    } else {
+      setIsEmailDomainValid(true);
+    }
+  };
+
+
   return (
     <CenteredFlexContainer>
     <StyledSignUpContainer className="container">
@@ -109,8 +125,9 @@ const SignUp = () => {
         <Form.Item
           label="Email"
           name="email"
-          rules={[{ type: 'email', message: 'The input is not a valid email!' }, 
-          { required: true, message: 'Please input your email!' }]}
+          rules={[{ required: true, message: 'Please input your email!' }, { type: 'email', message: 'The input is not a valid email!' }]}
+          validateStatus={isEmailDomainValid ? '' : 'error'}
+          help={isEmailDomainValid ? '' : 'Email domain is not allowed.'}
         >
           <Input onChange={(e) => setEmail(e.target.value)} />
         </Form.Item>
