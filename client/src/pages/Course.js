@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState, useCallback }from 'react';
 import { Table, Button, Rate, Checkbox , Modal, message, Tooltip, Form, Input, Upload} from 'antd';
-import { DownloadOutlined,StarOutlined } from '@ant-design/icons';
+import { DownloadOutlined, StarOutlined, InboxOutlined } from '@ant-design/icons';
 import StoreContext from '../store/StoreContext';
 import "../styles/tables_style.css";
 import FilterBar from './FilterBar';
@@ -313,7 +313,6 @@ const Course = () => {
             filters={filters}
             type = 'FILES'
           />
-          <Table columns={columns} dataSource={[...state.files]} rowKey={"id"}/>  
           <Table locale={locale} columns={columns} dataSource={[...state.files]} rowKey={"id"}/>  
           <Modal  
             title="File Rating" 
