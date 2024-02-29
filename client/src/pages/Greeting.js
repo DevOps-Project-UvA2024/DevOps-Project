@@ -1,9 +1,8 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import StoreContext from '../store/StoreContext';
 
 const Greeting = () => {
   const { state } = useContext(StoreContext);
-  // const [downloadUrl] = useState('');
 
   return (
     <div>

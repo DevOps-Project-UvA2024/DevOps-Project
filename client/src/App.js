@@ -17,7 +17,6 @@ import Course from './pages/Course';
 
 const App = () => {
   
-  
   return (
     <>
     <div className="container">
