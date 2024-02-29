@@ -28,6 +28,7 @@ const Courses = () => {
       const result = await response.json();
       if (!response.ok) throw new Error('Error creating course');
       form.resetFields();
+      dispatch({ type: 'RESET_COURSES'});
       message.success(`Successfully added course category ${result.message[0].name}`);
     } catch (error) {
       message.error(error);
@@ -65,6 +66,7 @@ const Courses = () => {
     fetch('/api/courses')
     .then(response => response.json())
     .then(data => {
+        dispatch({ type: 'RESET_COURSES'});
         dispatch({ type: 'SET_COURSES', payload: data });
     })
     .catch(error => console.error('Error fetching courses:', error));
