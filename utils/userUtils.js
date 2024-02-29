@@ -54,7 +54,7 @@ const checkUserCreation = async (req, res) => {
 
       await db.User.create({
         username: attributes.name,
-        email: email,
+        email: req.body.username,
         role_id: 1
       });
     } catch (error) {

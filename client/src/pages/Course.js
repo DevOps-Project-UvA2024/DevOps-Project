@@ -38,6 +38,10 @@ const Course = () => {
     };
 
     const { state, dispatch } = useContext(StoreContext);
+    let locale = {
+      emptyText: 'This course has no files yet!',
+    };
+
 
     // modal
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -205,7 +209,7 @@ const Course = () => {
           <div className='add-course-btn'>
             <h2>Files</h2>                
           </div>
-          <Table columns={columns} dataSource={[...state.files]} rowKey={"id"}/>  
+          <Table locale={locale} columns={columns} dataSource={[...state.files]} rowKey={"id"}/>  
           <Modal  
             title="File Rating" 
             open={isModalOpen} 
