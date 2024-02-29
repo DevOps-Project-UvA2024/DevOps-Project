@@ -7,7 +7,6 @@ const FilterBar = ({ submitUrl, filters, type }) => {
   const { dispatch } = useContext(StoreContext);
 
   const onFinish = async (values) => {
-    console.log(values)
     try {
       const response = await fetch(submitUrl, {
         method: 'POST',
