@@ -1,9 +1,13 @@
 const db = require('../models/index.js');
 
-const fetchCoursesFiles = async (course_id) => {
+const fetchCoursesFiles = async (role, course_id) => {
+    let searchParameters = { course_id: course_id }
+    if (role !== 2){
+      searchParameters = { ...searchParameters, active: true}
+    }
     try {
     const allCoursesWithFiles = await db.File.findAll({
-      where: { course_id: course_id },
+      where: searchParameters,
       include: [
         {
           model: db.Voting,
