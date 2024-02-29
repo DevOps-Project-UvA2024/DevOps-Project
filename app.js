@@ -5,9 +5,13 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 
 const checkAuth = require('./middleware/auth');
+const isAdmin = require('./middleware/isAdmin.js');
+
 const authRouter = require('./routes/authRouter');
 const userRouter = require('./routes/userRouter');
 const courseRouter = require('./routes/courseRouter.js');
+const fileRouter = require('./routes/fileRouter.js');
+const adminRouter = require('./routes/adminRouter.js');
 const fileRouter = require('./routes/fileRouter.js');
 
 const db = require('./models/index.js');
@@ -29,6 +33,7 @@ app.use('/api/courses', checkAuth, courseRouter);
 app.use('/api/files', checkAuth, fileRouter);
 
 app.use('/api/users/user', checkAuth, userRouter);
+app.use('/api/admin', checkAuth, isAdmin, adminRouter);
 
 // The "catchall" handler: for any request that doesn't match one above, send back React's index.html file.
 app.get('*', (req, res) => {

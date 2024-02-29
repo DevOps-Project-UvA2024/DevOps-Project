@@ -11,13 +11,14 @@ const fetchCoursesFiles = async (course_id) => {
           attributes: []
         }, {
           model: db.User,
-          attributes: ['username']
+          attributes: ['username', 'id']
         }],
       attributes: [
           'id',
           'name',
           'upload_date',
-          [db.Sequelize.fn('AVG', db.Sequelize.col('votings.voting')), 'aggregate_voting']
+          [db.Sequelize.fn('AVG', db.Sequelize.col('votings.voting')), 'aggregate_voting'],
+          [db.Sequelize.fn('COUNT', db.Sequelize.col('votings.id')), 'n_votes'] 
         ],
         group: ['file.id']
       });
@@ -51,9 +52,8 @@ const fetchLoggedUserRating = async (fileId, email) => {
   }
 }
 
-const rateFileByLoggedUser = async (fileId, rating, email) => {
-  const user = await db.User.findOne({email: email});
-  userId = user.dataValues.id;
+const rateFileByLoggedUser = async (fileId, rating, userId) => {
+
   try {
     const userRating = await db.Voting.findOne({
       where: {

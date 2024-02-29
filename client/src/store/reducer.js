@@ -14,7 +14,12 @@ export function reducer(state, action) {
         case 'SET_COURSES':
             return {
                 ...state,
-                courses: action.payload
+                courses: [...action.payload]
+            };
+        case 'RESET_COURSES':
+            return {
+                ...state,
+                courses: []
             };
         case 'SET_FILES':
             return {
@@ -26,6 +31,12 @@ export function reducer(state, action) {
                 ...state,
                 files: []
             };
+        case 'SET_FILES':
+            return {
+                ...state,
+                files: action.payload
+            };
+        
         case 'LOGOUT':
             return { ...state, user: null };
         default:
