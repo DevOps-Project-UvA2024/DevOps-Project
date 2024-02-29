@@ -51,7 +51,7 @@ const Course = () => {
         }
         const result = await response.json(); 
         message.success(`Successfully rated file ${selectedName}`);
-        
+
         dispatch({ type: 'RESET_FILES' });
         fetchFiles(course_id);
 
@@ -131,6 +131,7 @@ const Course = () => {
         title: 'Status',
         dataIndex: 'status',
         key: 'status',
+        hidden: state.user.role_id !== 2,
         render: (status, record) => (
           <Checkbox 
             checked={status} 
@@ -139,7 +140,7 @@ const Course = () => {
         )
       }  
     ];
-
+    
     const urlPath = window.location.pathname; 
     const urlparams = urlPath.split('/'); 
     const course_id = urlparams.pop() || 'default'; 
