@@ -3,18 +3,11 @@ import StoreContext from '../store/StoreContext';
 
 const Greeting = () => {
   const { state } = useContext(StoreContext);
-  
-  console.log(state);
+  // const [downloadUrl] = useState('');
 
   return (
     <div>
-      {state.user ? (
-        <>
-          <h1>Hello, {state.user.username}</h1>
-        </>
-      ) : (
-        <p>Loading user info...</p>
-      )}
+      {state.user ? <h1>Hello, {state.user.username}</h1> : <p>Loading user info...</p>}
     </div>
   );
 };

@@ -57,10 +57,10 @@ const SignIn = () => {
       if (!response.ok) {
         throw response; 
       }
-      window.location.reload(); 
     })
     .then(data => {
       console.log('Sign-in successful:', data);
+      window.location.reload(); 
     })
     .catch(async (errorResponse) => {
       const error = await errorResponse.json(); 
