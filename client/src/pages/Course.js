@@ -8,10 +8,33 @@ import "../styles/tables_style.css"
 
 const Course = () => {
     
-    //const navigate = useNavigate();
-
-    const onChange = (checked, recordKey) => {
-      console.log(`checked = ${checked}, key = ${recordKey}`);
+    // Handle changes in file visibility
+    const onChange = async (checked, fileId) => {
+      try {
+        const response = await fetch(`/api/files/disabling/${fileId}`, {
+          method: 'POST', // or PATCH depending on how your API is set up
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ isVisibleToNonAdmins: checked }),
+        });
+        console.log(response);
+    
+        if (!response.ok) {
+          throw new Error('Network response was not ok.');
+        }
+    
+        const result = await response.json();
+        message.success(`Status updated for file ID: ${fileId}`);
+    
+        // Dispatch an action to update your front-end state, if necessary
+        // For example, you might want to refetch the files list or update a specific item
+        fetchFiles(course_id);
+    
+      } catch (error) {
+        console.error('Failed to update status:', error);
+        message.error('Failed to update status.');
+      }
     };
 
     const { state, dispatch } = useContext(StoreContext);
@@ -22,6 +45,8 @@ const Course = () => {
     const [modalRating, setModalRating] = useState(0);
     const [ratingOkText, setRatingOkText] = useState("Rate") ;
     const [modalFileId, setModalFileId] = useState(null);
+    const [filesStatus, setFilesStatus] = useState([]);
+
 
     const showNameModal = async (file_name, file_id) => {
 
@@ -139,16 +164,16 @@ const Course = () => {
         )
       },
 
-      // change visibility only for admin
+
       {
         title: 'Status',
         dataIndex: 'status',
         key: 'status',
         hidden: !state.user || state.user.role_id !== 2,
-        render: (status, record) => (
+        render: (text, record) => (
           <Checkbox 
-            checked={status} 
-            onChange={(e) => onChange(e.target.checked, record.key)} 
+            checked={record.active} 
+            onChange={(e) => onChange(e.target.checked, record.id)} 
           />
         )
       }  
@@ -167,6 +192,8 @@ const Course = () => {
         })
         .catch(error => console.error('Error fetching files:', error));
     }, [dispatch]);
+
+
     
     useEffect(() => {
       fetchFiles(course_id);
@@ -196,6 +223,7 @@ const Course = () => {
       </div>
     );
   }
+
   
   
   export default Course
