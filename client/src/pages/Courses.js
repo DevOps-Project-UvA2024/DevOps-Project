@@ -18,6 +18,11 @@ const Courses = () => {
     setIsModalOpen(true);
   };
 
+  let locale = {
+    emptyText: 'There are no courses available yet!',
+  };
+
+
   const handleSubmit = async (values) => {
     try {
       const response = await fetch('api/admin/courses/add', {
@@ -148,7 +153,7 @@ const Courses = () => {
           filters={filters}
           type = 'COURSES'
         />
-        <Table columns={columns} dataSource={state.courses} rowKey={"id"} 
+        <Table locale={locale} columns={columns} dataSource={state.courses} rowKey={"id"} 
             pagination={{ defaultPageSize: 10, showSizeChanger: true}}
           />
       </div>
