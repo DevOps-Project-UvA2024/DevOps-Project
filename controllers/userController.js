@@ -1,5 +1,3 @@
-const { GetUserCommand } = require("@aws-sdk/client-cognito-identity-provider");
-const { client } = require("../cognito-config"); // Adjust the path as necessary
 const { fetchUserEmailFromCognito } = require("../utils/userUtils.js")
 
 const db = require('../models/index.js');

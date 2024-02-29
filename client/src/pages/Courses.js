@@ -1,8 +1,8 @@
-import React, { useEffect, useContext, useState, useRef } from 'react';
+import React, { useEffect, useContext, useState, useRef, useCallback } from 'react';
 import "../styles/tables_style.css"
 import StoreContext from '../store/StoreContext';
 import { useNavigate } from 'react-router-dom';
-import { Button, Modal, Form, Input, Table, message, Pagination } from 'antd';
+import { Button, Modal, Form, Input, Table, message } from 'antd';
 
 const Courses = () => {
 
@@ -27,8 +27,10 @@ const Courses = () => {
       });
       const result = await response.json();
       if (!response.ok) throw new Error('Error creating course');
+      
       form.resetFields();
       dispatch({ type: 'RESET_COURSES'});
+      fetchCourses();
       message.success(`Successfully added course category ${result.message[0].name}`);
     } catch (error) {
       message.error(error);
@@ -61,16 +63,19 @@ const Courses = () => {
 
   const { state, dispatch } = useContext(StoreContext);
 
-  useEffect(() => {
-    // Fetch user info from the backend
+  const fetchCourses = useCallback(() => {
     fetch('/api/courses')
-    .then(response => response.json())
-    .then(data => {
-        dispatch({ type: 'RESET_COURSES'});
-        dispatch({ type: 'SET_COURSES', payload: data });
-    })
-    .catch(error => console.error('Error fetching courses:', error));
+      .then(response => response.json())
+      .then(data => {
+          dispatch({ type: 'RESET_COURSES'});
+          dispatch({ type: 'SET_COURSES', payload: data });
+      })
+      .catch(error => console.error('Error fetching courses:', error));
   }, [dispatch]);
+  
+  useEffect(() => {
+    fetchCourses();
+  }, [fetchCourses]);
 
   const customFooter = [
     <Button key="back" onClick={handleCancel}>

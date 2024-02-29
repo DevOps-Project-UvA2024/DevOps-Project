@@ -1,8 +1,6 @@
 const { GetUserCommand } = require("@aws-sdk/client-cognito-identity-provider");
 const { client } = require("../cognito-config"); // Adjust the path as necessary
 
-const db = require('../models/index.js');
-
 const fetchUserEmailFromCognito = async (req) => {
 
     const accessToken = req.cookies['accessToken']; // Ensure you're extracting the access token correctly

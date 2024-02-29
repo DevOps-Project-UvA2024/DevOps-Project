@@ -12,7 +12,6 @@ const userRouter = require('./routes/userRouter');
 const courseRouter = require('./routes/courseRouter.js');
 const fileRouter = require('./routes/fileRouter.js');
 const adminRouter = require('./routes/adminRouter.js');
-const fileRouter = require('./routes/fileRouter.js');
 
 const db = require('./models/index.js');
 ///////////////// REMOVE IN PRODUCTION! IT DROPS THE TABLES! OMG! //////////////////////
