@@ -4,12 +4,12 @@ const { fetchCoursesFiles, fetchLoggedUserRating, rateFileByLoggedUser } = requi
 const { fetchUserEmailFromCognito } = require('../utils/userUtils');
 const db = require('../models/index.js');
 
-router.get('/:course_id', async (req, res) => {
+router.post('/:course_id', async (req, res) => {
   try {
     const loggedUserEmail = await fetchUserEmailFromCognito(req);
     const user = await db.User.findOne({where: { email: loggedUserEmail }});
     const role = user.dataValues.role_id;
-    const courseInfo = await fetchCoursesFiles(role, req.params.course_id);
+    const courseInfo = await fetchCoursesFiles(role, req.params.course_id, req.body);
     return res.status(200).json(courseInfo);
   } catch (error) {
     return res.status(400).json({ message: "Failed to fetch files", error: error.toString() });

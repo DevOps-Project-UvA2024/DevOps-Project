@@ -1,10 +1,20 @@
 const db = require('../models/index.js');
 
-const fetchCoursesFiles = async (role, course_id) => {
+const fetchCoursesFiles = async (role, course_id, inputParameters) => {
+
     let searchParameters = { course_id: course_id }
+
+    Object.keys(inputParameters).forEach(key => {
+      if (typeof inputParameters[key] === 'string') {
+        searchParameters[key] = { [db.Sequelize.Op.like]: `%${inputParameters[key]}%` };
+      }
+    });
+
     if (role !== 2){
       searchParameters = { ...searchParameters, active: true}
     }
+
+    console.log(searchParameters)
     try {
     const allCoursesWithFiles = await db.File.findAll({
       where: searchParameters,

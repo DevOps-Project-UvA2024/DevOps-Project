@@ -3,6 +3,7 @@ import "../styles/tables_style.css"
 import StoreContext from '../store/StoreContext';
 import { useNavigate } from 'react-router-dom';
 import { Button, Modal, Form, Input, Table, message } from 'antd';
+import FilterBar from './FilterBar';
 
 const Courses = () => {
 
@@ -63,13 +64,18 @@ const Courses = () => {
   ];
 
   const fetchCourses = useCallback(() => {
-    fetch('/api/courses')
-      .then(response => response.json())
-      .then(data => {
-          dispatch({ type: 'RESET_COURSES'});
-          dispatch({ type: 'SET_COURSES', payload: data });
-      })
-      .catch(error => console.error('Error fetching courses:', error));
+    fetch('/api/courses', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+        dispatch({ type: 'RESET_COURSES'});
+        dispatch({ type: 'SET_COURSES', payload: data });
+    })
+    .catch(error => console.error('Error fetching courses:', error));
   }, [dispatch]);
   
   useEffect(() => {
@@ -85,6 +91,15 @@ const Courses = () => {
     </Button>,
   ];
 
+  const filters = [
+    <Form.Item name="name" label="Name">
+      <Input placeholder="Name" />
+    </Form.Item>,
+    <Form.Item name="department" label="Department">
+      <Input placeholder="Department" />
+    </Form.Item>
+  ];
+
   return (
     <div className="container-table">
       <div className='table-container'>
@@ -92,7 +107,7 @@ const Courses = () => {
           <h2>Available Courses</h2>
           {state.user && state.user.role_id === 2 && (
             <>
-              <Button type="primary" onClick={showModal}>
+            <Button type="primary" onClick={showModal}>
               Add course 
             </Button>
             <Modal 
@@ -128,6 +143,11 @@ const Courses = () => {
             </>)
           }
         </div>
+        <FilterBar
+          submitUrl="/api/courses"
+          filters={filters}
+          type = 'COURSES'
+        />
         <Table columns={columns} dataSource={state.courses} rowKey={"id"} 
             pagination={{ defaultPageSize: 10, showSizeChanger: true}}
           />
