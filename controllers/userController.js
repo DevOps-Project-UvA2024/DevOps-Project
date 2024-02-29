@@ -1,10 +1,9 @@
-const { fetchUserEmailFromCognito } = require("../utils/userUtils.js")
-
+const { fetchUserEmailFromCognito } = require("../utils/userUtils.js");
 const db = require('../models/index.js');
 
 const fetchUserInfoFromCognito = async (req) => {
     try {
-      const loggedUserEmail = await fetchUserEmailFromCognito(req)
+      const loggedUserEmail = await fetchUserEmailFromCognito(req);
 
       const userInfo = await db.User.findOne({
         where: { email:loggedUserEmail }

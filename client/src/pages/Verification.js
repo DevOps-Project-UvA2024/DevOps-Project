@@ -54,7 +54,7 @@ const CodeVerification = () => {
         navigate('/signin', { state: { successMessage: 'Verification successful. Please sign in.' } });
       } catch (error) {
         console.error(error);
-        setErrorMessage(error);
+        setErrorMessage(error.message);
       }
     };
 
