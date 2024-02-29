@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState, useCallback }from 'react';
-import { Table, Button, Rate, Checkbox , Modal, message} from 'antd';
+import { Table, Button, Rate, Checkbox , Modal, message, Tooltip} from 'antd';
 import { DownloadOutlined,StarOutlined } from '@ant-design/icons';
 import StoreContext from '../store/StoreContext';
 
@@ -105,13 +105,26 @@ const Course = () => {
         render: aggregate_voting => <Rate disabled allowHalf defaultValue={Math.round(Number(aggregate_voting) * 2) / 2} />,
       },
       {
+        title: 'Number of Ratings',
+        dataIndex: 'n_votes',
+        key: 'rating',
+        align:'center'
+      },
+      {
         title: 'Your Rating',
         dataIndex: 'yourate',
         key: 'yourate',
         align:'center',
         render: (_, record) => (
           <>
-            <Button  onClick={() => showNameModal(record.name, record.id)}><StarOutlined />Rate</Button>
+            <Tooltip title={state.user && state.user.id === record.User.id ? "You cannot rate the file you uploaded!" : ''}>
+              <Button  
+                onClick={() => showNameModal(record.name, record.id)}
+                disabled={state.user && state.user.id === record.User.id}
+              >
+                <StarOutlined />Rate
+              </Button>
+            </Tooltip>
           </>
         ),
 
@@ -131,7 +144,7 @@ const Course = () => {
         title: 'Status',
         dataIndex: 'status',
         key: 'status',
-        hidden: state.user.role_id !== 2,
+        hidden: !state.user || state.user.role_id !== 2,
         render: (status, record) => (
           <Checkbox 
             checked={status} 
@@ -140,7 +153,7 @@ const Course = () => {
         )
       }  
     ];
-    
+
     const urlPath = window.location.pathname; 
     const urlparams = urlPath.split('/'); 
     const course_id = urlparams.pop() || 'default'; 

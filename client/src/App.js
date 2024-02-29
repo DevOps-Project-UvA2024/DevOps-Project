@@ -22,7 +22,6 @@ const App = () => {
     <>
     <div className="container">
        
-    
       <AuthProvider>
         <Routes>
         <Route path="/" element={<Navigate replace to="/signin" />} />
