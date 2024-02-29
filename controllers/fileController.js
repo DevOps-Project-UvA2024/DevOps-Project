@@ -1,10 +1,29 @@
 const db = require('../models/index.js');
 
-const fetchCoursesFiles = async (role, course_id) => {
-    let searchParameters = { course_id: course_id }
+const fetchCoursesFiles = async (role, course_id, inputParameters) => {
+
+    let searchParameters = { course_id: course_id };
+    let havingClause;
+
+    Object.keys(inputParameters).forEach(key => {
+      if (typeof inputParameters[key] === 'string') {
+        searchParameters[key] = { [db.Sequelize.Op.like]: `%${inputParameters[key]}%` };
+      }
+    });
+
+    Object.keys(inputParameters).forEach(key => {
+      if (key === 'voting') {
+        havingClause = db.Sequelize.where(
+          db.Sequelize.fn('AVG', db.Sequelize.col('votings.voting')),
+          { [db.Sequelize.Op.gte]: Number(inputParameters[key]) }
+        );
+      }
+    });
+
     if (role !== 2){
       searchParameters = { ...searchParameters, active: true}
     }
+
     try {
     const allCoursesWithFiles = await db.File.findAll({
       where: searchParameters,
@@ -24,7 +43,8 @@ const fetchCoursesFiles = async (role, course_id) => {
           [db.Sequelize.fn('AVG', db.Sequelize.col('votings.voting')), 'aggregate_voting'],
           [db.Sequelize.fn('COUNT', db.Sequelize.col('votings.id')), 'n_votes'] 
         ],
-        group: ['file.id']
+        group: ['file.id'],
+        having: havingClause
       });
       
       return allCoursesWithFiles;

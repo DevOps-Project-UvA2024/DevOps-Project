@@ -1,10 +1,9 @@
 import React, { useEffect, useContext, useState, useCallback }from 'react';
-import { Table, Button, Rate, Checkbox , Modal, message, Tooltip} from 'antd';
+import { Table, Button, Rate, Checkbox , Modal, message, Tooltip, Form, Input} from 'antd';
 import { DownloadOutlined,StarOutlined } from '@ant-design/icons';
 import StoreContext from '../store/StoreContext';
-
-import "../styles/tables_style.css"
-
+import "../styles/tables_style.css";
+import FilterBar from './FilterBar';
 
 const Course = () => {
     
@@ -147,7 +146,7 @@ const Course = () => {
                 onClick={() => showNameModal(record.name, record.id)}
                 disabled={state.user && state.user.id === record.User.id}
               >
-                <StarOutlined />Rate
+                <StarOutlined /> Rate
               </Button>
             </Tooltip>
           </>
@@ -184,7 +183,12 @@ const Course = () => {
     const course_id = urlparams.pop() || 'default'; 
 
     const fetchFiles = useCallback((course_id) => {
-      fetch(`/api/files/${course_id}`)
+      fetch(`/api/files/${course_id}`,{
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json', 
+          }
+        })
         .then(response => response.json())
         .then(data => {
           dispatch({ type: 'RESET_FILES' });
@@ -198,6 +202,15 @@ const Course = () => {
     useEffect(() => {
       fetchFiles(course_id);
     }, [course_id, fetchFiles]);
+
+    const filters = [
+      <Form.Item name="name" label="Name">
+        <Input placeholder="Name" />
+      </Form.Item>,
+      <Form.Item name="voting" label="Rating">
+        <Rate allowHalf />
+      </Form.Item>
+    ];
     
     return (
       <div className="container-table">  
@@ -205,6 +218,11 @@ const Course = () => {
           <div className='add-course-btn'>
             <h2>Files</h2>                
           </div>
+          <FilterBar
+            submitUrl={`/api/files/${course_id}`}
+            filters={filters}
+            type = 'FILES'
+          />
           <Table columns={columns} dataSource={[...state.files]} rowKey={"id"}/>  
           <Modal  
             title="File Rating" 
