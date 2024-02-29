@@ -16,9 +16,9 @@ const Course = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ isVisibleToNonAdmins: checked }),
+          body: JSON.stringify({ active : checked }),
         });
-        console.log(response);
+        //console.log(response);
     
         if (!response.ok) {
           throw new Error('Network response was not ok.');

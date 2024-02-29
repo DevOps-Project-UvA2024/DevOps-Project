@@ -20,7 +20,7 @@ router.post('/signin', async (req, res) => {
         const authResult = await signIn(req.body.username, req.body.password);
         res.cookie('accessToken', authResult.AccessToken, { httpOnly: true, secure: true, sameSite: 'strict' });
         res.cookie('idToken', authResult.IdToken, { httpOnly: true, secure: true, sameSite: 'strict' });
-        await checkUserCreation(req.body.username, req);
+        await checkUserCreation(req, res);
         res.status(200).json({ message: 'Authentication successful' });
     } catch (error) {
         res.status(400).json(error.message);

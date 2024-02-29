@@ -6,10 +6,12 @@ const db = require('../models/index.js');
 
 router.get('/:course_id', async (req, res) => {
   try {
-    const loggedUserEmail = await fetchUserEmailFromCognito(req);
+    console.log(req.params);
+    const loggedUserEmail = await fetchUserEmailFromCognito(req, res);
     const user = await db.User.findOne({where: { email: loggedUserEmail }});
     const role = user.dataValues.role_id;
     const courseInfo = await fetchCoursesFiles(role, req.params.course_id);
+    console.log(courseInfo);
     return res.status(200).json(courseInfo);
   } catch (error) {
     return res.status(400).json({ message: "Failed to fetch files", error: error.toString() });
@@ -18,7 +20,7 @@ router.get('/:course_id', async (req, res) => {
 
 router.get('/rating/:fileId', async (req, res) => {
   try {
-    const loggedUserEmail = await fetchUserEmailFromCognito(req);
+    const loggedUserEmail = await fetchUserEmailFromCognito(req, res);
     const userRating = await fetchLoggedUserRating(req.params.fileId, loggedUserEmail);
     return res.status(200).json(userRating);
   } catch (error) {
@@ -28,7 +30,7 @@ router.get('/rating/:fileId', async (req, res) => {
 
 router.post('/rating/:fileId', async (req, res) => {
   try {
-    const loggedUserEmail = await fetchUserEmailFromCognito(req);
+    const loggedUserEmail = await fetchUserEmailFromCognito(req, res);
     const user = await db.User.findOne({where: { email: loggedUserEmail }});
     const file = await db.File.findOne({where: { id: req.params.fileId }});
     const userId = user.dataValues.id;
@@ -44,21 +46,23 @@ router.post('/rating/:fileId', async (req, res) => {
 
 router.post('/disabling/:fileId', async (req, res) => {
   try {
-    // Add authentication check here to ensure only admins can access this route
-
+    
     const { active } = req.body;
     const fileId = req.params.fileId;
-
-    // Update the file's visibility in your database
     const file = await db.File.findByPk(fileId);
     file.active = active;
     await file.save();
-
     res.status(200).json({ message: "File visibility updated successfully" });
-  } catch (error) {
+  } 
+  catch (error) {
     res.status(400).json({ message: "Failed to update file visibility", error: error.toString() });
   }
 });
+
+
+
+
+
 
 
 

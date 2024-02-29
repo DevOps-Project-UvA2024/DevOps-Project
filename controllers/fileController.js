@@ -22,7 +22,8 @@ const fetchCoursesFiles = async (role, course_id) => {
           'name',
           'upload_date',
           [db.Sequelize.fn('AVG', db.Sequelize.col('votings.voting')), 'aggregate_voting'],
-          [db.Sequelize.fn('COUNT', db.Sequelize.col('votings.id')), 'n_votes'] 
+          [db.Sequelize.fn('COUNT', db.Sequelize.col('votings.id')), 'n_votes'],
+          'active' 
         ],
         group: ['file.id']
       });
