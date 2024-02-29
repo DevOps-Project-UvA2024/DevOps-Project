@@ -7,6 +7,34 @@ import FilterBar from './FilterBar';
 const { Dragger } = Upload;
 
 const Course = () => {
+
+  const handleDownload = async (fileKey) => {
+    try {
+        // Call your backend to get the signed URL for download
+        const response = await fetch(`/api/files/download/${fileKey}`, {
+            method: 'GET',
+            credentials: 'include'
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+
+        // Create a temporary anchor `<a>` tag to programmatically click for download
+        const downloadLink = document.createElement('a');
+        downloadLink.href = data.url;
+        downloadLink.setAttribute('download', ''); // Try to download instead of navigate
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink); // Clean up
+    } catch (error) {
+        console.error('Download error:', error);
+        alert('Download failed'); // Provide user feedback
+    }
+  };
+  
     
   const props = {
     name: 'file',
@@ -186,9 +214,14 @@ const Course = () => {
         dataIndex: 'download',
         key: 'download',
         align: 'center',
-        render: (_, record) => (          
-            <Button type="primary" icon={<DownloadOutlined />} onClick={() => console.log("Button clicked!", record.key)}/>
-        )
+        render: (_, record) => {
+          console.log(record)
+          return <Button
+            type="primary"
+            icon={<DownloadOutlined />}
+            onClick={() => handleDownload(record.name)}
+          />
+        },
       },
 
 
