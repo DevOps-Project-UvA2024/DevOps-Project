@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const { signUp, signIn, verifyUser, resendConfirmationCode, initiateReset, confirmReset } = require('../controllers/authController');
+const { checkUserCreation } = require("../utils/userUtils.js");
 
 // Sign up route
 router.post('/signup', async (req, res) => {
@@ -19,9 +20,8 @@ router.post('/signin', async (req, res) => {
         const authResult = await signIn(req.body.username, req.body.password);
         res.cookie('accessToken', authResult.AccessToken, { httpOnly: true, secure: true, sameSite: 'strict' });
         res.cookie('idToken', authResult.IdToken, { httpOnly: true, secure: true, sameSite: 'strict' });
-        res.status(200).json({ message: 'Authentication successful', userInfo: {
-            username: req.body.username
-        }});
+        await checkUserCreation(req.body.username, req);
+        res.status(200).json({ message: 'Authentication successful' });
     } catch (error) {
         res.status(400).json(error.message);
     }
@@ -30,7 +30,6 @@ router.post('/signin', async (req, res) => {
 // Verify user route
 router.post('/verify', async (req, res) => {
     const { email, code } = req.body;
-
     try {
         const result = await verifyUser(email, code);
         res.json({ message: "User verified successfully", details: result });

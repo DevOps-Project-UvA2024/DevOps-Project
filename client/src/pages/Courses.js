@@ -11,6 +11,7 @@ const Courses = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
   const formRef = useRef(null);
+  const { state, dispatch } = useContext(StoreContext);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -61,8 +62,6 @@ const Courses = () => {
     }
   ];
 
-  const { state, dispatch } = useContext(StoreContext);
-
   const fetchCourses = useCallback(() => {
     fetch('/api/courses')
       .then(response => response.json())
@@ -91,39 +90,43 @@ const Courses = () => {
       <div className='table-container'>
         <div className='add-course-btn'>
           <h2>Available Courses</h2>
-          <Button type="primary" onClick={showModal}>
-            Add course 
-          </Button>
-          <Modal 
-            title="Add a new course" 
-            open={isModalOpen} 
-            onCancel={handleCancel}
-            footer={customFooter} >
-            <Form
-              form={form}
-              ref={formRef}
-              onFinish={handleSubmit}
-            >
-              <Form.Item
-                label="Course Name"
-                name="course"
-                rules={[{ required: true, message: 'Please enter the course\'s name' }]}>
-                <Input allowClear/>
-              </Form.Item>
-              <Form.Item
-                label="Department"
-                name="department"
-                rules={[{ required: true, message: 'Please input the department of the course!' }]}>
-                <Input allowClear/>
-              </Form.Item>
-              <Form.Item
-                label="Description"
-                name="description"
-                rules={[{ required: true, message: 'Please enter a description!' }]}>
-                <TextArea rows={4} placeholder="Enter a description for the course" allowClear/>
-              </Form.Item>
-            </Form>
-          </Modal>
+          {state.user && state.user.role_id === 2 && (
+            <>
+              <Button type="primary" onClick={showModal}>
+              Add course 
+            </Button>
+            <Modal 
+              title="Add a new course" 
+              open={isModalOpen} 
+              onCancel={handleCancel}
+              footer={customFooter} >
+              <Form
+                form={form}
+                ref={formRef}
+                onFinish={handleSubmit}
+              >
+                <Form.Item
+                  label="Course Name"
+                  name="course"
+                  rules={[{ required: true, message: 'Please enter the course\'s name' }]}>
+                  <Input allowClear/>
+                </Form.Item>
+                <Form.Item
+                  label="Department"
+                  name="department"
+                  rules={[{ required: true, message: 'Please input the department of the course!' }]}>
+                  <Input allowClear/>
+                </Form.Item>
+                <Form.Item
+                  label="Description"
+                  name="description"
+                  rules={[{ required: true, message: 'Please enter a description!' }]}>
+                  <TextArea rows={4} placeholder="Enter a description for the course" allowClear/>
+                </Form.Item>
+              </Form>
+            </Modal>
+            </>)
+          }
         </div>
         <Table columns={columns} dataSource={state.courses} rowKey={"id"} 
             pagination={{ defaultPageSize: 10, showSizeChanger: true}}
