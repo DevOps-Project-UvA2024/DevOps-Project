@@ -6,29 +6,9 @@ import PasswordChecklist from "react-password-checklist"
 import { useAuth, AuthStatus } from '../AuthProvider';
 import { Navigate } from 'react-router-dom';
 import {allowedDomains} from '../utils';
+import loginImage from '../images/signup.png'
+import { UserOutlined, LockOutlined, SmileTwoTone, MailOutlined } from '@ant-design/icons';
 
-const CenteredFlexContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh; 
-  width: 100vw; 
-  background-color: #f0f2f5; 
-`;
-
-const StyledSignUpContainer = styled.div`
-  padding: 20px;
-  margin: 0;
-  width:50%;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  border-radius: 8px;
-  background-color: white; 
-`;
-
-const StyledFormTitle = styled.h1`
-  text-align: center;
-  color: #333;
-`;
 
 const SignUp = () => {
 
@@ -41,6 +21,8 @@ const SignUp = () => {
   const [password2, setPassword2] = React.useState("");
   const [email, setEmail] = useState('');
   const [isEmailDomainValid, setIsEmailDomainValid] = useState(true);
+  const [showPasswordChecklist, setShowPasswordChecklist] = useState(false);
+
 
   useEffect(() => {
     if (email) {
@@ -95,9 +77,17 @@ const SignUp = () => {
 
 
   return (
-    <CenteredFlexContainer>
-    <StyledSignUpContainer className="container">
-      <StyledFormTitle>Sign Up</StyledFormTitle>
+    <div className='background'>
+      <div className='welcome-container'>
+        <h1><b>Welcome to Student Portal! </b></h1>
+        <h4>A place from students to students</h4>
+        <img src={loginImage}/>
+        <h4><i>Browse courses, upload files, rate others and more...</i></h4>
+      </div>
+    <div className="container">
+      <h2>Welcome! </h2>
+      <h4>Create an account here!</h4>
+
       {errorMessage && (
         <Alert
           message={errorMessage}
@@ -113,13 +103,15 @@ const SignUp = () => {
         onFinishFailed={handleFinishFailed}
         autoComplete="off"
         layout="vertical"
+        className='form register'
+
       >
         <Form.Item
           label="Username"
           name="name"
           rules={[{ required: true, message: 'Please input your username!' }]}
         >
-          <Input />
+          <Input prefix={<UserOutlined />} />
         </Form.Item>
 
         <Form.Item
@@ -129,7 +121,7 @@ const SignUp = () => {
           validateStatus={isEmailDomainValid ? '' : 'error'}
           help={isEmailDomainValid ? '' : 'Email domain is not allowed.'}
         >
-          <Input onChange={(e) => setEmail(e.target.value)} />
+          <Input prefix={<MailOutlined/>} onChange={(e) => setEmail(e.target.value)} />
         </Form.Item>
 
         <Form.Item
@@ -137,7 +129,7 @@ const SignUp = () => {
           name="password"
           rules={[{ required: true, message: 'Please input your password!' }]}
           hasFeedback>
-          <Input.Password onChange={(e) => setPassword(e.target.value)} />
+          <Input.Password prefix={<LockOutlined/>} onChange={(e) => setPassword(e.target.value)} />
         </Form.Item>
 
         <Form.Item
@@ -157,7 +149,7 @@ const SignUp = () => {
             ]}
             hasFeedback
           >
-          <Input.Password onChange={(e) => setPassword2(e.target.value)} />
+          <Input.Password prefix={<LockOutlined/>} onChange={(e) => setPassword2(e.target.value)} />
         </Form.Item>
 
         <PasswordChecklist
@@ -166,6 +158,7 @@ const SignUp = () => {
             value={password}
             valueAgain={password2}
             onChange={(isValid) => {}}
+            className='passcheck'
           />
         
 
@@ -175,15 +168,17 @@ const SignUp = () => {
           </Button>
         </Form.Item>
 
-        <Form.Item>
-          <Button type="link" onClick={() => navigate('/signin')}>
-            Already have an account? Sign In
-          </Button>
-        </Form.Item>
+        
+          
+        
 
       </Form>
-    </StyledSignUpContainer>
-    </CenteredFlexContainer>
+      
+      <Button type="link" className='have-acc-btn' onClick={() => navigate('/signin')}>
+            Already have an account? Sign In
+          </Button>
+    </div>
+    </div>
   );
 };
 
