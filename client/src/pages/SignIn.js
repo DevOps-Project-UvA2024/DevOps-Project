@@ -2,15 +2,19 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Alert } from 'antd';
 import { UserOutlined, LockOutlined, SmileTwoTone } from '@ant-design/icons';
+import { UserOutlined, LockOutlined, SmileTwoTone } from '@ant-design/icons';
 import styled from 'styled-components';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth, AuthStatus } from '../AuthProvider';
 import "../styles/verification_style.css"
 import loginImage from '../images/login.png'
 
+import loginImage from '../images/login.png'
+
 
 const SignIn = () => {
 
+  const navigate = useNavigate(); 
   const navigate = useNavigate(); 
   const [errorMessage, setErrorMessage] = useState('');
   const location = useLocation();
@@ -56,12 +60,12 @@ const SignIn = () => {
   };
 
   return (
-    <div className='background'>x
+    <div className='background'>
     <div className='welcome-container'>
       <h1><b>Welcome back! </b></h1>
       <img src={loginImage}/>
     </div>
-    <div className="auth-container">
+    <div className="container">
       <h2>Hello! <SmileTwoTone/></h2>
       <h4>Sign In to your account!</h4>
       {errorMessage && (
@@ -70,6 +74,7 @@ const SignIn = () => {
           type="error"
           showIcon
           closable
+          onClose={() => setErrorMessage('')} 
           onClose={() => setErrorMessage('')} 
         />
       )}
@@ -85,8 +90,10 @@ const SignIn = () => {
         name="signin"
         onFinish={handleFinish}
         onFinishFailed={handleFinishFailed}        
+        onFinishFailed={handleFinishFailed}        
         autoComplete="off"
         layout="vertical"
+        className='form'
         className='form'
       >
         
@@ -97,6 +104,7 @@ const SignIn = () => {
           rules={[{ type: 'email', message: 'The input is not a valid email!' }, { required: true, message: 'Please input your email!' }]}
         >
           <Input prefix={<UserOutlined />} />
+          <Input prefix={<UserOutlined />} />
         </Form.Item>
 
         <Form.Item
@@ -106,7 +114,11 @@ const SignIn = () => {
           hasFeedback
         >
           <Input.Password prefix={<LockOutlined/>}/>
+          <Input.Password prefix={<LockOutlined/>}/>
         </Form.Item>
+        <Button type="link" className='forgot-pass-btn' onClick={() => navigate("/reset-password")}>
+              Forgot password?
+        </Button>
         <Button type="link" className='forgot-pass-btn' onClick={() => navigate("/reset-password")}>
               Forgot password?
         </Button>
@@ -121,6 +133,7 @@ const SignIn = () => {
       <div className='verificationButtons'> 
 
 
+
         <Button type="link" onClick={() => navigate("/verify-account")}>
           You haven't been verified yet?
         </Button>
@@ -131,6 +144,8 @@ const SignIn = () => {
       </div>
       
 
+    </div>
+    </div>
     </div>
     </div>
   );

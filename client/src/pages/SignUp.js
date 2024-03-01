@@ -8,6 +8,9 @@ import {allowedDomains} from '../utils';
 import loginImage from '../images/signup.png'
 import { UserOutlined, LockOutlined, SmileTwoTone, MailOutlined } from '@ant-design/icons';
 
+import loginImage from '../images/signup.png'
+import { UserOutlined, LockOutlined, SmileTwoTone, MailOutlined } from '@ant-design/icons';
+
 
 const SignUp = () => {
 
@@ -20,6 +23,8 @@ const SignUp = () => {
   const [password2, setPassword2] = React.useState("");
   const [email, setEmail] = useState('');
   const [isEmailDomainValid, setIsEmailDomainValid] = useState(true);
+  const [showPasswordChecklist, setShowPasswordChecklist] = useState(false);
+
   const [showPasswordChecklist, setShowPasswordChecklist] = useState(false);
 
 
@@ -104,12 +109,15 @@ const SignUp = () => {
         layout="vertical"
         className='form register'
 
+        className='form register'
+
       >
         <Form.Item
           label="Username"
           name="name"
           rules={[{ required: true, message: 'Please input your username!' }]}
         >
+          <Input prefix={<UserOutlined />} />
           <Input prefix={<UserOutlined />} />
         </Form.Item>
 
@@ -120,6 +128,7 @@ const SignUp = () => {
           validateStatus={isEmailDomainValid ? '' : 'error'}
           help={isEmailDomainValid ? '' : 'Email domain is not allowed.'}
         >
+          <Input prefix={<MailOutlined/>} onChange={(e) => setEmail(e.target.value)} />
           <Input prefix={<MailOutlined/>} onChange={(e) => setEmail(e.target.value)} />
         </Form.Item>
 
@@ -149,6 +158,7 @@ const SignUp = () => {
             hasFeedback
           >
           <Input.Password prefix={<LockOutlined/>} onChange={(e) => setPassword2(e.target.value)} />
+          <Input.Password prefix={<LockOutlined/>} onChange={(e) => setPassword2(e.target.value)} />
         </Form.Item>
 
         <PasswordChecklist
@@ -175,8 +185,17 @@ const SignUp = () => {
       </Form>
       
       <Button type="link" className='have-acc-btn' onClick={() => navigate('/signin')}>
+        
+          
+        
+
+      </Form>
+      
+      <Button type="link" className='have-acc-btn' onClick={() => navigate('/signin')}>
             Already have an account? Sign In
           </Button>
+    </div>
+    </div>
     </div>
     </div>
   );
