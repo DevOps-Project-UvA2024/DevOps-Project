@@ -15,8 +15,9 @@ const NavBar = () => {
 
     return (
         <nav className="nav">
-            <Link to="/greeting" className="site-title">Student Portal</Link>
-            <ul>
+            <div className="nav-elements">
+                <Link to="/greeting" className="site-title">Student Portal</Link>
+                <ul>
                 <CustomLink to="/courses">
                     Courses
                 </CustomLink>
@@ -26,7 +27,11 @@ const NavBar = () => {
                 <CustomLink to="/signin" onClick={initSignout}>
                     Logout
                 </CustomLink>
-            </ul>
+                </ul>
+
+
+            </div>
+            
         </nav>
     );
 };

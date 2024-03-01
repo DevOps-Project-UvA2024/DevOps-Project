@@ -1,39 +1,17 @@
 
 import React, { useState } from 'react';
 import { Form, Input, Button, Alert } from 'antd';
+import { UserOutlined, LockOutlined, SmileTwoTone } from '@ant-design/icons';
 import styled from 'styled-components';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth, AuthStatus } from '../AuthProvider';
 import "../styles/verification_style.css"
+import loginImage from '../images/login.png'
 
-
-const CenteredFlexContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh; 
-  width: 100vw; 
-  background-color: #f0f2f5; 
-`;
-
-
-const StyledSignInContainer = styled.div`
-  padding: 20px;
-  margin: 0;
-  width:50%;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  border-radius: 8px;
-  background-color: white; 
-`;
-
-const StyledFormTitle = styled.h1`
-  text-align: center;
-  color: #333;
-`;
 
 const SignIn = () => {
 
-  const navigate = useNavigate(); // Hook to navigate
+  const navigate = useNavigate(); 
   const [errorMessage, setErrorMessage] = useState('');
   const location = useLocation();
   const successMessage = location.state?.successMessage;
@@ -78,16 +56,21 @@ const SignIn = () => {
   };
 
   return (
-    <CenteredFlexContainer>
-    <StyledSignInContainer className="container">
-      <StyledFormTitle>Sign In</StyledFormTitle>
+    <div className='background'>
+    <div className='welcome-container'>
+      <h1><b>Welcome back! </b></h1>
+      <img src={loginImage}/>
+    </div>
+    <div className="container">
+      <h2>Hello! <SmileTwoTone/></h2>
+      <h4>Sign In to your account!</h4>
       {errorMessage && (
         <Alert
           message={errorMessage}
           type="error"
           showIcon
           closable
-          onClose={() => setErrorMessage('')} // Allow users to close the alert
+          onClose={() => setErrorMessage('')} 
         />
       )}
       {successMessage && (
@@ -101,10 +84,10 @@ const SignIn = () => {
       <Form
         name="signin"
         onFinish={handleFinish}
-        onFinishFailed={handleFinishFailed}
-        
+        onFinishFailed={handleFinishFailed}        
         autoComplete="off"
         layout="vertical"
+        className='form'
       >
         
 
@@ -113,7 +96,7 @@ const SignIn = () => {
           name="username"
           rules={[{ type: 'email', message: 'The input is not a valid email!' }, { required: true, message: 'Please input your email!' }]}
         >
-          <Input />
+          <Input prefix={<UserOutlined />} />
         </Form.Item>
 
         <Form.Item
@@ -122,9 +105,11 @@ const SignIn = () => {
           rules={[{ required: true, message: 'Please input your password!' }]}
           hasFeedback
         >
-          <Input.Password />
+          <Input.Password prefix={<LockOutlined/>}/>
         </Form.Item>
-
+        <Button type="link" className='forgot-pass-btn' onClick={() => navigate("/reset-password")}>
+              Forgot password?
+        </Button>
         <Form.Item>
           <Button type="primary" htmlType="submit">
             Sign In
@@ -134,9 +119,7 @@ const SignIn = () => {
       </Form>
 
       <div className='verificationButtons'> 
-        <Button type="link" onClick={() => navigate("/reset-password")}>
-              Forgot password?
-        </Button>
+
 
         <Button type="link" onClick={() => navigate("/verify-account")}>
           You haven't been verified yet?
@@ -148,8 +131,8 @@ const SignIn = () => {
       </div>
       
 
-    </StyledSignInContainer>
-    </CenteredFlexContainer>
+    </div>
+    </div>
   );
 };
 
