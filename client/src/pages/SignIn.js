@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Alert } from 'antd';
 import { UserOutlined, LockOutlined, SmileTwoTone } from '@ant-design/icons';
+import { UserOutlined, LockOutlined, SmileTwoTone } from '@ant-design/icons';
 import styled from 'styled-components';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth, AuthStatus } from '../AuthProvider';
@@ -56,12 +57,12 @@ const SignIn = () => {
   };
 
   return (
-    <div className='background'>x
+    <div className='background'>
     <div className='welcome-container'>
       <h1><b>Welcome back! </b></h1>
       <img src={loginImage}/>
     </div>
-    <div className="auth-container">
+    <div className="container">
       <h2>Hello! <SmileTwoTone/></h2>
       <h4>Sign In to your account!</h4>
       {errorMessage && (

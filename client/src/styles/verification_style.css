@@ -26,7 +26,7 @@ h1{
     background-color: #f3f8ff; 
 }
 
-.auth-container{
+.container{
     margin: 0;
     width:50%;
     background-color: white; 
@@ -67,7 +67,6 @@ h1{
 
 .passcheck{
     margin-bottom: 1rem !important;
-    font-size: 13px;
 }
 
 .register{
