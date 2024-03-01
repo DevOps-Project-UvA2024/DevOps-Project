@@ -83,13 +83,13 @@ const SignUp = () => {
   return (
     <div className='background'>
       <div className='welcome-container'>
-        <h1><b>Welcome to Student Portal! </b></h1>
-        <h4>A place from students to students</h4>
+        <h1><b>Welcome to Student Portal!  </b></h1>
+        <h4>A place <i>from</i> students <i>to</i> students</h4>
         <img src={loginImage}/>
-        <h4><i>Browse courses, upload files, rate others and more...</i></h4>
+        <h4><i>Browse Courses, Upload Files, Rate Others and many more...</i></h4>
       </div>
-    <div className="container">
-      <h2>Welcome! </h2>
+    <div className="auth-container">
+      <h2>Welcome! <SmileTwoTone/> </h2>
       <h4>Create an account here!</h4>
 
       {errorMessage && (
@@ -137,7 +137,12 @@ const SignUp = () => {
           name="password"
           rules={[{ required: true, message: 'Please input your password!' }]}
           hasFeedback>
-          <Input.Password prefix={<LockOutlined/>} onChange={(e) => setPassword(e.target.value)} />
+          <Input.Password 
+          prefix={<LockOutlined/>} 
+          onChange={(e) => {
+            setPassword(e.target.value);
+            setShowPasswordChecklist(!!e.target.value); 
+          }} />
         </Form.Item>
 
         <Form.Item
@@ -161,13 +166,14 @@ const SignUp = () => {
           <Input.Password prefix={<LockOutlined/>} onChange={(e) => setPassword2(e.target.value)} />
         </Form.Item>
 
-        <PasswordChecklist
-            rules={["minLength","specialChar","number","capital","match"]}
-            minLength={8}
-            value={password}
-            valueAgain={password2}
-            onChange={(isValid) => {}}
-            className='passcheck'
+        {showPasswordChecklist && (
+          <PasswordChecklist
+              rules={["minLength","specialChar","number","capital","match"]}
+              minLength={8}
+              value={password}
+              valueAgain={password2}
+              onChange={(isValid) => {}}
+              className='passcheck'
           />
         )}
         

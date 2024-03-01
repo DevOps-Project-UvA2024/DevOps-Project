@@ -57,12 +57,12 @@ const SignIn = () => {
   };
 
   return (
-    <div className='background'>
+    <div className='background'>x
     <div className='welcome-container'>
       <h1><b>Welcome back! </b></h1>
       <img src={loginImage}/>
     </div>
-    <div className="container">
+    <div className="auth-container">
       <h2>Hello! <SmileTwoTone/></h2>
       <h4>Sign In to your account!</h4>
       {errorMessage && (
