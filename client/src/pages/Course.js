@@ -3,7 +3,7 @@ import { Table, Button, Rate, Checkbox , Modal, message, Tooltip, Form, Input, U
 import { DownloadOutlined, StarOutlined, InboxOutlined } from '@ant-design/icons';
 import StoreContext from '../store/StoreContext';
 import "../styles/tables_style.css";
-import FilterBar from './FilterBar';
+import FilterBar from '../components/FilterBar';
 const { Dragger } = Upload;
 
 const Course = () => {

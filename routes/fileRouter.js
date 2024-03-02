@@ -10,7 +10,6 @@ require('dotenv').config();
 
 router.post('/:course_id', async (req, res) => {
   try {
-    console.log(req.params);
     const loggedUserEmail = await fetchUserEmailFromCognito(req, res);
     const user = await db.User.findOne({where: { email: loggedUserEmail }});
     const role = user.dataValues.role_id;

@@ -2,6 +2,7 @@ export const initialState = {
     user: null, 
     courses: [],
     files: [],
+    subscriptions: []
   };
   
 export function reducer(state, action) {
@@ -36,7 +37,16 @@ export function reducer(state, action) {
                 ...state,
                 files: action.payload
             };
-        
+        case 'SET_SUBSCRIPTIONS':
+            return {
+                ...state,
+                subscriptions: action.payload
+            }
+        case 'RESET_SUBSCRIPTIONS':
+            return {
+                ...state,
+                subscriptions: []
+            }
         case 'LOGOUT':
             return { ...state, user: null };
         default:

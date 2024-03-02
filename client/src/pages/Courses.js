@@ -3,7 +3,7 @@ import "../styles/tables_style.css"
 import StoreContext from '../store/StoreContext';
 import { useNavigate } from 'react-router-dom';
 import { Button, Modal, Form, Input, Table, message } from 'antd';
-import FilterBar from './FilterBar';
+import FilterBar from '../components/FilterBar';
 
 const Courses = () => {
 
@@ -34,7 +34,6 @@ const Courses = () => {
       });
       const result = await response.json();
       if (!response.ok) throw new Error('Error creating course');
-      
       form.resetFields();
       dispatch({ type: 'RESET_COURSES'});
       fetchCourses();
