@@ -4,9 +4,12 @@ const { fetchCoursesFiles, fetchLoggedUserRating, rateFileByLoggedUser, getSigne
 const { fetchUserEmailFromCognito } = require('../utils/userUtils');
 
 const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
 const db = require('../models/index.js');
 require('dotenv').config();
+
+const upload = multer();
+
+router.post('/upload', upload.any(), uploadFileAndStoreMetadata);
 
 router.post('/:course_id', async (req, res) => {
   try {
@@ -72,31 +75,5 @@ router.get('/download/:fileKey', async (req, res) => {
     res.status(500).json({ message: "Failed to get download URL", error: error.toString() });
   }
 });
-
-router.post('/upload', upload.single('file'), async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: "No file uploaded." });
-  }
-
-  const { originalname: name, mimetype: type } = req.file;
-
-  // get courseId, uploaderId from DB
-  // const { courseId, uploaderId } = req.body; // Assuming these are sent as part of the form data
-  
-  try {
-    await uploadFileAndStoreMetadata(req.file, { name, type, courseId, uploaderId });
-
-    res.json({ message: "File uploaded and metadata stored successfully." });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Failed to upload file and store metadata.", error: error.toString() });
-  }
-});
-
-
-
-
-
-
   
 module.exports = router;

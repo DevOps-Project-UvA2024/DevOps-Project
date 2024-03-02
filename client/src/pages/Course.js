@@ -34,28 +34,47 @@ const Course = () => {
         alert('Download failed'); // Provide user feedback
     }
   };
+
+  const handleUpload = async () => {
+    const formData = new FormData();
+    
+    selectedFiles.forEach(file => {
+      formData.append('files', file);
+    });
+    formData.append('username', state.user.username);
+    formData.append('user_id', state.user.id);
+    formData.append('course_id', parseInt(course_id));
   
+    try {
+      const response = await fetch('/api/files/upload', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await response.json(); // Use `.json()` to parse JSON response
+      return data;
+    } catch (error) {
+      console.error(`Upload error: ${error}`);
+      throw error;
+    }
+  };     
     
   const props = {
     name: 'file',
     multiple: true,
-    action: 'https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188',
-    onChange(info) {
-      const { status } = info.file;
-      if (status !== 'uploading') {
-        console.log(info.file, info.fileList);
-      }
-      if (status === 'done') {
-        message.success(`${info.file.name} file uploaded successfully.`);
-      } else if (status === 'error') {
-        message.error(`${info.file.name} file upload failed.`);
-      }
+    beforeUpload: (file) => {
+      // Add the selected file to the state without uploading it
+      setSelectedFiles(currentFiles => [...currentFiles, file]);
+      // Prevent `Upload` from automatically uploading the file
+      return false;
     },
-    onDrop(e) {
-      console.log('Dropped files', e.dataTransfer.files);
+    onRemove: (file) => {
+      // Remove the file from the state if it's deselected
+      setSelectedFiles(currentFiles => currentFiles.filter(f => f.uid !== file.uid));
+    },
+    onChange(info) {
+      console.log(info.file, info.fileList);
     },
   };
-
 
     // Handle changes in file visibility
     const onChange = async (checked, fileId) => {
@@ -67,7 +86,6 @@ const Course = () => {
           },
           body: JSON.stringify({ active : checked }),
         });
-        //console.log(response);
     
         if (!response.ok) {
           throw new Error('Network response was not ok.');
@@ -100,6 +118,13 @@ const Course = () => {
     const [modalRating, setModalRating] = useState(0);
     const [ratingOkText, setRatingOkText] = useState("Rate") ;
     const [modalFileId, setModalFileId] = useState(null);
+    const [selectedFiles, setSelectedFiles] = useState([]);
+    
+    const resetModalState = () => {
+      setIsModalOpen(false);
+      setIsUploadModalOpen(false);
+    };
+
 
     const showNameModal = async (file_name, file_id) => {
 
@@ -273,7 +298,11 @@ const Course = () => {
     }
 
     const handleUploadOk = () => {
-      setIsUploadModalOpen(false);
+      handleUpload().then(() => {
+        resetModalState();
+      }).catch(error => {
+        console.error('An error occurred during the upload:', error);
+      });
     };
 
     const handleUploadCancel = () => {
