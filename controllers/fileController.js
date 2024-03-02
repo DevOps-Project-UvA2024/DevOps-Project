@@ -127,42 +127,46 @@ const getSignedUrl = (bucket, fileKey) => {
 };
 
 const uploadFileAndStoreMetadata = async (req, res) => {
-  const { file } = req; // Assuming file is available in req.file (e.g., using multer for file handling)
-  const { courseId, uploaderId } = req.body; // Additional data sent along with the file
+  const { course_id, user_id, username } = req.body;
+  console.log("user_id", user_id)
 
-  if (!file || !courseId || !uploaderId) {
-    return res.status(400).send('Missing file or metadata');
+  // Since `upload.any()` is used, `req.files` will hold the files
+  if (!req.files || req.files.length === 0) {
+    return res.status(400).json({ error: 'No files were uploaded.' });
   }
 
-  const fileName = `${uploaderId}/${Date.now()}/${file.originalname}`;
-  const fileType = file.mimetype;
-  const s3Params = {
-    Bucket: process.env.AWS_BUCKET_NAME,
-    Key: fileName,
-    Body: file.buffer,
-    ContentType: fileType,
-    ACL: 'public-read', // adjust the ACL according to your needs
-  };
-
-  // Upload file to S3
+  // Loop through all files if you're expecting multiple files
   try {
-    await s3.upload(s3Params).promise();
+    const uploadPromises = req.files.map(async (file) => {
+      const fileName = `${username}/${Date.now()}/${file.originalname}`;
+      const fileType = file.mimetype;
+      const s3Params = {
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Key: fileName,
+        Body: file.buffer,
+        ContentType: fileType
+      };
 
-    // After successful upload, store file metadata in RDS
-    const newFile = await db.File.create({
-      name: fileName,
-      type: fileType,
-      upload_date: new Date(),
-      active: true,
-      course_id: courseId,
-      uploader_id: uploaderId,
+      // Upload file to S3
+      await s3.upload(s3Params).promise();
+
+      // After successful upload, store file metadata in RDS
+      await db.File.create({
+        name: fileName,
+        upload_date: new Date(),
+        active: true,
+        course_id: course_id,
+        uploader_id: user_id,
+      });
     });
 
-    res.json({ message: 'File uploaded and metadata stored successfully' });
+    await Promise.all(uploadPromises);
+    res.json({ message: 'All files uploaded and metadata stored successfully' });
   } catch (error) {
     console.error('Error uploading file or storing metadata:', error);
     res.status(500).json({ error: 'Failed to upload file and store metadata' });
   }
 };
+
 
 module.exports = { fetchCoursesFiles, fetchLoggedUserRating, rateFileByLoggedUser, getSignedUrl, uploadFileAndStoreMetadata };
