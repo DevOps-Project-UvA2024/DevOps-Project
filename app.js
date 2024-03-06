@@ -12,6 +12,7 @@ const userRouter = require('./routes/userRouter');
 const courseRouter = require('./routes/courseRouter.js');
 const fileRouter = require('./routes/fileRouter.js');
 const adminRouter = require('./routes/adminRouter.js');
+const subscriptionRouter = require('./routes/subscriptionRouter.js');
 
 const db = require('./models/index.js');
 ///////////////// REMOVE IN PRODUCTION! IT DROPS THE TABLES! OMG! //////////////////////
@@ -30,6 +31,7 @@ app.get('/api/check-logged-in', checkAuth, (req, res) => {
 });
 app.use('/api/courses', checkAuth, courseRouter);
 app.use('/api/files', checkAuth, fileRouter);
+app.use('/api/subscriptions', checkAuth, subscriptionRouter);
 
 app.use('/api/users/user', checkAuth, userRouter);
 app.use('/api/admin', checkAuth, isAdmin, adminRouter);

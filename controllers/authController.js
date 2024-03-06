@@ -22,7 +22,7 @@ const signUp = async (email, password, name) => {
         const data = await client.send(new SignUpCommand(params));
         return data; // Contains user details and metadata
     } catch (error) {
-        throw error;
+        console.log(error);
     }
 };
 
@@ -40,7 +40,7 @@ const signIn = async (username, password) => {
         const data = await client.send(new InitiateAuthCommand(params));
         return data.AuthenticationResult; // Contains tokens and the user returned from the mysql
     } catch (error) {
-        throw error;
+        console.log(error);
     }
 };
 
@@ -55,7 +55,7 @@ const verifyUser = async (email, code) => {
         const data = await client.send(new ConfirmSignUpCommand(params));
         return data; // Confirmation result
     } catch (error) {
-        throw error;
+        console.log(error);
     }
 };
 

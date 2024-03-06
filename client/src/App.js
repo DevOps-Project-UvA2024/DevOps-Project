@@ -11,14 +11,13 @@ import Greeting from './pages/Greeting';
 import PasswordReset from './pages/PasswordReset';
 import Courses from './pages/Courses';
 import Acc from './pages/Account';
-import WithNavBar from './pages/WithNavBar';
-import WithoutNavBar from './pages/WithoutNavBar';
+import WithNavBar from './components/WithNavBar';
+import WithoutNavBar from './components/WithoutNavBar';
 import Course from './pages/Course';
 
 const App = () => {
   
   return (
-    <>
     <div className="container">
        
       <AuthProvider>
@@ -46,7 +45,6 @@ const App = () => {
       </AuthProvider>
    
     </div>
-    </>
   );
 };
 
