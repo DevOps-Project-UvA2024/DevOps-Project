@@ -14,6 +14,7 @@ import Acc from './pages/Account';
 import WithNavBar from './pages/WithNavBar';
 import WithoutNavBar from './pages/WithoutNavBar';
 import Course from './pages/Course';
+import CourseAnalytics from './pages/CourseAnalytics';
 
 const App = () => {
   
@@ -39,6 +40,8 @@ const App = () => {
               <Route path="/courses" element={<Courses />} /> 
               <Route path="/account" element={<Acc />} />
               <Route path="/courses/:courseid" element={<Course />} />
+              <Route path="/courses/:courseid/course-analytics" element={<CourseAnalytics />} />
+
 
             </Route>
           </Route>

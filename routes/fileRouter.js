@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const { fetchCoursesFiles, fetchLoggedUserRating, rateFileByLoggedUser, getSignedUrl, uploadFileAndStoreMetadata } = require('../controllers/fileController');
 const { fetchUserEmailFromCognito } = require('../utils/userUtils');
-
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
 const db = require('../models/index.js');
@@ -81,18 +80,20 @@ router.post('/upload', upload.single('file'), async (req, res) => {
 
   const { originalname: name, mimetype: type } = req.file;
 
-  // get courseId, uploaderId from DB
-  // const { courseId, uploaderId } = req.body; // Assuming these are sent as part of the form data
-  
+   
   try {
     await uploadFileAndStoreMetadata(req.file, { name, type, courseId, uploaderId });
-
     res.json({ message: "File uploaded and metadata stored successfully." });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Failed to upload file and store metadata.", error: error.toString() });
   }
 });
+
+
+
+
+
 
 
 

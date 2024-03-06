@@ -34,4 +34,31 @@ const addCourse = async (data) => {
   }
 }
 
-module.exports = { fetchAllCourses, addCourse };
+const getTopUploaders = async (req,res) =>{
+  try {
+    const { courseid } = req.params;   
+    const topUploaders = await db.File.findAll({
+      where: { course_id: courseid }, // Use the correct field name from the "files" table
+      attributes: [
+        'uploader_id',
+        [db.Sequelize.fn('COUNT', db.Sequelize.col('uploader_id')), 'fileCount'],
+      ],
+      include: [{
+        model: db.User,
+        attributes: ['username'], 
+      }],
+      group: ['uploader_id', 'User.id'],
+      //order: [[Sequelize.fn('COUNT', Sequelize.col('uploader_id')), 'DESC']], // Corrected order clause
+      limit: 5,
+    });
+
+    res.status(200).json(topUploaders);
+
+  } catch (error) {
+    
+    console.log(error);
+
+  }
+}
+
+module.exports = { fetchAllCourses, addCourse, getTopUploaders };

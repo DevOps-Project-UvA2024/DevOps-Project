@@ -4,12 +4,18 @@ import { DownloadOutlined, StarOutlined, InboxOutlined } from '@ant-design/icons
 import StoreContext from '../store/StoreContext';
 import "../styles/tables_style.css";
 import FilterBar from './FilterBar';
-const { Dragger } = Upload;
+import { useNavigate, useParams} from 'react-router-dom';
+
+
 
 const Course = () => {
+  const { Dragger } = Upload;
+  const navigate = useNavigate();
+
 
   const handleDownload = async (fileKey) => {
     try {
+
         // Call your backend to get the signed URL for download
         const response = await fetch(`/api/files/download/${fileKey}`, {
             method: 'GET',
@@ -215,7 +221,7 @@ const Course = () => {
         key: 'download',
         align: 'center',
         render: (_, record) => {
-          console.log(record)
+          //console.log(record)
           return <Button
             type="primary"
             icon={<DownloadOutlined />}
@@ -263,6 +269,8 @@ const Course = () => {
     
     useEffect(() => {
       fetchFiles(course_id);
+      console.log(course_id)
+
     }, [course_id, fetchFiles]);
 
     const filters = [
@@ -288,6 +296,11 @@ const Course = () => {
     const handleUploadCancel = () => {
       setIsUploadModalOpen(false);
     };
+
+    const goToCourseAnalytics = () => {
+      navigate(`/courses/${course_id}/course-analytics`);
+
+    };
     
     return (
       <div className="container-table">  
@@ -297,6 +310,11 @@ const Course = () => {
             <Button type="primary" onClick={showUploadModal}>
               Upload File 
             </Button> 
+            <Button 
+              type="primary" 
+              onClick={goToCourseAnalytics}>
+              Top Uploaders
+            </Button>   
             <Modal title="Upload" open={isUploadModalOpen} onOk={handleUploadOk} onCancel={handleUploadCancel}>
               <p>Please upload a file here.</p>  
               <Dragger {...props}>

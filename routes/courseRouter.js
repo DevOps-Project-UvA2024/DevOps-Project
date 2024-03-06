@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { fetchAllCourses } = require('../controllers/courseController');
+const { fetchAllCourses, getTopUploaders } = require('../controllers/courseController');
 
 router.post('/', async (req, res) => {
   try {
@@ -10,5 +10,7 @@ router.post('/', async (req, res) => {
     res.status(400).json({ message: "Failed to fetch courses", error: error.toString() });
   }
 });
+
+router.get('/:courseid/course-analytics', getTopUploaders );
 
 module.exports = router;
