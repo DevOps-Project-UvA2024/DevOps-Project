@@ -1,5 +1,5 @@
 # Stage-1 & specify a name 'builder'
-FROM node:20-alpine3.17 AS builder
+FROM node:18.18.0 AS builder
 
 # Set the working directory inside the builder stage to /app/client
 WORKDIR /app/client
@@ -19,11 +19,11 @@ RUN npm run build
 # Stage-2
 FROM nginx:1.25.2-alpine-slim
 
+# Copy the custom Nginx configuration
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 # Copy the static files from the 'builder' stage to the Nginx folder to serve static content
 COPY --from=builder /app/client/build /usr/share/nginx/html
 
-# Open the port to serve the React app, default for HTTP
 EXPOSE 80
-
-# Run Nginx in the foreground
 CMD ["nginx", "-g", "daemon off;"]
