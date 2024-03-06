@@ -3,6 +3,9 @@ import { Table, Button, Rate, Checkbox , Modal, message, Tooltip, Form, Input, U
 import { DownloadOutlined, StarOutlined, InboxOutlined } from '@ant-design/icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import "../styles/analytics.css"
+import firstPrizeImage from '../images/firstPrize.png';
+import secondPrizeImage from '../images/secondPrize.png';
+import thirdPrizeImage from '../images/thirdPrize.png';
 
 const CourseAnalytics = () => {
     const { courseid } = useParams(); 
@@ -82,41 +85,47 @@ const CourseAnalytics = () => {
         fetchTopFiles();
     }, [fetchTopUploaders, fetchTopFiles]);
 
+    const getPrizeImage = (index) => {
+        switch (index) {
+            case 0: return firstPrizeImage;
+            case 1: return secondPrizeImage;
+            case 2: return thirdPrizeImage;
+            default: return null;
+        }
+    };
+
     return (
         <div className='course-analytics'>
-          <h2>Course Analytics</h2>
+            <h2>Course Analytics</h2>
+            <div className="tables-containers">
+                <div className="top5users">
+                    <h3>Top 5 Users</h3>
+                    {loadingTopUploaders ? <p>Loading...</p> : topUploaders.map((uploader, index) => (
+                        <div key={uploader.key} className="uploader-info">
+                            <div className='image-container'>                            
+                                {index < 3 && <img src={getPrizeImage(index)} alt={`Prize ${index + 1}`} />}
+                            </div>
+                            <div className="info">
+                                <div className="title">@{uploader.username}</div>
+                                <div><span className='no-uploads'>{uploader.fileCount}</span> total upload(s)</div>
+                            </div>
 
-        <div className="tables-containers">
-            <h3>Top 5 Users</h3>
-            <div className="top5users">
-                <Table
-                className='table'
-                columns={columns}
-                dataSource={topUploaders}
-                rowKey="userId"
-                loading={loading}
-                pagination={false}
-                /> 
+      
+                        </div>
+                    ))}
+                </div>
+
+                <div className="top5files">
+                    <h3>Top 5 Uploads</h3>
+                    {!loadingTopFiles && topFiles.map((file, index) => (
+                    <div key={index} className="file-info">
+                        <p className="title">{file.name.split("/").pop()}</p>
+                        <div className="rating-all"><Rate disabled allowHalf defaultValue={Math.round(Number(file.averageRating) * 2) / 2}  />({file.totalVotes})</div>
+                    </div>
+                    ))}
+                </div>
             </div>
-
-            <div className="top5files">
-                <h3>Top 5 Uploads</h3>
-                <Table
-                className='table'
-                columns={columns}
-                dataSource={topUploaders}
-                rowKey="userId"
-                loading={loading}
-                pagination={false}
-                /> 
-            </div>
-             
-             
-
         </div>
-
-        
-        </div> 
       );
 }
 
