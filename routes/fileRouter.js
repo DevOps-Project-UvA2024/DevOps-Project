@@ -67,7 +67,7 @@ router.post('/disabling/:fileId', async (req, res) => {
 
 router.get('/download/:fileKey', async (req, res) => {
   const { fileKey } = req.params;
-  const bucketName = process.env.AWS_BUCKET_NAME;
+  const bucketName = process.env.BUCKET_NAME;
 
   try {
     const url = await getSignedUrl(bucketName, fileKey);
