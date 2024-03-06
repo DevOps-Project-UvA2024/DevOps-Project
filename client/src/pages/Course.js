@@ -219,7 +219,6 @@ const Course = () => {
         key: 'yourate',
         align:'center',
         render: (_, record) => (
-          <>
             <Tooltip title={state.user && state.user.id === record.User.id ? "You cannot rate the file you uploaded!" : ''}>
               <Button  
                 onClick={() => showNameModal(record.name, record.id)}
@@ -228,7 +227,6 @@ const Course = () => {
                 <StarOutlined /> Rate
               </Button>
             </Tooltip>
-          </>
         ),
 
       },
