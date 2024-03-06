@@ -246,7 +246,6 @@ const Course = () => {
         key: 'download',
         align: 'center',
         render: (_, record) => {
-          //console.log(record)
           return <Button
             type="primary"
             icon={<DownloadOutlined />}
@@ -290,8 +289,6 @@ const Course = () => {
     
     useEffect(() => {
       fetchFiles(course_id);
-      console.log(course_id)
-
     }, [course_id, fetchFiles]);
 
     const filters = [

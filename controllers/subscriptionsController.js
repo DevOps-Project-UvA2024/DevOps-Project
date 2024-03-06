@@ -5,16 +5,20 @@ const fetchAllSubscriptions = async (searchParameters, userId) => {
   Object.keys(searchParameters).forEach(key => {
     searchParameters[key] = { [db.Sequelize.Op.like]: `%${searchParameters[key]}%` };
   });
-  searchParameters['active'] = true;
-  searchParameters['student_id'] = userId;
+
+  const nameParameters = {
+    student_id: userId,
+    active: true
+  };
 
   try {
     const allSubscriptions = await db.Subscription.findAll({
-      where: searchParameters,
+      where: nameParameters,
       include:[
         {
           model: db.Course,
-          attributes: ['name', 'department', 'id']
+          attributes: ['name', 'department', 'id'],
+          where: searchParameters
         }
       ],
       attributes:[

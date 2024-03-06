@@ -17,7 +17,6 @@ router.post('/', async (req, res) => {
 router.post('/toggle-subscription', async (req, res) => {
   try {
     const userId = (await fetchUserFromDatabase(req)).id;
-    console.log(userId)
     const subscriptionActive = await toggleSubscription(req.body, userId);
     res.status(200).json({ message: `${subscriptionActive} course`});
   } catch (error) {
