@@ -19,6 +19,7 @@ db.User = require('./User')(sequelize, Sequelize);
 db.Course = require('./Course')(sequelize, Sequelize);
 db.File = require('./File')(sequelize, Sequelize);
 db.Voting = require('./Voting')(sequelize, Sequelize);
+db.Subscription = require('./Subscription')(sequelize, Sequelize);
 
 // Associations can be defined here
 db.Role.hasMany(db.User, { foreignKey: 'role_id' });
@@ -33,5 +34,10 @@ db.User.hasMany(db.Voting, { foreignKey: 'student_id' });
 db.File.hasMany(db.Voting, { as: 'votings', foreignKey: 'file_id' });
 db.Voting.belongsTo(db.User, { foreignKey: 'student_id' });
 db.Voting.belongsTo(db.File, { foreignKey: 'file_id' });
+
+db.User.hasMany(db.Subscription, { foreignKey: 'student_id'});
+db.Course.hasMany(db.Subscription, { foreignKey: 'course_id'});
+db.Subscription.belongsTo(db.Course, { foreignKey: 'course_id'});
+db.Subscription.belongsTo(db.User, { foreignKey: 'student_id'});
 
 module.exports = db;

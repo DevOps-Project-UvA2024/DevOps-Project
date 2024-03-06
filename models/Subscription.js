@@ -1,17 +1,9 @@
 module.exports = (sequelize, DataTypes) => {
-    const File = sequelize.define('File', {
+    const Subscription = sequelize.define('Subscription', {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
-        allowNull: false
-      },
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
-      upload_date: {
-        type: DataTypes.DATE,
         allowNull: false
       },
       active: {
@@ -27,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
           key: 'id'
         }
       },
-      uploader_id: {
+      student_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
@@ -39,6 +31,6 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: false
     });
   
-    return File;
+    return Subscription;
 };
   

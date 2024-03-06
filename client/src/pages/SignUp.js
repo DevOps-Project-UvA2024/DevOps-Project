@@ -1,10 +1,9 @@
 import React, { useState, useEffect  } from 'react';
 import { Form, Input, Button, Alert } from 'antd';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import PasswordChecklist from "react-password-checklist"
 import { useAuth, AuthStatus } from '../AuthProvider';
-import { Navigate } from 'react-router-dom';
 import {allowedDomains} from '../utils';
 import loginImage from '../images/signup.png'
 import { UserOutlined, LockOutlined, SmileTwoTone, MailOutlined } from '@ant-design/icons';

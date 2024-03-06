@@ -5,7 +5,7 @@ const dotenv = require("dotenv")
 const { parsed } = dotenv.config()
 
 const client = jwksClient({
-  jwksUri: `https://cognito-idp.${parsed.AWS_REGION}.amazonaws.com/${parsed.COGNITO_USER_POOL_ID}/.well-known/jwks.json`
+  jwksUri: `https://cognito-idp.${parsed.REGION}.amazonaws.com/${parsed.COGNITO_USER_POOL_ID}/.well-known/jwks.json`
 });
 
 function getKey(header, callback){

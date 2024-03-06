@@ -2,8 +2,8 @@ import React, { useEffect, useContext, useState, useRef, useCallback } from 'rea
 import "../styles/tables_style.css"
 import StoreContext from '../store/StoreContext';
 import { useNavigate } from 'react-router-dom';
-import { Button, Modal, Form, Input, Table, message } from 'antd';
-import FilterBar from './FilterBar';
+import { Button, Modal, Form, Input, Table, message, Checkbox } from 'antd';
+import FilterBar from '../components/FilterBar';
 
 const Courses = () => {
 
@@ -22,6 +22,25 @@ const Courses = () => {
     emptyText: 'There are no courses available yet!',
   };
 
+  const toggleSubscribeCourse = async (active, courseId) => {
+    try {
+      const response = await fetch('/api/subscriptions/toggle-subscription', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: courseId,
+          active: active
+        }),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error('Error creating course');
+      message.success(result.message);
+    } catch (error) {
+      message.error(error);
+    }
+  }
 
   const handleSubmit = async (values) => {
     try {
@@ -34,7 +53,6 @@ const Courses = () => {
       });
       const result = await response.json();
       if (!response.ok) throw new Error('Error creating course');
-      
       form.resetFields();
       dispatch({ type: 'RESET_COURSES'});
       fetchCourses();
@@ -65,6 +83,18 @@ const Courses = () => {
       dataIndex: 'department',
       key: 'department',
       sorter: (a, b) => a.name.localeCompare(b.name),
+    },
+    {
+      title: 'Subscribed',
+      dataIndex: 'active',
+      key: 'active',
+      align: 'center',
+      render: (_, record) => (
+        <Checkbox 
+          defaultChecked={record.Subscriptions.length ? record.Subscriptions[0]["active"] : false}
+          onChange={(e) => toggleSubscribeCourse(e.target.checked, record.id)} 
+        />
+      )
     }
   ];
 
@@ -97,10 +127,10 @@ const Courses = () => {
   ];
 
   const filters = [
-    <Form.Item name="name" label="Name">
+    <Form.Item key="name" name="name" label="Name">
       <Input placeholder="Name" />
     </Form.Item>,
-    <Form.Item name="department" label="Department">
+    <Form.Item key="department" name="department" label="Department">
       <Input placeholder="Department" />
     </Form.Item>
   ];

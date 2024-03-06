@@ -3,7 +3,7 @@ import { Table, Button, Rate, Checkbox , Modal, message, Tooltip, Form, Input, U
 import { DownloadOutlined, StarOutlined, InboxOutlined } from '@ant-design/icons';
 import StoreContext from '../store/StoreContext';
 import "../styles/tables_style.css";
-import FilterBar from './FilterBar';
+import FilterBar from '../components/FilterBar';
 const { Dragger } = Upload;
 
 const Course = () => {
@@ -11,7 +11,8 @@ const Course = () => {
   const handleDownload = async (fileKey) => {
     try {
         // Call your backend to get the signed URL for download
-        const response = await fetch(`/api/files/download/${fileKey}`, {
+        let fileKeySplit = fileKey.split("/");
+        const response = await fetch(`/api/files/download/${fileKeySplit[0]}/${fileKeySplit[1]}/${fileKeySplit[2]}`, {
             method: 'GET',
             credentials: 'include'
         });
@@ -21,7 +22,7 @@ const Course = () => {
         }
 
         const data = await response.json();
-
+        message.success("File will be downloaded shortly")
         // Create a temporary anchor `<a>` tag to programmatically click for download
         const downloadLink = document.createElement('a');
         downloadLink.href = data.url;
@@ -31,31 +32,53 @@ const Course = () => {
         document.body.removeChild(downloadLink); // Clean up
     } catch (error) {
         console.error('Download error:', error);
-        alert('Download failed'); // Provide user feedback
+        message.error('Download failed'); // Provide user feedback
     }
   };
+
+  const handleUpload = async () => {
+    const formData = new FormData();
+    
+    selectedFiles.forEach(file => {
+      formData.append('files', file);
+    });
+    formData.append('username', state.user.username);
+    formData.append('user_id', state.user.id);
+    formData.append('course_id', parseInt(course_id));
   
+    try {
+      const response = await fetch('/api/files/upload', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await response.json();
+      dispatch({ type: 'RESET_FILES' });
+      fetchFiles(course_id);
+      message.success(data.message);
+      return data;
+    } catch (error) {
+      console.error(`Upload error: ${error}`);
+      throw error;
+    }
+  };     
     
   const props = {
     name: 'file',
     multiple: true,
-    action: 'https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188',
-    onChange(info) {
-      const { status } = info.file;
-      if (status !== 'uploading') {
-        console.log(info.file, info.fileList);
-      }
-      if (status === 'done') {
-        message.success(`${info.file.name} file uploaded successfully.`);
-      } else if (status === 'error') {
-        message.error(`${info.file.name} file upload failed.`);
-      }
+    beforeUpload: (file) => {
+      // Add the selected file to the state without uploading it
+      setSelectedFiles(currentFiles => [...currentFiles, file]);
+      // Prevent `Upload` from automatically uploading the file
+      return false;
     },
-    onDrop(e) {
-      console.log('Dropped files', e.dataTransfer.files);
+    onRemove: (file) => {
+      // Remove the file from the state if it's deselected
+      setSelectedFiles(currentFiles => currentFiles.filter(f => f.uid !== file.uid));
+    },
+    onChange(info) {
+      console.log(info.file, info.fileList);
     },
   };
-
 
     // Handle changes in file visibility
     const onChange = async (checked, fileId) => {
@@ -67,13 +90,12 @@ const Course = () => {
           },
           body: JSON.stringify({ active : checked }),
         });
-        //console.log(response);
     
         if (!response.ok) {
           throw new Error('Network response was not ok.');
         }
     
-        const result = await response.json();
+        await response.json();
         message.success(`Status updated for file ID: ${fileId}`);
     
         // Dispatch an action to update your front-end state, if necessary
@@ -100,7 +122,13 @@ const Course = () => {
     const [modalRating, setModalRating] = useState(0);
     const [ratingOkText, setRatingOkText] = useState("Rate") ;
     const [modalFileId, setModalFileId] = useState(null);
-    const [filesStatus, setFilesStatus] = useState([]);
+    const [selectedFiles, setSelectedFiles] = useState([]);
+    
+    const resetModalState = () => {
+      setSelectedFiles([]);
+      setIsModalOpen(false);
+      setIsUploadModalOpen(false);
+    };
 
 
     const showNameModal = async (file_name, file_id) => {
@@ -196,7 +224,6 @@ const Course = () => {
         key: 'yourate',
         align:'center',
         render: (_, record) => (
-          <>
             <Tooltip title={state.user && state.user.id === record.User.id ? "You cannot rate the file you uploaded!" : ''}>
               <Button  
                 onClick={() => showNameModal(record.name, record.id)}
@@ -205,7 +232,6 @@ const Course = () => {
                 <StarOutlined /> Rate
               </Button>
             </Tooltip>
-          </>
         ),
 
       },
@@ -223,15 +249,13 @@ const Course = () => {
           />
         },
       },
-
-
       {
         title: 'Status',
         dataIndex: 'status',
         key: 'status',
         align: 'center',
         hidden: !state.user || state.user.role_id !== 2,
-        render: (text, record) => (
+        render: (_, record) => (
           <Checkbox 
             checked={record.active} 
             onChange={(e) => onChange(e.target.checked, record.id)} 
@@ -258,31 +282,30 @@ const Course = () => {
         })
         .catch(error => console.error('Error fetching files:', error));
     }, [dispatch]);
-
-
     
     useEffect(() => {
       fetchFiles(course_id);
     }, [course_id, fetchFiles]);
 
     const filters = [
-      <Form.Item name="name" label="Name">
+      <Form.Item key="name" name="name" label="Name">
         <Input placeholder="Name" />
       </Form.Item>,
-      <Form.Item name="voting" label="Rating">
+      <Form.Item key="voting" name="voting" label="Rating">
         <Rate allowHalf />
       </Form.Item>
     ];
-    const showModal = () => {
-      setIsModalOpen(true);
-    };
 
     const showUploadModal = () => {
       setIsUploadModalOpen(true);
     }
 
     const handleUploadOk = () => {
-      setIsUploadModalOpen(false);
+      handleUpload().then(() => {
+        resetModalState();
+      }).catch(error => {
+        console.error('An error occurred during the upload:', error);
+      });
     };
 
     const handleUploadCancel = () => {
@@ -299,12 +322,11 @@ const Course = () => {
             </Button> 
             <Modal title="Upload" open={isUploadModalOpen} onOk={handleUploadOk} onCancel={handleUploadCancel}>
               <p>Please upload a file here.</p>  
-              <Dragger {...props}>
+              <Dragger {...props} fileList={selectedFiles}>
                 <p className="ant-upload-drag-icon">
                   <InboxOutlined />
                 </p>
                 <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                
               </Dragger>           
             </Modal>             
           </div>

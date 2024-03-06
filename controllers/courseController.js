@@ -1,6 +1,6 @@
 const db = require('../models/index.js');
 
-const fetchAllCourses = async (searchParameters) => {
+const fetchAllCourses = async (searchParameters, userId) => {
   
   Object.keys(searchParameters).forEach(key => {
     searchParameters[key] = { [db.Sequelize.Op.like]: `%${searchParameters[key]}%` };
@@ -8,7 +8,15 @@ const fetchAllCourses = async (searchParameters) => {
 
   try {
     const allCourses = await db.Course.findAll({
-      where: searchParameters
+      where: searchParameters,
+      include: [{
+        model: db.Subscription,
+        where: {
+          student_id: userId,
+          active: true
+        },
+        required: false
+      }]
     });
     return allCourses;
   } catch (error) {
