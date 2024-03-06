@@ -91,7 +91,7 @@ const Courses = () => {
       align: 'center',
       render: (_, record) => (
         <Checkbox 
-          defaultChecked={!!record.Subscriptions.length ? record.Subscriptions[0]["active"] : false}
+          defaultChecked={record.Subscriptions.length ? record.Subscriptions[0]["active"] : false}
           onChange={(e) => toggleSubscribeCourse(e.target.checked, record.id)} 
         />
       )

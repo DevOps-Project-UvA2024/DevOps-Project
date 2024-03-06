@@ -11,7 +11,8 @@ const Course = () => {
   const handleDownload = async (fileKey) => {
     try {
         // Call your backend to get the signed URL for download
-        const response = await fetch(`/api/files/download/${fileKey}`, {
+        let fileKeySplit = fileKey.split("/");
+        const response = await fetch(`/api/files/download/${fileKeySplit[0]}/${fileKeySplit[1]}/${fileKeySplit[2]}`, {
             method: 'GET',
             credentials: 'include'
         });
@@ -21,7 +22,7 @@ const Course = () => {
         }
 
         const data = await response.json();
-
+        message.success("File will be downloaded shortly")
         // Create a temporary anchor `<a>` tag to programmatically click for download
         const downloadLink = document.createElement('a');
         downloadLink.href = data.url;
@@ -31,7 +32,7 @@ const Course = () => {
         document.body.removeChild(downloadLink); // Clean up
     } catch (error) {
         console.error('Download error:', error);
-        alert('Download failed'); // Provide user feedback
+        message.error('Download failed'); // Provide user feedback
     }
   };
 
@@ -50,7 +51,10 @@ const Course = () => {
         method: 'POST',
         body: formData
       });
-      const data = await response.json(); // Use `.json()` to parse JSON response
+      const data = await response.json();
+      dispatch({ type: 'RESET_FILES' });
+      fetchFiles(course_id);
+      message.success(data.message);
       return data;
     } catch (error) {
       console.error(`Upload error: ${error}`);
@@ -121,6 +125,7 @@ const Course = () => {
     const [selectedFiles, setSelectedFiles] = useState([]);
     
     const resetModalState = () => {
+      setSelectedFiles([]);
       setIsModalOpen(false);
       setIsUploadModalOpen(false);
     };
@@ -317,12 +322,11 @@ const Course = () => {
             </Button> 
             <Modal title="Upload" open={isUploadModalOpen} onOk={handleUploadOk} onCancel={handleUploadCancel}>
               <p>Please upload a file here.</p>  
-              <Dragger {...props}>
+              <Dragger {...props} fileList={selectedFiles}>
                 <p className="ant-upload-drag-icon">
                   <InboxOutlined />
                 </p>
                 <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                
               </Dragger>           
             </Modal>             
           </div>

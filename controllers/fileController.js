@@ -128,7 +128,6 @@ const getSignedUrl = (bucket, fileKey) => {
 
 const uploadFileAndStoreMetadata = async (req, res) => {
   const { course_id, user_id, username } = req.body;
-  console.log("user_id", user_id)
 
   // Since `upload.any()` is used, `req.files` will hold the files
   if (!req.files || req.files.length === 0) {
@@ -144,7 +143,8 @@ const uploadFileAndStoreMetadata = async (req, res) => {
         Bucket: process.env.BUCKET_NAME,
         Key: fileName,
         Body: file.buffer,
-        ContentType: fileType
+        ContentType: fileType,
+        ContentDisposition: "attachment"
       };
 
       // Upload file to S3

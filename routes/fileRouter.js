@@ -64,10 +64,10 @@ router.post('/disabling/:fileId', async (req, res) => {
   }
 });
 
-router.get('/download/:fileKey', async (req, res) => {
-  const { fileKey } = req.params;
+router.get('/download/:uploaderName/:uploadTime/:fileName', async (req, res) => {
+  const { uploaderName, uploadTime, fileName } = req.params;
   const bucketName = process.env.BUCKET_NAME;
-
+  const fileKey = uploaderName + "/" + uploadTime + "/" + fileName;
   try {
     const url = await getSignedUrl(bucketName, fileKey);
     res.json({url});
