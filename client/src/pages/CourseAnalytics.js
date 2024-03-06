@@ -2,6 +2,7 @@ import React, { useEffect, useContext, useState, useCallback }from 'react';
 import { Table, Button, Rate, Checkbox , Modal, message, Tooltip, Form, Input, Upload} from 'antd';
 import { DownloadOutlined, StarOutlined, InboxOutlined } from '@ant-design/icons';
 import { useNavigate, useParams } from 'react-router-dom';
+import "../styles/analytics.css"
 
 const CourseAnalytics = () => {
     const { courseid } = useParams(); 
@@ -53,15 +54,29 @@ const CourseAnalytics = () => {
     console.log(topUploaders);
 
     return (
-        <>
-        <h1>Top Uploaders</h1>
-        <Table
+        <div className='course-analytics'>
+        <h2>Course Analytics</h2>
+
+        <div className="tables-containers">
+          <Table
+            className='table'
             columns={columns}
             dataSource={topUploaders}
             rowKey="userId"
             loading={loading}
-        />
-        </> 
+         />  
+          <Table
+            className='table'
+            columns={columns}
+            dataSource={topUploaders}
+            rowKey="userId"
+            loading={loading}
+         />  
+
+        </div>
+
+        
+        </div> 
         );
 }
 
