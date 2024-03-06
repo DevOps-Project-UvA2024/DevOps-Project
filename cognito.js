@@ -11,7 +11,7 @@ const poolData = {
 UserPoolId: "eu-north-1_R9M5he9af",
 ClientId: "1tk5am2ea91tjfvn2aq0ssdt7v"
 };
-const aws_region = "eu-north-1";
+const REGION = "eu-north-1";
 
 const CognitoUserPool = AmazonCognitoId.CognitoUserPool;
 const userPool = new AmazonCognitoId.CognitoUserPool (poolData);

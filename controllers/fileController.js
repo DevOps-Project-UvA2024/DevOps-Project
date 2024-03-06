@@ -141,7 +141,7 @@ const uploadFileAndStoreMetadata = async (req, res) => {
       const fileName = `${username}/${Date.now()}/${file.originalname}`;
       const fileType = file.mimetype;
       const s3Params = {
-        Bucket: process.env.AWS_BUCKET_NAME,
+        Bucket: process.env.BUCKET_NAME,
         Key: fileName,
         Body: file.buffer,
         ContentType: fileType
