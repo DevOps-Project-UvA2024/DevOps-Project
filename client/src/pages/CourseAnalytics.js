@@ -18,9 +18,9 @@ const CourseAnalytics = () => {
         },
         {
           title: 'Files Uploaded',
-          dataIndex: 'filesUploaded',
+          dataIndex: 'fileCount',
           key: 'filesUploaded',
-          sorter: (a, b) => a.filesUploaded - b.filesUploaded,
+          sorter: (a, b) => a.fileCount  - b.fileCount ,
           sortDirections: ['descend', 'ascend'],
         },
       ];
@@ -50,7 +50,7 @@ const CourseAnalytics = () => {
         fetchTopUploaders();
     }, [fetchTopUploaders]);
 
-   
+    console.log(topUploaders);
 
     return (
         <>

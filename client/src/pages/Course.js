@@ -306,15 +306,20 @@ const Course = () => {
       <div className="container-table">  
         <div className='table-container'>
           <div className='add-course-btn'>
-            <h2>Files</h2>  
-            <Button type="primary" onClick={showUploadModal}>
-              Upload File 
-            </Button> 
-            <Button 
-              type="primary" 
-              onClick={goToCourseAnalytics}>
-              Top Uploaders
-            </Button>   
+            <h2>Files</h2> 
+            <div>
+              <Button type="primary" onClick={showUploadModal}>
+                Upload File 
+                
+              </Button> 
+              
+              <Button 
+                type="primary" 
+                onClick={goToCourseAnalytics}>
+                Course Analytics
+              </Button>  
+            </div> 
+             
             <Modal title="Upload" open={isUploadModalOpen} onOk={handleUploadOk} onCancel={handleUploadCancel}>
               <p>Please upload a file here.</p>  
               <Dragger {...props}>
