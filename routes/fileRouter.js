@@ -11,12 +11,12 @@ require('dotenv').config();
 router.post('/:course_id', async (req, res) => {
   try {
     const loggedUserEmail = await fetchUserEmailFromCognito(req, res);
-    const user = await db.User.findOne({where: { email: loggedUserEmail }});
+    const user = await db.User.findOne({ where: { email: loggedUserEmail }});
     const role = user.dataValues.role_id;
     const courseInfo = await fetchCoursesFiles(role, req.params.course_id, req.body);
-    return res.status(200).json(courseInfo);
+    res.status(200).json(courseInfo); // Sending response within the try block
   } catch (error) {
-    return res.status(400).json({ message: "Failed to fetch files", error: error.toString() });
+    res.status(400).json({ message: "Failed to fetch files", error: error.toString() });
   }
 });
 

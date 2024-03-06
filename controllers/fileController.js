@@ -149,9 +149,8 @@ const uploadFileAndStoreMetadata = async (req, res) => {
     await s3.upload(s3Params).promise();
 
     // After successful upload, store file metadata in RDS
-    const newFile = await db.File.create({
+    await db.File.create({
       name: fileName,
-      type: fileType,
       upload_date: new Date(),
       active: true,
       course_id: courseId,

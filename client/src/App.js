@@ -18,7 +18,6 @@ import Course from './pages/Course';
 const App = () => {
   
   return (
-    <>
     <div className="container">
        
       <AuthProvider>
@@ -46,7 +45,6 @@ const App = () => {
       </AuthProvider>
    
     </div>
-    </>
   );
 };
 

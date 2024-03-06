@@ -223,15 +223,13 @@ const Course = () => {
           />
         },
       },
-
-
       {
         title: 'Status',
         dataIndex: 'status',
         key: 'status',
         align: 'center',
         hidden: !state.user || state.user.role_id !== 2,
-        render: (text, record) => (
+        render: (_, record) => (
           <Checkbox 
             checked={record.active} 
             onChange={(e) => onChange(e.target.checked, record.id)} 
@@ -258,24 +256,19 @@ const Course = () => {
         })
         .catch(error => console.error('Error fetching files:', error));
     }, [dispatch]);
-
-
     
     useEffect(() => {
       fetchFiles(course_id);
     }, [course_id, fetchFiles]);
 
     const filters = [
-      <Form.Item name="name" label="Name">
+      <Form.Item key="name" name="name" label="Name">
         <Input placeholder="Name" />
       </Form.Item>,
-      <Form.Item name="voting" label="Rating">
+      <Form.Item key="voting" name="voting" label="Rating">
         <Rate allowHalf />
       </Form.Item>
     ];
-    const showModal = () => {
-      setIsModalOpen(true);
-    };
 
     const showUploadModal = () => {
       setIsUploadModalOpen(true);

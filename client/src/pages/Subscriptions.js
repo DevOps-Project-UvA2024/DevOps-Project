@@ -2,7 +2,7 @@ import React, { useEffect, useContext, useState, useRef, useCallback } from 'rea
 import "../styles/tables_style.css"
 import StoreContext from '../store/StoreContext';
 import { useNavigate } from 'react-router-dom';
-import { Form, Input, Table } from 'antd';
+import { Form, Input, Table, Checkbox, message } from 'antd';
 import FilterBar from '../components/FilterBar';
 
 const Subscriptions = () => {
@@ -14,6 +14,26 @@ const Subscriptions = () => {
     emptyText: 'There are no subscriptions available yet!',
   };
 
+  const toggleSubscribeCourse = async (active, courseId) => {
+    try {
+      const response = await fetch('/api/subscriptions/toggle-subscription', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: courseId,
+          active: active
+        }),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error('Error creating course');
+      message.success(result.message);
+    } catch (error) {
+      message.error(error);
+    }
+  }
+
 
   const columns = [
     {
@@ -21,17 +41,30 @@ const Subscriptions = () => {
       dataIndex: 'name',
       key: 'name',
       sorter: (a, b) => a.name.localeCompare(b.name),
-      render: (text, record) => <a href="/" onClick={(e) => { 
+      render: (_, record) => <a href="/" onClick={(e) => { 
         e.preventDefault(); 
-        navigate(`/subscriptions/${record.id}`); 
-      }}>{text}</a>,
+        navigate(`/courses/${record.Course.id}`); 
+      }}>{record.Course.name}</a>,
     },
     {
       title: 'Department',
       dataIndex: 'department',
       key: 'department',
       sorter: (a, b) => a.name.localeCompare(b.name),
-    }
+      render: (_, record ) => record.Course.department
+    },
+    {
+      title: 'Subscribed',
+      dataIndex: 'active',
+      key: 'active',
+      align: 'center',
+      render: (_, record) => (
+        <Checkbox 
+          defaultChecked={record.active}
+          onChange={(e) => toggleSubscribeCourse(e.target.checked, record.id)} 
+        />
+      )
+    }  
   ];
 
   const fetchSubscriptions = useCallback(() => {
@@ -54,10 +87,10 @@ const Subscriptions = () => {
   }, [fetchSubscriptions]);
 
   const filters = [
-    <Form.Item name="name" label="Name">
+    <Form.Item key="name" name="name" label="Name">
       <Input placeholder="Name" />
     </Form.Item>,
-    <Form.Item name="department" label="Department">
+    <Form.Item key="department" name="department" label="Department">
       <Input placeholder="Department" />
     </Form.Item>
   ];
