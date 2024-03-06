@@ -48,17 +48,46 @@ const getTopUploaders = async (req,res) =>{
         attributes: ['username'], 
       }],
       group: ['uploader_id', 'User.id'],
-      //order: [[Sequelize.fn('COUNT', Sequelize.col('uploader_id')), 'DESC']], // Corrected order clause
+      order: [[db.Sequelize.fn('COUNT', db.Sequelize.col('uploader_id')), 'DESC']], // Corrected order clause
       limit: 5,
     });
 
     res.status(200).json(topUploaders);
-
   } catch (error) {
-    
     console.log(error);
-
   }
 }
 
-module.exports = { fetchAllCourses, addCourse, getTopUploaders };
+const getTopFiles = async (req,res) =>{
+  try {
+    const { courseid } = req.params;   
+    const topRatedFiles = await db.File.findAll({
+      where: { course_id: courseid },
+      attributes: [
+        'id',
+        'name',
+        [db.Sequelize.fn('COUNT', db.Sequelize.col('votings.id')), 'totalVotes'],
+        [db.Sequelize.fn('AVG', db.Sequelize.col('votings.voting')), 'averageRating'],
+      ],
+      include: [{
+        model: db.Voting,
+        attributes: [],
+        as: 'votings',
+        required: false
+      }],
+      group: [db.Sequelize.col('File.id')],
+      having: db.Sequelize.literal('COUNT(`votings`.`id`) > 0'),
+      order: [
+        [db.Sequelize.literal('averageRating'), 'DESC']
+      ],
+      limit: 5,
+      subQuery: false
+    });    
+
+    res.status(200).json(topRatedFiles);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+module.exports = { fetchAllCourses, addCourse, getTopUploaders, getTopFiles };
