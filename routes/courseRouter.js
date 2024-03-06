@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const { fetchAllCourses } = require('../controllers/courseController');
 const { fetchUserEmailFromCognito } = require('../utils/userUtils');
 const db = require('../models/index.js');
+const { fetchAllCourses, getTopUploaders, getTopFiles } = require('../controllers/courseController');
 
 router.post('/', async (req, res) => {
   try {
@@ -15,5 +15,10 @@ router.post('/', async (req, res) => {
     res.status(400).json({ message: "Failed to fetch courses", error: error.toString() });
   }
 });
+
+router.get('/:courseid/course-analytics/top-uploaders', getTopUploaders );
+
+router.get('/:courseid/course-analytics/top-files', getTopFiles );
+
 
 module.exports = router;

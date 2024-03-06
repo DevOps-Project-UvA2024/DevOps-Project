@@ -1,0 +1,74 @@
+
+.course-analytics{
+    display: flex;
+    flex-direction: column;
+    ;
+}
+
+.course-analytics .tables-containers{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.course-analytics .table{
+    width:100%;
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
+    .uploader-info, .file-info{
+        background-color: #407bff;
+        color: white;
+        padding: 1rem;
+        border-radius: 20px;
+        margin-bottom: 2rem;
+    }
+
+    .course-analytics .title{
+        font-size: 22px;
+    }
+
+    .uploader-info {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .uploader-info .image-container{
+        display: flex;
+        align-items: center;
+    }
+
+    .uploader-info .image-container img{
+        width: 100%;
+    }
+
+    .uploader-info .info{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width:100%;
+        justify-content: space-around;
+    }
+
+    .course-analytics h2{
+        margin:2rem;
+    }
+
+    .top5users, .top5files{
+        width:80%;
+        padding: 2rem;
+    }
+
+    .top5users .no-uploads{
+        font-size: 20px;
+    }
+
+
+
+    .top5files .rating-all{
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+    }
+
+

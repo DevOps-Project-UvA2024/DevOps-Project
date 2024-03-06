@@ -56,7 +56,7 @@ const SignIn = () => {
   };
 
   return (
-    <div className='background'>x
+    <div className='background'>
     <div className='welcome-container'>
       <h1><b>Welcome back! </b></h1>
       <img src={loginImage}/>

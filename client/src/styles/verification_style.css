@@ -8,12 +8,12 @@
     margin-left: 1rem;
 }
 
-h2, h4{
+.background h2, h4{
     text-align: center;
     color: #333;
 }
 
-h1{
+.background {
     color: #2d56b3;
 }
 

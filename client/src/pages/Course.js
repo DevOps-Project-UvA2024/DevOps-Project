@@ -5,11 +5,18 @@ import StoreContext from '../store/StoreContext';
 import "../styles/tables_style.css";
 import FilterBar from '../components/FilterBar';
 const { Dragger } = Upload;
+import { useNavigate, useParams} from 'react-router-dom';
+
+
 
 const Course = () => {
+  const { Dragger } = Upload;
+  const navigate = useNavigate();
+
 
   const handleDownload = async (fileKey) => {
     try {
+
         // Call your backend to get the signed URL for download
         let fileKeySplit = fileKey.split("/");
         const response = await fetch(`/api/files/download/${fileKeySplit[0]}/${fileKeySplit[1]}/${fileKeySplit[2]}`, {
@@ -180,6 +187,7 @@ const Course = () => {
         dataIndex: 'name',
         key: 'name',
         sorter: (a, b) => a.name.localeCompare(b.name),
+        render: (text) => text.split("/").pop()
       },
       {
         title: 'Uploaded By',
@@ -215,7 +223,7 @@ const Course = () => {
       {
         title: 'Number of Ratings',
         dataIndex: 'n_votes',
-        key: 'rating',
+        key: 'n_votes',
         align:'center'
       },
       {
@@ -241,7 +249,7 @@ const Course = () => {
         key: 'download',
         align: 'center',
         render: (_, record) => {
-          console.log(record)
+          //console.log(record)
           return <Button
             type="primary"
             icon={<DownloadOutlined />}
@@ -285,6 +293,8 @@ const Course = () => {
     
     useEffect(() => {
       fetchFiles(course_id);
+      console.log(course_id)
+
     }, [course_id, fetchFiles]);
 
     const filters = [
@@ -311,15 +321,30 @@ const Course = () => {
     const handleUploadCancel = () => {
       setIsUploadModalOpen(false);
     };
+
+    const goToCourseAnalytics = () => {
+      navigate(`/courses/${course_id}/course-analytics`);
+
+    };
     
     return (
       <div className="container-table">  
         <div className='table-container'>
           <div className='add-course-btn'>
-            <h2>Files</h2>  
-            <Button type="primary" onClick={showUploadModal}>
-              Upload File 
-            </Button> 
+            <h2>Files</h2> 
+            <div>
+              <Button type="primary" onClick={showUploadModal}>
+                Upload File 
+                
+              </Button> 
+              
+              <Button 
+                type="primary" 
+                onClick={goToCourseAnalytics}>
+                Course Analytics
+              </Button>  
+            </div> 
+             
             <Modal title="Upload" open={isUploadModalOpen} onOk={handleUploadOk} onCancel={handleUploadCancel}>
               <p>Please upload a file here.</p>  
               <Dragger {...props} fileList={selectedFiles}>
