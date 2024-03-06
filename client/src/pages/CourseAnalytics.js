@@ -58,20 +58,31 @@ const CourseAnalytics = () => {
         <h2>Course Analytics</h2>
 
         <div className="tables-containers">
-          <Table
-            className='table'
-            columns={columns}
-            dataSource={topUploaders}
-            rowKey="userId"
-            loading={loading}
-         />  
-          <Table
-            className='table'
-            columns={columns}
-            dataSource={topUploaders}
-            rowKey="userId"
-            loading={loading}
-         />  
+            <h3>Top 5 Users</h3>
+            <div className="top5users">
+                <Table
+                className='table'
+                columns={columns}
+                dataSource={topUploaders}
+                rowKey="userId"
+                loading={loading}
+                pagination={false}
+                /> 
+            </div>
+
+            <div className="top5files">
+                <h3>Top 5 Uploads</h3>
+                <Table
+                className='table'
+                columns={columns}
+                dataSource={topUploaders}
+                rowKey="userId"
+                loading={loading}
+                pagination={false}
+                /> 
+            </div>
+             
+             
 
         </div>
 
