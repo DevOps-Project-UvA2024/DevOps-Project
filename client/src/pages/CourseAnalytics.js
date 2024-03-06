@@ -8,10 +8,11 @@ const CourseAnalytics = () => {
     const { courseid } = useParams(); 
     const navigate = useNavigate();
     const [topUploaders, setTopUploaders] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [topFiles, setTopFiles] = useState([]);
+    const [loadingTopUploaders, setLoadingTopUploaders] = useState(true);
+    const [loadingTopFiles, setLoadingTopFiles] = useState(true);
 
-
-    const columns = [
+    const columnsTopUploaders = [
         {
             title: 'Username',
             dataIndex: 'username',
@@ -21,41 +22,69 @@ const CourseAnalytics = () => {
           title: 'Files Uploaded',
           dataIndex: 'fileCount',
           key: 'filesUploaded',
-          sorter: (a, b) => a.fileCount  - b.fileCount ,
-          sortDirections: ['descend', 'ascend'],
+        },
+      ];
+
+      const columnsTopFiles = [
+        {
+          title: 'Name',
+          dataIndex: 'name',
+          key: 'name',
+          render: (text) => text.split("/").pop()
+        },
+        {
+          title: 'Rating',
+          dataIndex: 'averageRating',
+          key: 'rating',
+          render: averageRating => <Rate disabled allowHalf defaultValue={Math.round(Number(averageRating) * 2) / 2} />,
+        },
+        {
+          title: 'Number of Ratings',
+          dataIndex: 'totalVotes',
+          key: 'n_votes',
+          align:'center'
         },
       ];
     
       const fetchTopUploaders = useCallback(() => {
-        fetch(`/api/courses/${courseid}/course-analytics`, {
+        fetch(`/api/courses/${courseid}/course-analytics/top-uploaders`, {
             method: 'GET',
             credentials: 'include'
         })
         .then(response => response.json())
         .then(data => {
             const formattedData = data.map((item) => ({
-               key: item.uploader_id,  // Assuming uploader_id is unique for each item.
+                key: item.uploader_id,  // Assuming uploader_id is unique for each item.
                 username: item.User.username,
                 fileCount: item.fileCount,
             }));
             setTopUploaders(formattedData);
-            setLoading(false);
+            setLoadingTopUploaders(false);
         })
-        
         .catch(error => console.error('Error fetching files:', error));
-
-        
         }, [courseid]);
+
+    const fetchTopFiles = useCallback(() => {
+      fetch(`/api/courses/${courseid}/course-analytics/top-files`, {
+          method: 'GET',
+          credentials: 'include'
+      })
+      .then(response => response.json())
+      .then(data => {
+          setTopFiles(data);
+          setLoadingTopFiles(false);
+      })
+      .catch(error => console.error('Error fetching files:', error));
+      }, [courseid]);
 
       useEffect(() => {
         fetchTopUploaders();
-    }, [fetchTopUploaders]);
-
-    console.log(topUploaders);
+        fetchTopFiles();
+    }, [fetchTopUploaders, fetchTopFiles]);
 
     return (
         <div className='course-analytics'>
-        <h2>Course Analytics</h2>
+          <h2>Course Analytics</h2>
 
         <div className="tables-containers">
             <h3>Top 5 Users</h3>
@@ -88,7 +117,7 @@ const CourseAnalytics = () => {
 
         
         </div> 
-        );
+      );
 }
 
 export default CourseAnalytics

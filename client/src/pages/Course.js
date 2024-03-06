@@ -158,6 +158,7 @@ const Course = () => {
         dataIndex: 'name',
         key: 'name',
         sorter: (a, b) => a.name.localeCompare(b.name),
+        render: (text) => text.split("/").pop()
       },
       {
         title: 'Uploaded By',
@@ -193,7 +194,7 @@ const Course = () => {
       {
         title: 'Number of Ratings',
         dataIndex: 'n_votes',
-        key: 'rating',
+        key: 'n_votes',
         align:'center'
       },
       {

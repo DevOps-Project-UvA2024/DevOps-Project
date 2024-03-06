@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { fetchAllCourses, getTopUploaders } = require('../controllers/courseController');
+const { fetchAllCourses, getTopUploaders, getTopFiles } = require('../controllers/courseController');
 
 router.post('/', async (req, res) => {
   try {
@@ -11,6 +11,9 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.get('/:courseid/course-analytics', getTopUploaders );
+router.get('/:courseid/course-analytics/top-uploaders', getTopUploaders );
+
+router.get('/:courseid/course-analytics/top-files', getTopFiles );
+
 
 module.exports = router;
