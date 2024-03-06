@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  backend:
+    build: 
+      context: .
+      dockerfile: back.Dockerfile
+    ports:
+      - "3001:3001"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=production
+    command: node app.js
+
+  frontend:
+    build: 
+      context: .
+      dockerfile: front.Dockerfile
+    ports:
+      - "80:80"
+    environment:
+      - NODE_ENV=production
