@@ -17,6 +17,7 @@ export function reducer(state, action) {
             return {
                 ...state,
                 courses: action.payload
+                courses: action.payload
             };
         case 'RESET_COURSES':
             return {
@@ -27,21 +28,12 @@ export function reducer(state, action) {
             return {
                 ...state,
                 files: action.payload
+                files: action.payload
             };
         case 'RESET_FILES':
             return {
                 ...state,
                 files: []
-            };
-        case 'SET_SUBSCRIPTIONS':
-            return {
-                ...state,
-                subscriptions: action.payload
-            }
-        case 'RESET_SUBSCRIPTIONS':
-            return {
-                ...state,
-                files: action.payload
             };
         case 'SET_SUBSCRIPTIONS':
             return {
