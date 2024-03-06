@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useContext, useCallback } from 'react';
 import "../styles/tables_style.css"
 import StoreContext from '../store/StoreContext';
 import { useNavigate } from 'react-router-dom';

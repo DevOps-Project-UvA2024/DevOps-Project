@@ -73,7 +73,7 @@ const Course = () => {
           throw new Error('Network response was not ok.');
         }
     
-        const result = await response.json();
+        await response.json();
         message.success(`Status updated for file ID: ${fileId}`);
     
         // Dispatch an action to update your front-end state, if necessary
@@ -100,8 +100,6 @@ const Course = () => {
     const [modalRating, setModalRating] = useState(0);
     const [ratingOkText, setRatingOkText] = useState("Rate") ;
     const [modalFileId, setModalFileId] = useState(null);
-    const [filesStatus, setFilesStatus] = useState([]);
-
 
     const showNameModal = async (file_name, file_id) => {
 
