@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState, useCallback }from 'react';
-import { Table, Button, Rate, Checkbox , Modal, message, Tooltip, Form, Input, Upload} from 'antd';
+import { Table, Button, Rate, Checkbox , Modal, message, Tooltip, Form, Input, Upload, Typography} from 'antd';
 import { DownloadOutlined, StarOutlined, InboxOutlined } from '@ant-design/icons';
 import StoreContext from '../store/StoreContext';
 import "../styles/tables_style.css";
@@ -8,8 +8,8 @@ import { useNavigate} from 'react-router-dom';
 
 const Course = () => {
   const { Dragger } = Upload;
+  const { Text } = Typography;
   const navigate = useNavigate();
-
 
   const handleDownload = async (fileKey) => {
     try {
@@ -365,8 +365,8 @@ const Course = () => {
             okText={ratingOkText}
             onCancel={handleCancel}>            
             <div className='modal-rating'>
-                <p>What is your rating for {selectedName}?</p>
-                <Rate allowHalf onChange={(value) => setModalRating(value)} value={modalRating} />
+              <p>What is your rating for <Text ellipsis={{ tooltip: selectedName.split("/").pop() }}>{selectedName.split("/").pop()}?</Text></p>
+              <Rate allowHalf onChange={(value) => setModalRating(value)} value={modalRating} />
             </div>
           </Modal> 
 
