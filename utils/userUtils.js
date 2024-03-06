@@ -2,13 +2,13 @@ const { GetUserCommand } = require("@aws-sdk/client-cognito-identity-provider");
 const { client } = require("../cognito-config"); // Adjust the path as necessary
 const db = require('../models/index.js');
 
-const fetchUserEmailFromCognito = async (req, res) => {
+const fetchUserEmailFromCognito = async (req) => {
 
     const accessToken = req.cookies['accessToken']; // Ensure you're extracting the access token correctly
 
-    if (!accessToken) {
-      return res.status(401).json({ message: "Access Token is required" });
-    }
+    // if (!accessToken) {
+    //   return res.status(401).json({ message: "Access Token is required" });
+    // }
 
     const command = new GetUserCommand({
       AccessToken: accessToken,
@@ -29,12 +29,17 @@ const fetchUserEmailFromCognito = async (req, res) => {
     }
   };
 
-const checkUserCreation = async (req, res) => {
+const fetchUserFromDatabase = async (req) => {
+  const loggedUserEmail = await fetchUserEmailFromCognito(req);
+  const user = await db.User.findOne({where: { email: loggedUserEmail }});
+  return user.dataValues;
+}
 
-  const user = await db.User.findOne({ where: { email: req.body.username } });
+const checkUserCreation = async (accessToken, email) => {
+
+  const user = await db.User.findOne({ where: { email: email } });
   
   if (!user) {
-    const accessToken = req.cookies['accessToken']; // Ensure you're extracting the access token correctly
 
     // if (!accessToken) {
     //   return res.status(401).json({ message: "Access Token is required" });
@@ -54,7 +59,7 @@ const checkUserCreation = async (req, res) => {
 
       await db.User.create({
         username: attributes.name,
-        email: req.body.username,
+        email: email,
         role_id: 1
       });
     } catch (error) {
@@ -65,4 +70,4 @@ const checkUserCreation = async (req, res) => {
 
 }
 
-module.exports = { fetchUserEmailFromCognito, checkUserCreation };
+module.exports = { fetchUserEmailFromCognito, checkUserCreation, fetchUserFromDatabase };

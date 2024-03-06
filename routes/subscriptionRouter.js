@@ -1,14 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const { fetchAllSubscriptions, toggleSubscription } = require('../controllers/subscriptionsController');
-const { fetchUserEmailFromCognito } = require('../utils/userUtils');
+const { fetchUserFromDatabase } = require('../utils/userUtils');
 const db = require('../models/index.js');
 
 router.post('/', async (req, res) => {
   try {
-    const loggedUserEmail = await fetchUserEmailFromCognito(req, res);
-    const user = await db.User.findOne({where: { email: loggedUserEmail }});
-    const userId = user.dataValues.id;
+    const userId = (await fetchUserFromDatabase(req)).id;
     const subscriptionInfo = await fetchAllSubscriptions(req.body, userId);
     res.status(200).json(subscriptionInfo);
   } catch (error) {
@@ -18,9 +16,8 @@ router.post('/', async (req, res) => {
 
 router.post('/toggle-subscription', async (req, res) => {
   try {
-    const loggedUserEmail = await fetchUserEmailFromCognito(req, res);
-    const user = await db.User.findOne({where: { email: loggedUserEmail }});
-    const userId = user.dataValues.id;
+    const userId = (await fetchUserFromDatabase(req)).id;
+    console.log(userId)
     const subscriptionActive = await toggleSubscription(req.body, userId);
     res.status(200).json({ message: `${subscriptionActive} course`});
   } catch (error) {

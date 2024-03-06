@@ -1,14 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { fetchUserEmailFromCognito } = require('../utils/userUtils');
-const db = require('../models/index.js');
+const { fetchUserFromDatabase } = require('../utils/userUtils');
 const { fetchAllCourses, getTopUploaders, getTopFiles } = require('../controllers/courseController');
 
 router.post('/', async (req, res) => {
   try {
-    const loggedUserEmail = await fetchUserEmailFromCognito(req, res);
-    const user = await db.User.findOne({where: { email: loggedUserEmail }});
-    const userId = user.dataValues.id;
+    const userId = (await fetchUserFromDatabase(req)).id;
     const courseInfo = await fetchAllCourses(req.body, userId);
     res.status(200).json(courseInfo);
   } catch (error) {

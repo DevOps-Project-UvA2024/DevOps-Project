@@ -4,10 +4,7 @@ import { DownloadOutlined, StarOutlined, InboxOutlined } from '@ant-design/icons
 import StoreContext from '../store/StoreContext';
 import "../styles/tables_style.css";
 import FilterBar from '../components/FilterBar';
-const { Dragger } = Upload;
-import { useNavigate, useParams} from 'react-router-dom';
-
-
+import { useNavigate} from 'react-router-dom';
 
 const Course = () => {
   const { Dragger } = Upload;

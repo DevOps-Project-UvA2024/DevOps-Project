@@ -40,7 +40,8 @@ const signIn = async (username, password) => {
         const data = await client.send(new InitiateAuthCommand(params));
         return data.AuthenticationResult; // Contains tokens and the user returned from the mysql
     } catch (error) {
-        console.log(error);
+        console.log("Sign in failed:",error);
+        return error;
     }
 };
 

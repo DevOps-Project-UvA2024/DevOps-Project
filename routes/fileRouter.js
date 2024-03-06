@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { fetchCoursesFiles, fetchLoggedUserRating, rateFileByLoggedUser, getSignedUrl, uploadFileAndStoreMetadata } = require('../controllers/fileController');
-const { fetchUserEmailFromCognito } = require('../utils/userUtils');
+const { fetchUserFromDatabase } = require('../utils/userUtils');
 const multer = require('multer');
 const db = require('../models/index.js');
 require('dotenv').config();
@@ -12,9 +12,7 @@ router.post('/upload', upload.any(), uploadFileAndStoreMetadata);
 
 router.post('/:course_id', async (req, res) => {
   try {
-    const loggedUserEmail = await fetchUserEmailFromCognito(req, res);
-    const user = await db.User.findOne({ where: { email: loggedUserEmail }});
-    const role = user.dataValues.role_id;
+    const role = (await fetchUserFromDatabase(req)).role_id;
     const courseInfo = await fetchCoursesFiles(role, req.params.course_id, req.body);
     res.status(200).json(courseInfo); // Sending response within the try block
   } catch (error) {
@@ -34,10 +32,8 @@ router.get('/rating/:fileId', async (req, res) => {
 
 router.post('/rating/:fileId', async (req, res) => {
   try {
-    const loggedUserEmail = await fetchUserEmailFromCognito(req, res);
-    const user = await db.User.findOne({where: { email: loggedUserEmail }});
     const file = await db.File.findOne({where: { id: req.params.fileId }});
-    const userId = user.dataValues.id;
+    const userId = (await fetchUserFromDatabase(req)).id;
     const uploaderId = file.dataValues.uploader_id;
     if (userId === uploaderId) return res.status(403).json({ message: "You cannot rate your own file!"});
 
