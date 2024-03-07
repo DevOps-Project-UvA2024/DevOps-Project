@@ -15,12 +15,9 @@ const CourseAnalytics = () => {
     const [topFiles, setTopFiles] = useState([]);
     const [mainCourseAnalytics, setMainCourseAnalytics] = useState({});
     const [loadingTopUploaders, setLoadingTopUploaders] = useState(true);
-    const [loadingTopFiles, setLoadingTopFiles] = useState(true);
-    const [loadingMainCourseAnalytics, setLoadingMainCourseAnalytics] = useState(true);
-    const [isActive, setIsActive] = useState(null);
+    const [loadingTopFiles, setLoadingTopFiles] = useState(true); 
+    const [loadingMainCourseAnalytics, setLoadingMainCourseAnalytics] = useState(true); 
 
-    
-    
 
     const fetchTopUploaders = useCallback(() => {
         fetch(`/api/courses/${courseid}/course-analytics/top-uploaders`, {
@@ -82,14 +79,6 @@ const CourseAnalytics = () => {
         }
     };
 
-    const getActiveImage = (index) => {
-        switch (index) {
-            case 0: return fireImage;
-            case 1: return iceImage;
-            default: return null;
-        }
-    };
-
     console.log()
     const imageSrc = mainCourseAnalytics.contributionsPastWeek ? fireImage : iceImage;
 
@@ -115,7 +104,7 @@ const CourseAnalytics = () => {
                     </div>
 
                     <div className='overview-columns'>
-                        <div className='overview-data'>{mainCourseAnalytics.contributionsPastWeek} <img src={imageSrc}  className='activeness'/>
+                        <div className='overview-data'>{mainCourseAnalytics.contributionsPastWeek} <img src={imageSrc}  className='activeness' alt=""/>
 </div> 
                         <div className='overview-titles'>Posts last week</div>
 

@@ -1,6 +1,5 @@
 import React, { useState, useEffect  } from 'react';
 import { Form, Input, Button, Alert } from 'antd';
-import styled from 'styled-components';
 import { useNavigate, Navigate } from 'react-router-dom';
 import PasswordChecklist from "react-password-checklist"
 import { useAuth, AuthStatus } from '../AuthProvider';
@@ -13,7 +12,6 @@ const SignUp = () => {
 
   // page navigation 
   const navigate = useNavigate();
-  
   const { authStatus } = useAuth();
   const [errorMessage, setErrorMessage] = useState('');
   const [password, setPassword] = React.useState("");
