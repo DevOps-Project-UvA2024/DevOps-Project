@@ -1,6 +1,6 @@
 import {Link, useMatch, useResolvedPath} from "react-router-dom";
 import "../styles/navbar.css";
-import { Button } from 'antd';
+import PropTypes from 'prop-types'; 
 
 const NavBar = () => {
 
@@ -22,32 +22,35 @@ const NavBar = () => {
                 <CustomLink to="/courses">
                     Courses
                 </CustomLink>
-                {/* <CustomLink onClick={initSignout}>
+                <CustomLink logoutBool={true} onClick={initSignout}>
                     Logout
-                </CustomLink> */}
-                <Button onClick={initSignout}>
-                    Logout
-                </Button>
+                </CustomLink>
                 </ul>
-
-
-            </div>
-            
+            </div> 
         </nav>
     );
 };
 
-function CustomLink({to,children,onClick,...props}){
+function CustomLink({to, children, onClick, logoutBool, ...props}){
     
     const resolvedPath = useResolvedPath(to);
-    const isActive = useMatch({path:resolvedPath.pathname});
+    const isActive = useMatch({path:resolvedPath.pathname}) && logoutBool === false;
 
     return (
     // if pathname is equal to href then the classname is
     <li className={isActive ? "active": ""}>              
-        <Link to={to}{...props} onClick={onClick}>
+        <Link to={to} {...props} onClick={onClick}>
             {children}
         </Link>
     </li>)
 }
+
+CustomLink.propTypes = {
+    children: PropTypes.node.isRequired,
+    to: PropTypes.string,
+    onClick: PropTypes.func,
+    logoutBool: PropTypes.bool
+  };
+  
+
 export default NavBar;

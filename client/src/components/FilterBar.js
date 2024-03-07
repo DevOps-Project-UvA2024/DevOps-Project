@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { Form, Button, Row, Col } from 'antd';
 import StoreContext from '../store/StoreContext';
+import PropTypes from 'prop-types'; 
 
 const FilterBar = ({ submitUrl, filters, type }) => {
   const [form] = Form.useForm();
@@ -70,6 +71,13 @@ const FilterBar = ({ submitUrl, filters, type }) => {
         </Row>
     </Form>
   );
+};
+
+FilterBar.propTypes = {
+  filters: PropTypes.array.isRequired,
+  type: PropTypes.string.isRequired,
+  submitUrl: PropTypes.string.isRequired
+
 };
 
 export default FilterBar;

@@ -1,14 +1,16 @@
 // StoreProvider.js
-import React, { useReducer } from 'react';
+import React, { useReducer, useMemo } from 'react';
 import StoreContext from './StoreContext';
 import { reducer, initialState } from './reducer';
-import PropTypes from 'prop-types'; // Import PropTypes
+import PropTypes from 'prop-types'; 
 
 const StoreProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  const value = useMemo(() => ({ state, dispatch }), [state, dispatch]);
+
   return (
-    <StoreContext.Provider value={{ state, dispatch }}>
+    <StoreContext.Provider value={value}>
       {children}
     </StoreContext.Provider>
   );
