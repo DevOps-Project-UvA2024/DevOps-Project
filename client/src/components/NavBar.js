@@ -1,5 +1,5 @@
 import {Link, useMatch, useResolvedPath} from "react-router-dom"
-import "../styles/navbar.css"
+import "../styles/navbar.css";
 
 const NavBar = () => {
 
@@ -20,9 +20,6 @@ const NavBar = () => {
                 <ul>
                 <CustomLink to="/courses">
                     Courses
-                </CustomLink>
-                <CustomLink to="/account">
-                    Account
                 </CustomLink>
                 <CustomLink to="/signin" onClick={initSignout}>
                     Logout

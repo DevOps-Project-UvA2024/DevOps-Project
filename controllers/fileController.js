@@ -56,18 +56,13 @@ const fetchCoursesFiles = async (role, course_id, inputParameters) => {
     }
   };
 
-const fetchLoggedUserRating = async (fileId, email) => {
+const fetchLoggedUserRating = async (fileId, userId) => {
   try {
     const userRating = await db.Voting.findOne({
       where: {
-        file_id: fileId
+        file_id: fileId,
+        student_id: userId
       }, 
-      include: [
-        {
-          model: db.User,
-          where: {email: email},
-          attributes: [],
-        }],
       attributes: ['voting']
     });
 
@@ -79,7 +74,6 @@ const fetchLoggedUserRating = async (fileId, email) => {
 }
 
 const rateFileByLoggedUser = async (fileId, rating, userId) => {
-
   try {
     const userRating = await db.Voting.findOne({
       where: {

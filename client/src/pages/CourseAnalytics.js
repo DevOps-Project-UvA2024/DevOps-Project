@@ -1,7 +1,6 @@
-import React, { useEffect, useContext, useState, useCallback }from 'react';
-import { Table, Button, Rate, Checkbox , Modal, message, Tooltip, Form, Input, Upload} from 'antd';
-import { DownloadOutlined, StarOutlined, InboxOutlined } from '@ant-design/icons';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useEffect, useState, useCallback }from 'react';
+import { Rate } from 'antd';
+import { useParams } from 'react-router-dom';
 import "../styles/analytics.css"
 import firstPrizeImage from '../images/firstPrize.png';
 import secondPrizeImage from '../images/secondPrize.png';
@@ -9,45 +8,10 @@ import thirdPrizeImage from '../images/thirdPrize.png';
 
 const CourseAnalytics = () => {
     const { courseid } = useParams(); 
-    const navigate = useNavigate();
     const [topUploaders, setTopUploaders] = useState([]);
     const [topFiles, setTopFiles] = useState([]);
     const [loadingTopUploaders, setLoadingTopUploaders] = useState(true);
     const [loadingTopFiles, setLoadingTopFiles] = useState(true);
-
-    const columnsTopUploaders = [
-        {
-            title: 'Username',
-            dataIndex: 'username',
-            key: 'username',
-        },
-        {
-          title: 'Files Uploaded',
-          dataIndex: 'fileCount',
-          key: 'filesUploaded',
-        },
-      ];
-
-      const columnsTopFiles = [
-        {
-          title: 'Name',
-          dataIndex: 'name',
-          key: 'name',
-          render: (text) => text.split("/").pop()
-        },
-        {
-          title: 'Rating',
-          dataIndex: 'averageRating',
-          key: 'rating',
-          render: averageRating => <Rate disabled allowHalf defaultValue={Math.round(Number(averageRating) * 2) / 2} />,
-        },
-        {
-          title: 'Number of Ratings',
-          dataIndex: 'totalVotes',
-          key: 'n_votes',
-          align:'center'
-        },
-      ];
     
       const fetchTopUploaders = useCallback(() => {
         fetch(`/api/courses/${courseid}/course-analytics/top-uploaders`, {
@@ -74,6 +38,7 @@ const CourseAnalytics = () => {
       })
       .then(response => response.json())
       .then(data => {
+        console.log(data)
           setTopFiles(data);
           setLoadingTopFiles(false);
       })
@@ -118,10 +83,10 @@ const CourseAnalytics = () => {
                 <div className="top5files">
                     <h3>Top 5 Uploads</h3>
                     {!loadingTopFiles && topFiles.map((file, index) => (
-                    <div key={index} className="file-info">
-                        <p className="title">{file.name.split("/").pop()}</p>
-                        <div className="rating-all"><Rate disabled allowHalf defaultValue={Math.round(Number(file.averageRating) * 2) / 2}  />({file.totalVotes})</div>
-                    </div>
+                        <div key={index} className="file-info">
+                            <p className="title">{file.name.split("/").pop()}</p>
+                            <div className="rating-all"><Rate disabled allowHalf defaultValue={Math.round(Number(file.averageRating) * 2) / 2}  />({file.totalVotes})</div>
+                        </div>
                     ))}
                 </div>
             </div>

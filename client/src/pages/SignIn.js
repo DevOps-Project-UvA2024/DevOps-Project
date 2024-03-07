@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Alert } from 'antd';
 import { UserOutlined, LockOutlined, SmileTwoTone } from '@ant-design/icons';
-import styled from 'styled-components';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth, AuthStatus } from '../AuthProvider';
 import "../styles/verification_style.css"

@@ -10,7 +10,6 @@ import PrivateRoute from './PrivateRoute';
 import Greeting from './pages/Greeting';
 import PasswordReset from './pages/PasswordReset';
 import Courses from './pages/Courses';
-import Acc from './pages/Account';
 import WithNavBar from './components/WithNavBar';
 import WithoutNavBar from './components/WithoutNavBar';
 import Course from './pages/Course';
@@ -37,11 +36,8 @@ const App = () => {
             <Route element={<PrivateRoute />}>
               <Route path="/greeting" element={<Greeting />} />
               <Route path="/courses" element={<Courses />} /> 
-              <Route path="/account" element={<Acc />} />
               <Route path="/courses/:courseid" element={<Course />} />
               <Route path="/courses/:courseid/course-analytics" element={<CourseAnalytics />} />
-
-
             </Route>
           </Route>
         </Routes>

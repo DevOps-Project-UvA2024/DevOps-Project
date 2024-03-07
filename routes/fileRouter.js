@@ -22,8 +22,8 @@ router.post('/:course_id', async (req, res) => {
 
 router.get('/rating/:fileId', async (req, res) => {
   try {
-    const loggedUserEmail = await fetchUserEmailFromCognito(req, res);
-    const userRating = await fetchLoggedUserRating(req.params.fileId, loggedUserEmail);
+    const userId = (await fetchUserFromDatabase(req)).id;
+    const userRating = await fetchLoggedUserRating(req.params.fileId, userId);
     return res.status(200).json(userRating);
   } catch (error) {
     return res.status(400).json({ message: "Failed to fetch user's rating", error: error.toString() });
