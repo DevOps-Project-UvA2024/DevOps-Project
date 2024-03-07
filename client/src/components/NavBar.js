@@ -1,11 +1,12 @@
-import {Link, useMatch, useResolvedPath} from "react-router-dom"
+import {Link, useMatch, useResolvedPath} from "react-router-dom";
 import "../styles/navbar.css";
+import { Button } from 'antd';
 
 const NavBar = () => {
 
     const initSignout = async () => {
         try {
-            const response = await fetch('api/users/auth/signout');
+            const response = await fetch(`${window.location.origin}/api/users/auth/signout`);
             if (!response.ok) throw new Error('Error while signing out');
             window.location.reload()
           } catch (error) {
@@ -21,9 +22,12 @@ const NavBar = () => {
                 <CustomLink to="/courses">
                     Courses
                 </CustomLink>
-                <CustomLink to="/signin" onClick={initSignout}>
+                {/* <CustomLink onClick={initSignout}>
                     Logout
-                </CustomLink>
+                </CustomLink> */}
+                <Button onClick={initSignout}>
+                    Logout
+                </Button>
                 </ul>
 
 
