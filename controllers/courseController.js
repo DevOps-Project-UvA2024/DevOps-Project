@@ -1,4 +1,5 @@
 const db = require('../models/index.js');
+const moment = require('moment');
 
 const fetchAllCourses = async (searchParameters, userId) => {
   
@@ -98,4 +99,38 @@ const getTopFiles = async (req,res) =>{
   }
 }
 
-module.exports = { fetchAllCourses, addCourse, getTopUploaders, getTopFiles };
+const getCourseAnalytics = async (req,res) =>{
+  try {
+    const { courseid } = req.params;   
+    const courseContributors = await db.File.count({
+      where: { course_id: courseid },
+      distinct: true,
+      col: 'uploader_id'
+    });
+
+    const courseSubscribers = await db.Subscription.count({
+      where: { course_id: courseid },
+      col: 'student_id'
+    });
+
+    const contributionsPastWeek  = await db.File.count({
+      where: {
+        course_id: courseid,
+        upload_date: {
+          [db.Sequelize.Op.gte]: moment().subtract(7, 'days').toDate()
+        }
+      }
+    });
+
+    res.status(200).json({
+      contributors: courseContributors, 
+      subscribers: courseSubscribers,
+      contributionsPastWeek: contributionsPastWeek,
+      activeCourse: contributionsPastWeek > 0
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+module.exports = { fetchAllCourses, addCourse, getTopUploaders, getTopFiles, getCourseAnalytics };
