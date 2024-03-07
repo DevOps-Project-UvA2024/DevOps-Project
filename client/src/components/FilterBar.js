@@ -48,26 +48,25 @@ const FilterBar = ({ submitUrl, filters, type }) => {
   return (
     <Form form={form} name="filterForm" onFinish={onFinish} layout="vertical">
         <Row gutter={24} wrap={false}>
-        {filters.map((filter, index) => (
-            <Col span={8} key={index}>
-            {filter}
-            </Col>
-            
-        ))} 
+          {filters.map((filter) => (
+              <Col span={8} key={filter.key}>
+                {filter}
+              </Col>
+          ))} 
         <Col>
-        <Form.Item>
-            <Button type="primary" onClick={handleReset} icon={<ReloadOutlined />}>
-                
-            </Button>
-        </Form.Item>
+          <Form.Item>
+              <Button type="primary" onClick={handleReset} icon={<ReloadOutlined />}>
+                  
+              </Button>
+          </Form.Item>
         </Col>
         <Col>
-                <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                        Apply
-                    </Button>
-                </Form.Item>
-            </Col>
+            <Form.Item>
+                <Button type="primary" htmlType="submit">
+                    Apply
+                </Button>
+            </Form.Item>
+          </Col>
         </Row>
     </Form>
   );
