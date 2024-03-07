@@ -1,0 +1,6 @@
+{
+    "sonarlint.connectedMode.project": {
+        "connectionId": "devops-project-uva2024",
+        "projectKey": "DevOps-Project-UvA2024_DevOps-Project"
+    }
+}
