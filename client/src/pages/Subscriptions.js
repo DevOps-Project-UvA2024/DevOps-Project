@@ -96,7 +96,7 @@ const Subscriptions = () => {
   ];
 
   return (
-    <div className="container-table">
+    <div className="container-greeting">
       <div className='table-container'>
         <FilterBar
           submitUrl="/api/subscriptions"
