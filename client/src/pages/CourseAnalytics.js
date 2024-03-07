@@ -16,8 +16,6 @@ const CourseAnalytics = () => {
     const [mainCourseAnalytics, setMainCourseAnalytics] = useState({});
     const [loadingTopUploaders, setLoadingTopUploaders] = useState(true);
     const [loadingTopFiles, setLoadingTopFiles] = useState(true); 
-    const [loadingMainCourseAnalytics, setLoadingMainCourseAnalytics] = useState(true); 
-
 
     const fetchTopUploaders = useCallback(() => {
         fetch(`/api/courses/${courseid}/course-analytics/top-uploaders`, {
@@ -59,7 +57,6 @@ const CourseAnalytics = () => {
         .then(response => response.json())
         .then(data => {
             setMainCourseAnalytics(data);
-            setLoadingMainCourseAnalytics(false);
         })
         .catch(error => console.error('Error fetching files:', error));
     }, [courseid]);
@@ -105,9 +102,8 @@ const CourseAnalytics = () => {
 
                     <div className='overview-columns'>
                         <div className='overview-data'>{mainCourseAnalytics.contributionsPastWeek} <img src={imageSrc}  className='activeness' alt=""/>
-</div> 
+                    </div> 
                         <div className='overview-titles'>Posts last week</div>
-
                     </div>
 
                 </div>
@@ -129,8 +125,8 @@ const CourseAnalytics = () => {
 
                     <div className="top5files">
                         <h3>Top 5 Uploads</h3>
-                        {!loadingTopFiles && topFiles.map((file, index) => (
-                            <div key={index} className="file-info">
+                        {!loadingTopFiles && topFiles.map((file) => (
+                            <div key={file.name} className="file-info">
                                 <p className="title">{file.name.split("/").pop()}</p>
                                 <div className="rating-all"><Rate disabled allowHalf defaultValue={Math.round(Number(file.averageRating) * 2) / 2}  />({file.totalVotes})</div>
                             </div>

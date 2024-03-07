@@ -6,10 +6,6 @@ const fetchUserEmailFromCognito = async (req) => {
 
     const accessToken = req.cookies['accessToken']; // Ensure you're extracting the access token correctly
 
-    // if (!accessToken) {
-    //   return res.status(401).json({ message: "Access Token is required" });
-    // }
-
     const command = new GetUserCommand({
       AccessToken: accessToken,
     });
@@ -40,10 +36,6 @@ const checkUserCreation = async (accessToken, email) => {
   const user = await db.User.findOne({ where: { email: email } });
   
   if (!user) {
-
-    // if (!accessToken) {
-    //   return res.status(401).json({ message: "Access Token is required" });
-    // }
 
     const command = new GetUserCommand({
       AccessToken: accessToken,

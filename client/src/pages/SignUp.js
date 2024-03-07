@@ -78,7 +78,7 @@ const SignUp = () => {
       <div className='welcome-container'>
         <h1><b>Welcome to Student Portal!  </b></h1>
         <h4>A place <i>from</i> students <i>to</i> students</h4>
-        <img src={loginImage}/>
+        <img alt="Login" src={loginImage}/>
         <h4><i>Browse Courses, Upload Files, Rate Others and many more...</i></h4>
       </div>
     <div className="auth-container">
