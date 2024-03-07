@@ -1,0 +1,9 @@
+*{
+    font-family: "Nunito", sans-serif;
+}
+
+.greeting-container{
+    margin: 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}

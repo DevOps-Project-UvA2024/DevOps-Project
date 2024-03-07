@@ -62,34 +62,53 @@ const CourseAnalytics = () => {
     return (
         <div className='course-analytics'>
             <h2>Course Analytics</h2>
-            <div className="tables-containers">
-                <div className="top5users">
-                    <h3>Top 5 Users</h3>
-                    {loadingTopUploaders ? <p>Loading...</p> : topUploaders.map((uploader, index) => (
-                        <div key={uploader.key} className="uploader-info">
-                            <div className='image-container'>                            
-                                {index < 3 && <img src={getPrizeImage(index)} alt={`Prize ${index + 1}`} />}
-                            </div>
-                            <div className="info">
-                                <div className="title">@{uploader.username}</div>
-                                <div><span className='no-uploads'>{uploader.fileCount}</span> total upload(s)</div>
-                            </div>
+            <div className='all-analytics'>
+                <div className='overview'>
+                    <div className='overview-columns'>
+                        <div className='overview-data'>3</div> 
+                        <div className='overview-titles'>Subscribers</div>
 
-      
-                        </div>
-                    ))}
+                    </div>
+                    <div className='overview-columns'>
+                        <div className='overview-data'>3</div> 
+                        <div className='overview-titles'>Contributors</div>
+                    </div>
+                    <div className='overview-columns'>
+                        <div className='overview-data'>3</div> 
+                        <div className='overview-titles'>Posts last week</div>
+
+                    </div>
+
+                </div>
+                <div className="tables-containers">
+                    <div className="top5users">
+                        <h3>Top 5 Users</h3>
+                        {loadingTopUploaders ? <p>Loading...</p> : topUploaders.map((uploader, index) => (
+                            <div key={uploader.key} className="uploader-info">
+                                <div className='image-container'>                            
+                                    {index < 3 && <img src={getPrizeImage(index)} alt={`Prize ${index + 1}`} />}
+                                </div>
+                                <div className="info">
+                                    <div className="title">@{uploader.username}</div>
+                                    <div><span className='no-uploads'>{uploader.fileCount}</span> total upload(s)</div>
+                                </div>        
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="top5files">
+                        <h3>Top 5 Uploads</h3>
+                        {!loadingTopFiles && topFiles.map((file, index) => (
+                            <div key={index} className="file-info">
+                                <p className="title">{file.name.split("/").pop()}</p>
+                                <div className="rating-all"><Rate disabled allowHalf defaultValue={Math.round(Number(file.averageRating) * 2) / 2}  />({file.totalVotes})</div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
-                <div className="top5files">
-                    <h3>Top 5 Uploads</h3>
-                    {!loadingTopFiles && topFiles.map((file, index) => (
-                        <div key={index} className="file-info">
-                            <p className="title">{file.name.split("/").pop()}</p>
-                            <div className="rating-all"><Rate disabled allowHalf defaultValue={Math.round(Number(file.averageRating) * 2) / 2}  />({file.totalVotes})</div>
-                        </div>
-                    ))}
-                </div>
             </div>
+            
         </div>
       );
 }
