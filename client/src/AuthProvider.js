@@ -1,6 +1,5 @@
-import React, { createContext, useContext, useEffect, useState, useMemo } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { AmIAuthenticated } from "./AmIAuthenticated"; // Adjust import path as needed
-import PropTypes from 'prop-types'; 
 
 // Constants to replace the AuthStatus enum
 const AuthStatus = {
@@ -39,11 +38,11 @@ const AuthProvider = ({ children }) => {
     setAuthStatus(AuthStatus.SignedOut);
   }
 
-  const value = useMemo(() => ({
+  const value = {
     authStatus,
     signIn,
     signOut,
-  }), [authStatus, signIn, signOut]);
+  };
 
   return (
     <AuthContext.Provider value={value}>
@@ -52,26 +51,14 @@ const AuthProvider = ({ children }) => {
   );
 };
 
-const AuthIsSignedIn = ({ children }) => {
+export { AuthProvider, AuthStatus };
+
+export const AuthIsSignedIn = ({ children }) => {
   const { authStatus } = useAuth();
   return <>{authStatus === AuthStatus.SignedIn ? children : null}</>;
 };
 
-const AuthIsNotSignedIn = ({ children }) => {
+export const AuthIsNotSignedIn = ({ children }) => {
   const { authStatus } = useAuth();
   return <>{authStatus === AuthStatus.SignedOut ? children : null}</>;
 };
-
-AuthIsSignedIn.propTypes = {
-  children: PropTypes.node
-};
-
-AuthIsNotSignedIn.propTypes = {
-  children: PropTypes.node
-};
-
-AuthProvider.propTypes = {
-  children: PropTypes.node
-};
-
-export { AuthProvider, AuthStatus, AuthIsSignedIn, AuthIsNotSignedIn };
