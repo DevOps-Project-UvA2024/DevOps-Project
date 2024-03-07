@@ -10,10 +10,12 @@ const CourseAnalytics = () => {
     const { courseid } = useParams(); 
     const [topUploaders, setTopUploaders] = useState([]);
     const [topFiles, setTopFiles] = useState([]);
+    const [mainCourseAnalytics, setMainCourseAnalytics] = useState({});
     const [loadingTopUploaders, setLoadingTopUploaders] = useState(true);
     const [loadingTopFiles, setLoadingTopFiles] = useState(true);
+    const [loadingMainCourseAnalytics, setLoadingMainCourseAnalytics] = useState(true);
     
-      const fetchTopUploaders = useCallback(() => {
+    const fetchTopUploaders = useCallback(() => {
         fetch(`/api/courses/${courseid}/course-analytics/top-uploaders`, {
             method: 'GET',
             credentials: 'include'
@@ -29,7 +31,7 @@ const CourseAnalytics = () => {
             setLoadingTopUploaders(false);
         })
         .catch(error => console.error('Error fetching files:', error));
-        }, [courseid]);
+    }, [courseid]);
 
     const fetchTopFiles = useCallback(() => {
       fetch(`/api/courses/${courseid}/course-analytics/top-files`, {
@@ -43,12 +45,26 @@ const CourseAnalytics = () => {
           setLoadingTopFiles(false);
       })
       .catch(error => console.error('Error fetching files:', error));
-      }, [courseid]);
+    }, [courseid]);
 
-      useEffect(() => {
+    const fetchMainCourseAnalytics = useCallback(() => {
+        fetch(`/api/courses/${courseid}/course-analytics/main-course-analytics`, {
+            method: 'GET',
+            credentials: 'include'
+        })
+        .then(response => response.json())
+        .then(data => {
+            setMainCourseAnalytics(data);
+            setLoadingMainCourseAnalytics(false);
+        })
+        .catch(error => console.error('Error fetching files:', error));
+    }, [courseid]);
+
+    useEffect(() => {
         fetchTopUploaders();
         fetchTopFiles();
-    }, [fetchTopUploaders, fetchTopFiles]);
+        fetchMainCourseAnalytics();
+    }, [fetchTopUploaders, fetchTopFiles, fetchMainCourseAnalytics]);
 
     const getPrizeImage = (index) => {
         switch (index) {
