@@ -5,6 +5,9 @@ import "../styles/analytics.css"
 import firstPrizeImage from '../images/firstPrize.png';
 import secondPrizeImage from '../images/secondPrize.png';
 import thirdPrizeImage from '../images/thirdPrize.png';
+import fireImage from '../images/fire.png'
+import iceImage from '../images/ice.png'
+
 
 const CourseAnalytics = () => {
     const { courseid } = useParams(); 
@@ -14,7 +17,11 @@ const CourseAnalytics = () => {
     const [loadingTopUploaders, setLoadingTopUploaders] = useState(true);
     const [loadingTopFiles, setLoadingTopFiles] = useState(true);
     const [loadingMainCourseAnalytics, setLoadingMainCourseAnalytics] = useState(true);
+    const [isActive, setIsActive] = useState(null);
+
     
+    
+
     const fetchTopUploaders = useCallback(() => {
         fetch(`/api/courses/${courseid}/course-analytics/top-uploaders`, {
             method: 'GET',
@@ -75,22 +82,41 @@ const CourseAnalytics = () => {
         }
     };
 
+    const getActiveImage = (index) => {
+        switch (index) {
+            case 0: return fireImage;
+            case 1: return iceImage;
+            default: return null;
+        }
+    };
+
+    console.log()
+    const imageSrc = mainCourseAnalytics.contributionsPastWeek ? fireImage : iceImage;
+
+
+
     return (
         <div className='course-analytics'>
-            <h2>Course Analytics</h2>
+            <h2 className="main-title">
+                Course Analytics 
+            </h2>
             <div className='all-analytics'>
                 <div className='overview'>
                     <div className='overview-columns'>
-                        <div className='overview-data'>3</div> 
+                        <div className='overview-data'>{mainCourseAnalytics.subscribers}</div> 
                         <div className='overview-titles'>Subscribers</div>
+
 
                     </div>
                     <div className='overview-columns'>
-                        <div className='overview-data'>3</div> 
+                        <div className='overview-data'>{mainCourseAnalytics.contributors}</div> 
+
                         <div className='overview-titles'>Contributors</div>
                     </div>
+
                     <div className='overview-columns'>
-                        <div className='overview-data'>3</div> 
+                        <div className='overview-data'>{mainCourseAnalytics.contributionsPastWeek} <img src={imageSrc}  className='activeness'/>
+</div> 
                         <div className='overview-titles'>Posts last week</div>
 
                     </div>

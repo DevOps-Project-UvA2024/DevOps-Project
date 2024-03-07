@@ -38,6 +38,14 @@
         justify-content: space-evenly;
 
     }
+    .course-analytics .activeness{
+        width:30px;
+    }
+
+    .course-analytics .main-title{
+        display: flex;
+        align-items: center;
+    }
 
     .course-analytics .overview .overview-columns{
         display: flex;
@@ -52,6 +60,8 @@
     .course-analytics .overview .overview-columns .overview-data{
         font-size: 23px;
         font-weight: 600;
+        display: flex;
+        align-items: center;
     }
 
     .course-analytics .title{
