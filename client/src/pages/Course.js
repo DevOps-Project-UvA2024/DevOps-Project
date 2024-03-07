@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState, useCallback }from 'react';
-import { Table, Button, Rate, Checkbox , Modal, message, Tooltip, Form, Input, Upload, Typography} from 'antd';
+import { Table, Button, Rate, Checkbox , Modal, message, Tooltip, Form, Input, Upload, Typography, Row, Col} from 'antd';
 import { DownloadOutlined, StarOutlined, InboxOutlined } from '@ant-design/icons';
 import StoreContext from '../store/StoreContext';
 import "../styles/tables_style.css";
@@ -327,16 +327,22 @@ const Course = () => {
           <div className='add-course-btn'>
             <h2>Files</h2> 
             <div>
-              <Button type="primary" onClick={showUploadModal}>
-                Upload File 
-                
-              </Button> 
-              
-              <Button 
-                type="primary" 
-                onClick={goToCourseAnalytics}>
-                Course Analytics
-              </Button>  
+              <Row gutter={8}>
+                <Col>
+                  <Button type="primary" onClick={showUploadModal}>
+                    Upload File 
+                  </Button> 
+                </Col>
+
+                <Col>
+                  <Button 
+                    type="primary" 
+                    onClick={goToCourseAnalytics}>
+                    Course Analytics
+                  </Button> 
+                </Col>
+              </Row>
+ 
             </div> 
              
             <Modal title="Upload" open={isUploadModalOpen} onOk={handleUploadOk} onCancel={handleUploadCancel}>
