@@ -30,6 +30,12 @@
         margin-bottom: 2rem;
     }
 
+    .course-analytics h3{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
     .course-analytics .overview {
         margin-left: 2rem;
         margin-right: 2rem;

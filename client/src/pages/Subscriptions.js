@@ -4,6 +4,8 @@ import StoreContext from '../store/StoreContext';
 import { useNavigate } from 'react-router-dom';
 import { Form, Input, Table, Checkbox, message } from 'antd';
 import FilterBar from '../components/FilterBar';
+import { SearchOutlined } from '@ant-design/icons';
+
 
 const Subscriptions = () => {
 
@@ -87,11 +89,11 @@ const Subscriptions = () => {
   }, [fetchSubscriptions]);
 
   const filters = [
-    <Form.Item key="name" name="name" label="Name">
-      <Input placeholder="Name" />
+    <Form.Item key="name" name="name" >
+      <Input placeholder="Name" prefix={<SearchOutlined />}/>
     </Form.Item>,
-    <Form.Item key="department" name="department" label="Department">
-      <Input placeholder="Department" />
+    <Form.Item key="department" name="department" >
+      <Input placeholder="Department" prefix={<SearchOutlined />}/>
     </Form.Item>
   ];
 

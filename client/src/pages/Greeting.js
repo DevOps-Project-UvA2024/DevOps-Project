@@ -3,6 +3,7 @@ import StoreContext from '../store/StoreContext';
 import Subscriptions from './Subscriptions';
 import styles from '../styles/greeting_style.css'
 
+
 const Greeting = () => {
   const { state } = useContext(StoreContext);
 

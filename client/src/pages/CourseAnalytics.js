@@ -124,7 +124,7 @@ const CourseAnalytics = () => {
                 </div>
                 <div className="tables-containers">
                     <div className="top5users">
-                        <h3>Top 5 Users</h3>
+                        <h3>Top 5 Contributors</h3>
                         {loadingTopUploaders ? <p>Loading...</p> : topUploaders.map((uploader, index) => (
                             <div key={uploader.key} className="uploader-info">
                                 <div className='image-container'>                            
