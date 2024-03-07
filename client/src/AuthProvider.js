@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState, useMemo, useCallback } from "react";
+import React, { createContext, useContext, useEffect, useState, useMemo } from "react";
 import { AmIAuthenticated } from "./AmIAuthenticated"; // Adjust import path as needed
 import PropTypes from 'prop-types'; 
 
@@ -29,17 +29,15 @@ const AuthProvider = ({ children }) => {
       .catch(() => setAuthStatus(AuthStatus.SignedOut));
   }, []);
 
-  // Memoize signIn function
-  const signIn = useCallback(() => {
+  function signIn() {
     // Your signIn logic
     setAuthStatus(AuthStatus.SignedIn);
-  }, []); // Add dependencies here if signIn logic depends on any external values
+  }
 
-  // Memoize signOut function
-  const signOut = useCallback(() => {
+  function signOut() {
     // Your signOut logic
     setAuthStatus(AuthStatus.SignedOut);
-  }, []); 
+  }
 
   const value = useMemo(() => ({
     authStatus,
