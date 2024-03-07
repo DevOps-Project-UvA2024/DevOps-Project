@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState, useCallback }from 'react';
 import { Table, Button, Rate, Checkbox , Modal, message, Tooltip, Form, Input, Upload, Typography, Row, Col} from 'antd';
-import { DownloadOutlined, StarOutlined, InboxOutlined } from '@ant-design/icons';
+import { DownloadOutlined, StarOutlined, InboxOutlined, UploadOutlined,BarChartOutlined, SearchOutlined } from '@ant-design/icons';
 import StoreContext from '../store/StoreContext';
 import "../styles/tables_style.css";
 import FilterBar from '../components/FilterBar';
@@ -292,10 +292,10 @@ const Course = () => {
     }, [course_id, fetchFiles]);
 
     const filters = [
-      <Form.Item key="name" name="name" label="Name">
-        <Input placeholder="Name" />
+      <Form.Item key="name" name="name" >
+        <Input placeholder="Name" prefix={<SearchOutlined />}/>
       </Form.Item>,
-      <Form.Item key="voting" name="voting" label="Rating">
+      <Form.Item key="voting" name="voting" >
         <Rate allowHalf />
       </Form.Item>
     ];
@@ -329,16 +329,17 @@ const Course = () => {
             <div>
               <Row gutter={8}>
                 <Col>
-                  <Button type="primary" onClick={showUploadModal}>
-                    Upload File 
+                  <Button type="primary" onClick={showUploadModal} 
+                  icon={<UploadOutlined />}>                    
                   </Button> 
                 </Col>
 
                 <Col>
                   <Button 
                     type="primary" 
-                    onClick={goToCourseAnalytics}>
-                    Course Analytics
+                    onClick={goToCourseAnalytics} 
+                    icon ={<BarChartOutlined />}>
+                    
                   </Button> 
                 </Col>
               </Row>

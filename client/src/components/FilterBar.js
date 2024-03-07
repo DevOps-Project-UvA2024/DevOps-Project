@@ -2,6 +2,8 @@ import React, { useContext } from 'react';
 import { Form, Button, Row, Col } from 'antd';
 import StoreContext from '../store/StoreContext';
 import PropTypes from 'prop-types'; 
+import { ReloadOutlined } from '@ant-design/icons';
+
 
 const FilterBar = ({ submitUrl, filters, type }) => {
   const [form] = Form.useForm();
@@ -50,18 +52,16 @@ const FilterBar = ({ submitUrl, filters, type }) => {
             <Col span={8} key={index}>
             {filter}
             </Col>
-        ))}
-        </Row>
-        <Row gutter={24}>
-            <Col flex="auto"></Col> {/* This ensures the button aligns to the right */}
-            <Col>
-                <Form.Item>
-                    <Button type="primary" onClick={handleReset}>
-                        Reset
-                    </Button>
-                </Form.Item>
-            </Col>
-            <Col>
+            
+        ))} 
+        <Col>
+        <Form.Item>
+            <Button type="primary" onClick={handleReset} icon={<ReloadOutlined />}>
+                
+            </Button>
+        </Form.Item>
+        </Col>
+        <Col>
                 <Form.Item>
                     <Button type="primary" htmlType="submit">
                         Apply
