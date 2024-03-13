@@ -3,8 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "cd client && npm install && npm run build",
-    "start": "npm run build && node app.js"
+    "start": "node app.js"
   },
   "dependencies": {
     "@ant-design/icons": "^5.3.0",
