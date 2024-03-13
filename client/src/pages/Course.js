@@ -189,14 +189,14 @@ const Course = () => {
       {
         title: 'Uploaded By',
         key: 'uploadedby',
-        sorter: (a, b) => a.uploadedby.localeCompare(b.uploadedby),
+        sorter: (a, b) => a.User.username.localeCompare(b.User.username),
         render: (_, record ) => record.User.username
       },
       {
         title: 'Date',
         dataIndex: 'upload_date',
         key: 'upload_date',
-        sorter: (a, b) => a.uploadedby.localeCompare(b.uploadedby),
+        sorter: (a, b) => new Date(a.upload_date) - new Date(b.upload_date),
         render: (text) => {
           const date = new Date(text);
           const formattedDate = new Intl.DateTimeFormat('en-US', {
@@ -209,19 +209,20 @@ const Course = () => {
           }).format(date);
           return formattedDate;
         }
-
       },
       {
         title: 'Rating',
         dataIndex: 'aggregate_voting',
         key: 'rating',
+        sorter: (a, b) => a.aggregate_voting - b.aggregate_voting,
         render: aggregate_voting => <Rate disabled allowHalf defaultValue={Math.round(Number(aggregate_voting) * 2) / 2} />,
       },
       {
         title: 'Number of Ratings',
         dataIndex: 'n_votes',
         key: 'n_votes',
-        align:'center'
+        align: 'center',
+        sorter: (a, b) => a.n_votes - b.n_votes,
       },
       {
         title: 'Your Rating',
