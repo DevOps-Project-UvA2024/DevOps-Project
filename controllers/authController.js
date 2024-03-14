@@ -2,7 +2,6 @@
 const { client } = require('../cognito-config');
 const { SignUpCommand, InitiateAuthCommand, ConfirmSignUpCommand, ResendConfirmationCodeCommand,
     ConfirmForgotPasswordCommand, ForgotPasswordCommand } = require("@aws-sdk/client-cognito-identity-provider");
-require('dotenv').config();
 
 const signUp = async (email, password, name) => {
     const params = {
