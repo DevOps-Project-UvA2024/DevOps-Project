@@ -18,8 +18,8 @@ router.post('/signup', async (req, res) => {
 router.post('/signin', async (req, res) => {
     try {
         const authResult = await signIn(req.body.username, req.body.password);
-        res.cookie('accessToken', authResult.AccessToken, { httpOnly: true, secure: false, sameSite: 'strict' });
-        res.cookie('idToken', authResult.IdToken, { httpOnly: true, secure: false, sameSite: 'strict' });
+        res.cookie('accessToken', authResult.AccessToken, { httpOnly: true, secure: false, sameSite: 'lax' });
+        res.cookie('idToken', authResult.IdToken, { httpOnly: true, secure: false, sameSite: 'lax' });
         await checkUserCreation(authResult.AccessToken, req.body.username);
         res.status(200).json({ message: 'Authentication successful' });
     } catch (error) {
