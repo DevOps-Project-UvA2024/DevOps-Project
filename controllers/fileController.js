@@ -45,7 +45,7 @@ const fetchCoursesFiles = async (role, course_id, inputParameters) => {
           [db.Sequelize.fn('COUNT', db.Sequelize.col('votings.id')), 'n_votes'],
           'active' 
         ],
-        group: ['file.id'],
+        group: ['id'],
         having: havingClause
       });
       
