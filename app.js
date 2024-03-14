@@ -1,4 +1,5 @@
 const express = require('express');
+const helmet = require('helmet');
 const path = require('path');
 const app = express();
 const cookieParser = require('cookie-parser');
@@ -21,6 +22,7 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
+app.use(helmet());
 
 // API Calls
 app.use('/api/users/auth',authRouter);
