@@ -25,6 +25,7 @@ const SignIn = () => {
 
     fetch('/api/users/auth/signin', {
       method: 'POST',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
