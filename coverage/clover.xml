@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1710429447127" clover="3.2.0">
-  <project timestamp="1710429447127" name="All files">
+<coverage generated="1710431256581" clover="3.2.0">
+  <project timestamp="1710431256581" name="All files">
     <metrics statements="59" coveredstatements="47" conditionals="4" coveredconditionals="3" methods="9" coveredmethods="9" elements="72" coveredelements="59" complexity="0" loc="59" ncloc="59" packages="1" files="2" classes="2"/>
     <file name="courseController.js" path="/Users/konstantinosal/Documents/UvA/DevOps/DevOpsPortal/controllers/courseController.js">
       <metrics statements="37" coveredstatements="30" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="6"/>
