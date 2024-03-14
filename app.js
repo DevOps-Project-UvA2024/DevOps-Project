@@ -15,8 +15,6 @@ const adminRouter = require('./routes/adminRouter.js');
 const subscriptionRouter = require('./routes/subscriptionRouter.js');
 
 const db = require('./models/index.js');
-///////////////// REMOVE IN PRODUCTION! IT DROPS THE TABLES! OMG! //////////////////////
-// db.sequelize.sync();
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'client/build')));

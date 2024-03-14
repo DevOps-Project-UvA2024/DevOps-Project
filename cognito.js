@@ -4,9 +4,6 @@ const request = require("request");
 const jwkToPem = require("jwk-to-pem");
 const jwt = require("jsonwebtoken");
 
-//global.fetch = require("node-fetch");
-
-
 const poolData = {
 UserPoolId: "eu-north-1_R9M5he9af",
 ClientId: "1tk5am2ea91tjfvn2aq0ssdt7v"

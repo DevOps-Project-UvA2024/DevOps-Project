@@ -59,7 +59,7 @@ const SignIn = () => {
     <div className='background'>
     <div className='welcome-container'>
       <h1><b>Welcome back! </b></h1>
-      <img src={loginImage}/>
+      <img alt={"Signin"} src={loginImage}/>
     </div>
     <div className="auth-container">
       <h2>Hello! <SmileTwoTone/></h2>

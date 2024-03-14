@@ -1,6 +1,6 @@
 import React from 'react';
 // eslint-disable-next-line
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import SignUp from './pages/SignUp';
 import SignIn from './pages/SignIn'
 import Verification from './pages/Verification'
