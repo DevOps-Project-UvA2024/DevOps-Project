@@ -6,7 +6,9 @@ const multer = require('multer');
 const db = require('../models/index.js');
 require('dotenv').config();
 
-const upload = multer();
+const upload = multer({
+  limits: { fileSize: 11 * 1024 * 1024 } // for example, 10 MB
+});
 
 router.post('/upload', upload.any(), uploadFileAndStoreMetadata);
 
