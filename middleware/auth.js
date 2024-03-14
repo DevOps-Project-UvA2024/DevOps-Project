@@ -1,11 +1,9 @@
 const jwt = require('jsonwebtoken');
 const jwksClient = require('jwks-rsa');
-const dotenv = require("dotenv")
-
-const { parsed } = dotenv.config()
+require('dotenv').config();
 
 const client = jwksClient({
-  jwksUri: `https://cognito-idp.${parsed.REGION}.amazonaws.com/${parsed.COGNITO_USER_POOL_ID}/.well-known/jwks.json`
+  jwksUri: `https://cognito-idp.${process.env.REGION}.amazonaws.com/${process.env.COGNITO_USER_POOL_ID}/.well-known/jwks.json`
 });
 
 function getKey(header, callback){
