@@ -1,7 +1,6 @@
 export const AmIAuthenticated = async () => {
   try {
-    const res = await fetch('/api/check-logged-in');
-    console.log("THE RESPONSE IS: ", res)
+    const res = await fetch('/api/check-logged-in', { credentials: 'include' });
     if (!res.ok) {
       throw new Error('Network response was not ok');
     }
