@@ -1,20 +1,45 @@
-name: Build
+name: Build and Test
 on:
   push:
     branches:
       - dev
   pull_request:
     types: [opened, synchronize, reopened]
+
 jobs:
-  sonarcloud:
-    name: SonarCloud
+  build_and_test:
+    name: Build and Test
     runs-on: ubuntu-latest
+    
     steps:
       - uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0  # Full clone for better analysis
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14' # Specify your Node.js version
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Jest Tests with Coverage
+        run: npm test -- --coverage
+        # Make sure your Jest configuration generates coverage reports in a format SonarCloud accepts (e.g., lcov)
+
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed for PR info
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # SonarCloud token
+        with:
+          args: >
+            -Dsonar.projectKey=your_project_key_here
+            -Dsonar.organization=your_organization_key_here
+            -Dsonar.sources=.
+            -Dsonar.exclusions=**/node_modules/**,**/*.spec.js,**/*.test.js
+            -Dsonar.tests=.
+            -Dsonar.test.inclusions=**/*.spec.js,**/*.test.js
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+            # Add additional sonar properties as needed
