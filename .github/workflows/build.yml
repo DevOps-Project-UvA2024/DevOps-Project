@@ -1,24 +1,44 @@
-name: Build
+name: Build and Test
 on:
- push:
-   branches:
-     - master
- pull_request:
-   types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - dev
+  pull_request:
+    types: [opened, synchronize, reopened]
+
 jobs:
-  sonarcloud:
-    name: SonarCloud
+  build_and_test:
+    name: Build and Test
     runs-on: ubuntu-latest
+    
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
-          fetch-depth: 0 
+          fetch-depth: 0  # Full clone for better analysis
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14' # Specify your Node.js version
+
       - name: Install dependencies
         run: npm install
-      - name: Test and coverage
+
+      - name: Run Jest Tests with Coverage
         run: npm test -- --coverage
+        # Make sure your Jest configuration generates coverage reports in a format SonarCloud accepts (e.g., lcov)
+
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.projectKey=DevOps-Project-UvA2024_DevOps-Project
+            -Dsonar.organization=devops-project-uva2024
+            -Dsonar.sources=.
+            -Dsonar.exclusions=**/node_modules/**,**/*.spec.js,**/*.test.js
+            -Dsonar.tests=.
+            -Dsonar.test.inclusions=**/*.spec.js,**/*.test.js
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
