@@ -15,6 +15,7 @@ const Courses = () => {
   const [form] = Form.useForm();
   const formRef = useRef(null);
   const { state, dispatch } = useContext(StoreContext);
+  const [loader, setLoader] = useState(true);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -111,6 +112,7 @@ const Courses = () => {
     .then(data => {
         dispatch({ type: 'RESET_COURSES'});
         dispatch({ type: 'SET_COURSES', payload: data });
+        setLoader(false);
     })
     .catch(error => console.error('Error fetching courses:', error));
   }, [dispatch]);
@@ -185,7 +187,7 @@ const Courses = () => {
           filters={filters}
           type = 'COURSES'
         />
-        <Table locale={locale} columns={columns} dataSource={state.courses} rowKey={"id"} 
+        <Table locale={locale} columns={columns} dataSource={state.courses} rowKey={"id"} loading={loader}
             pagination={{ defaultPageSize: 10, showSizeChanger: true}}
           />
       </div>

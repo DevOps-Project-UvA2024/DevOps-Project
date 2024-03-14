@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useCallback } from 'react';
+import React, { useEffect, useContext, useCallback, useState } from 'react';
 import "../styles/tables_style.css"
 import StoreContext from '../store/StoreContext';
 import { useNavigate } from 'react-router-dom';
@@ -11,6 +11,7 @@ const Subscriptions = () => {
 
   const navigate = useNavigate();
   const { state, dispatch } = useContext(StoreContext);
+  const [loader, setLoader] = useState(true);
 
   let locale = {
     emptyText: 'There are no subscriptions available yet!',
@@ -80,6 +81,7 @@ const Subscriptions = () => {
     .then(data => {
         dispatch({ type: 'RESET_SUBSCRIPTIONS'});
         dispatch({ type: 'SET_SUBSCRIPTIONS', payload: data });
+        setLoader(false);
     })
     .catch(error => console.error('Error fetching subscriptions:', error));
   }, [dispatch]);
@@ -105,7 +107,7 @@ const Subscriptions = () => {
           filters={filters}
           type = 'SUBSCRIPTIONS'
         />
-        <Table locale={locale} columns={columns} dataSource={state.subscriptions} rowKey={"id"} 
+        <Table locale={locale} columns={columns} dataSource={state.subscriptions} rowKey={"id"} loading={loader}
             pagination={{ defaultPageSize: 10, showSizeChanger: true}}
           />
       </div>

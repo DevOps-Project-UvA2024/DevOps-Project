@@ -10,6 +10,7 @@ const Course = () => {
   const { Dragger } = Upload;
   const { Text } = Typography;
   const navigate = useNavigate();
+  const [loader, setLoader] = useState(true);
 
   const handleDownload = async (fileKey) => {
     try {
@@ -284,6 +285,7 @@ const Course = () => {
         .then(data => {
           dispatch({ type: 'RESET_FILES' });
           dispatch({ type: 'SET_FILES', payload: data });
+          setLoader(false);
         })
         .catch(error => console.error('Error fetching files:', error));
     }, [dispatch]);
@@ -362,7 +364,7 @@ const Course = () => {
             filters={filters}
             type = 'FILES'
           />
-          <Table locale={locale} columns={columns} dataSource={[...state.files]} rowKey={"id"}/>  
+          <Table loading={loader} locale={locale} columns={columns} dataSource={[...state.files]} rowKey={"id"}/>  
           <Modal  
             title="File Rating" 
             open={isModalOpen} 
