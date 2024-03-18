@@ -23,16 +23,16 @@ const SignUp = () => {
 
   useEffect(() => {
     if (email) {
-      checkEmailDomain(email);
+      checkEmailDomain(email); // Checks if the given email domain matches the required domains, this works for client-side sign up operation
     }
   }, [email]);
 
-
+  // User is signed in, redirect them to /greeting 
   if (authStatus === AuthStatus.SignedIn) {
-    // User is signed in, redirect them to /greeting
-    return <Navigate to="/courses" replace />;
+    return <Navigate to="/greeting" replace />;
   }
 
+  // Requests user sign up from the server
   const handleFinish = async (values) => {
     fetch('api/users/auth/signup', {
       method: 'POST',
@@ -45,7 +45,7 @@ const SignUp = () => {
       if (!response.ok) {
         throw response; 
       }
-      navigate('/verify-account', { state: { email: email} });
+      navigate('/verify-account', { state: { email: email} }); // After a successful sign up, the user is still not verified, so we navigate them to the verification page
     })
     .then(data => {
       console.log('Sign-up successful:', data);
@@ -164,18 +164,11 @@ const SignUp = () => {
               className='passcheck'
           />
         )}
-        
-
         <Form.Item>
           <Button type="primary" htmlType="submit">
             Register
           </Button>
         </Form.Item>
-
-        
-          
-        
-
       </Form>
       
       <Button type="link" className='have-acc-btn' onClick={() => navigate('/signin')}>

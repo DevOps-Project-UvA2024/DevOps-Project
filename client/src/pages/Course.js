@@ -12,11 +12,12 @@ const Course = () => {
   const navigate = useNavigate();
   const [loader, setLoader] = useState(true);
 
+  // Requests url to download from the server
   const handleDownload = async (fileKey) => {
     try {
 
         // Call your backend to get the signed URL for download
-        let fileKeySplit = fileKey.split("/");
+        let fileKeySplit = fileKey.split("/"); // Splits the file key into the three requested parts, in order to use them as parameters
         const response = await fetch(`/api/files/download/${fileKeySplit[0]}/${fileKeySplit[1]}/${fileKeySplit[2]}`, {
             method: 'GET',
             credentials: 'include'
@@ -41,6 +42,7 @@ const Course = () => {
     }
   };
 
+  // Requests upload to the server
   const handleUpload = async () => {
     const formData = new FormData();
     
@@ -57,7 +59,7 @@ const Course = () => {
         body: formData
       });
       const data = await response.json();
-      dispatch({ type: 'RESET_FILES' });
+      dispatch({ type: 'RESET_FILES' }); // Resets file to allow re-rendering of the table
       fetchFiles(course_id);
       message.success(data.message);
       return data;
@@ -85,11 +87,11 @@ const Course = () => {
     },
   };
 
-    // Handle changes in file visibility
+    // If a file is toggled from disabled to enabled or vice versa, communicate with the server, and re-render files' table
     const onChange = async (checked, fileId) => {
       try {
         const response = await fetch(`/api/files/disabling/${fileId}`, {
-          method: 'POST', // or PATCH depending on how your API is set up
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -101,10 +103,7 @@ const Course = () => {
         }
     
         await response.json();
-        message.success(`Status updated for file ID: ${fileId}`);
-    
-        // Dispatch an action to update your front-end state, if necessary
-        // For example, you might want to refetch the files list or update a specific item
+        message.success(`Status updated for file ID: ${fileId}`);    
         fetchFiles(course_id);
     
       } catch (error) {
@@ -149,6 +148,7 @@ const Course = () => {
       setIsModalOpen(true);
     };
 
+    // Requests modification of rating from the server
     const handleOk = async () => {
       try {
         const response = await fetch(`/api/files/rating/${modalFileId}`, {
@@ -274,6 +274,7 @@ const Course = () => {
     const urlparams = urlPath.split('/'); 
     const course_id = urlparams.pop() || 'default'; 
 
+    // Requests files from the server depending on the course_id
     const fetchFiles = useCallback((course_id) => {
       fetch(`/api/files/${course_id}`,{
           method: 'POST',
@@ -321,7 +322,6 @@ const Course = () => {
 
     const goToCourseAnalytics = () => {
       navigate(`/courses/${course_id}/course-analytics`);
-
     };
     
     return (
@@ -342,11 +342,9 @@ const Course = () => {
                     type="primary" 
                     onClick={goToCourseAnalytics} 
                     icon ={<BarChartOutlined />}>
-                    
                   </Button> 
                 </Col>
               </Row>
- 
             </div> 
              
             <Modal title="Upload" open={isUploadModalOpen} onOk={handleUploadOk} onCancel={handleUploadCancel}>
@@ -376,7 +374,6 @@ const Course = () => {
               <Rate allowHalf onChange={(value) => setModalRating(value)} value={modalRating} />
             </div>
           </Modal> 
-
         </div>  
       </div>
     );

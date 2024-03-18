@@ -17,10 +17,12 @@ const SignIn = () => {
 
   const { authStatus } = useAuth();
 
+  // If user is signed in, then navigate them to the greeting page, else continue to the sign in page
   if (authStatus === AuthStatus.SignedIn) {
     return <Navigate to="/greeting" replace />;
   }
 
+  // Requests login from the server
   const handleFinish = async (values) => {
 
     fetch('/api/users/auth/signin', {
@@ -38,7 +40,7 @@ const SignIn = () => {
     })
     .then(data => {
       console.log('Sign-in successful:', data);
-      window.location.reload(); 
+      window.location.reload(); // Reloads the page, consequently when the user is logged in the page will redirect to /greeting
     })
     .catch(async (errorResponse) => {
       const error = await errorResponse.json(); 
@@ -51,8 +53,9 @@ const SignIn = () => {
     console.log('Failed:', errorInfo);
   };
 
+  // Simple navigation to sign up page
   const redirectToSignUp = () => {
-    navigate('/signup'); // Adjust the path as needed
+    navigate('/signup');
   };
 
   return (
@@ -89,8 +92,6 @@ const SignIn = () => {
         layout="vertical"
         className='form'
       >
-        
-
         <Form.Item
           label="Email"
           name="username"
@@ -119,8 +120,6 @@ const SignIn = () => {
       </Form>
 
       <div className='verificationButtons'> 
-
-
         <Button type="link" onClick={() => navigate("/verify-account")}>
           You haven't been verified yet?
         </Button>
@@ -129,8 +128,6 @@ const SignIn = () => {
           Don't have an account yet? Sign Up
         </Button>
       </div>
-      
-
     </div>
     </div>
   );

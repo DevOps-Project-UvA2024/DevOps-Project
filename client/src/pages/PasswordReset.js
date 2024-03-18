@@ -32,6 +32,7 @@ const PasswordReset = () => {
   const [showVerification, setShowVerification] = useState(false);
   const [email, setEmail] = useState('');
 
+  // Requests reset password email for user from server
   const sendResetEmail = () => {
     // API call to request a password reset email
     fetch('/api/users/auth/reset-password', {
@@ -51,6 +52,7 @@ const PasswordReset = () => {
     });
   };
 
+  // Confirms update of password from the server
   const handleFinish = async (values) => {
     // API call to change the password
     fetch('/api/users/auth/confirm-reset-password', {
@@ -62,7 +64,7 @@ const PasswordReset = () => {
       if (!response.ok) {
         throw response;
       }
-      navigate('/signin', { state: { successMessage: 'Password changed successfully. Please sign in with your new password.' } });
+      navigate('/signin', { state: { successMessage: 'Password changed successfully. Please sign in with your new password.' } }); // If the password was changed successfully, navigate the user back to sign in page
     })
     .catch(async (errorResponse) => {
       const error = await errorResponse.json();
@@ -96,6 +98,7 @@ const PasswordReset = () => {
         >
             <Input onChange={(e) => setEmail(e.target.value)} />
         </Form.Item>
+          {/* After user has submitted the email to initiate password change, allow the user to apply the code and new password */}
           {showVerification && (
             <>
               <Form.Item

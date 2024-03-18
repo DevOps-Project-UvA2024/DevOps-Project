@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useEffect, useState, useMemo } from "react";
-import { AmIAuthenticated } from "./AmIAuthenticated"; // Adjust import path as needed
+import { AmIAuthenticated } from "./AmIAuthenticated";
 import PropTypes from 'prop-types'; 
 
-// Constants to replace the AuthStatus enum
+// Authentication status indicators
 const AuthStatus = {
   Loading: 'Loading',
   SignedIn: 'SignedIn',
@@ -10,40 +10,40 @@ const AuthStatus = {
 };
 
 const AuthContext = createContext({
-  authStatus: AuthStatus.Loading,
-  signIn: () => {},
-  signOut: () => {},
+  authStatus: AuthStatus.Loading, // Initial loading state
+  signIn: () => {}, // Placeholder for signIn function
+  signOut: () => {}, // Placeholder for signOut function
 });
 
-// Define the useAuth hook here
+// Custom hook to use the auth context
 export const useAuth = () => useContext(AuthContext);
 
 const AuthProvider = ({ children }) => {
   const [authStatus, setAuthStatus] = useState(AuthStatus.Loading);
 
+  // Check authentication status on component mount
   useEffect(() => {
     AmIAuthenticated()
-      .then(isAuthenticated => {
-        setAuthStatus(isAuthenticated ? AuthStatus.SignedIn : AuthStatus.SignedOut);
-      })
+      .then(isAuthenticated => setAuthStatus(isAuthenticated ? AuthStatus.SignedIn : AuthStatus.SignedOut))
       .catch(() => setAuthStatus(AuthStatus.SignedOut));
   }, []);
 
+  // Sign-in logic
   function signIn() {
-    // Your signIn logic
     setAuthStatus(AuthStatus.SignedIn);
   }
 
+  // Sign-out logic
   function signOut() {
-    // Your signOut logic
     setAuthStatus(AuthStatus.SignedOut);
   }
 
+  // Memoize context value to avoid unnecessary re-renders
   const value = useMemo(() => ({
     authStatus,
     signIn,
     signOut,
-  }), [authStatus, signIn, signOut]);
+  }), [authStatus]);
 
   return (
     <AuthContext.Provider value={value}>
@@ -52,26 +52,21 @@ const AuthProvider = ({ children }) => {
   );
 };
 
+// Component to render content only when the user is signed in
 const AuthIsSignedIn = ({ children }) => {
   const { authStatus } = useAuth();
   return <>{authStatus === AuthStatus.SignedIn ? children : null}</>;
 };
 
+// Component to render content only when the user is not signed in
 const AuthIsNotSignedIn = ({ children }) => {
   const { authStatus } = useAuth();
   return <>{authStatus === AuthStatus.SignedOut ? children : null}</>;
 };
 
-AuthIsSignedIn.propTypes = {
-  children: PropTypes.node
-};
-
-AuthIsNotSignedIn.propTypes = {
-  children: PropTypes.node
-};
-
-AuthProvider.propTypes = {
-  children: PropTypes.node
-};
+// PropTypes for validation
+AuthIsSignedIn.propTypes = { children: PropTypes.node };
+AuthIsNotSignedIn.propTypes = { children: PropTypes.node };
+AuthProvider.propTypes = { children: PropTypes.node };
 
 export { AuthProvider, AuthStatus, AuthIsSignedIn, AuthIsNotSignedIn };

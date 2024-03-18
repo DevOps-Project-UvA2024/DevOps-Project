@@ -13,10 +13,12 @@ const Subscriptions = () => {
   const { state, dispatch } = useContext(StoreContext);
   const [loader, setLoader] = useState(true);
 
+  // Text to display when no subscriptions are found
   let locale = {
     emptyText: 'There are no subscriptions available yet!',
   };
 
+  // Toggles subscription and post update to server
   const toggleSubscribeCourse = async (active, courseId) => {
     try {
       const response = await fetch('/api/subscriptions/toggle-subscription', {
@@ -37,7 +39,7 @@ const Subscriptions = () => {
     }
   }
 
-
+  // Table columns
   const columns = [
     {
       title: 'Name',
@@ -70,6 +72,7 @@ const Subscriptions = () => {
     }  
   ];
 
+  // Requests subscriptions for the logged user from the server
   const fetchSubscriptions = useCallback(() => {
     fetch('/api/subscriptions', {
       method: 'POST',
@@ -79,8 +82,8 @@ const Subscriptions = () => {
     })
     .then(response => response.json())
     .then(data => {
-        dispatch({ type: 'RESET_SUBSCRIPTIONS'});
-        dispatch({ type: 'SET_SUBSCRIPTIONS', payload: data });
+        dispatch({ type: 'RESET_SUBSCRIPTIONS'}); // Calls store to reset subscriptions
+        dispatch({ type: 'SET_SUBSCRIPTIONS', payload: data }); // Calls store to set subscriptions anew
         setLoader(false);
     })
     .catch(error => console.error('Error fetching subscriptions:', error));
@@ -90,6 +93,7 @@ const Subscriptions = () => {
     fetchSubscriptions();
   }, [fetchSubscriptions]);
 
+  // Filters for filter bar
   const filters = [
     <Form.Item key="name" name="name" >
       <Input placeholder="Name" prefix={<SearchOutlined />}/>

@@ -25,6 +25,7 @@ const Courses = () => {
     emptyText: 'There are no courses available yet!',
   };
 
+  // Requests change of subscription from the server
   const toggleSubscribeCourse = async (active, courseId) => {
     try {
       const response = await fetch('/api/subscriptions/toggle-subscription', {
@@ -45,6 +46,7 @@ const Courses = () => {
     }
   }
 
+  // Adds course from the servers 
   const handleSubmit = async (values) => {
     try {
       const response = await fetch('api/admin/courses/add', {
@@ -57,7 +59,7 @@ const Courses = () => {
       const result = await response.json();
       if (!response.ok) throw new Error('Error creating course');
       form.resetFields();
-      dispatch({ type: 'RESET_COURSES'});
+      dispatch({ type: 'RESET_COURSES'}); // Resets courses array in store to allow re-rendering of the table
       fetchCourses();
       message.success(`Successfully added course category ${result.message[0].name}`);
     } catch (error) {
@@ -101,9 +103,10 @@ const Courses = () => {
     }
   ];
 
+  // Requests courses from the server with the applied filters
   const fetchCourses = useCallback(() => {
     fetch('/api/courses', {
-      method: 'POST',
+      method: 'POST',  // We use post to pass the filters as body in the request
       headers: {
         'Content-Type': 'application/json',
       }
@@ -121,6 +124,7 @@ const Courses = () => {
     fetchCourses();
   }, [fetchCourses]);
 
+  // Custom modal footer
   const customFooter = [
     <Button key="back" onClick={handleCancel}>
       Cancel

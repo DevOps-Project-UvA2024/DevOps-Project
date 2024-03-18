@@ -34,13 +34,13 @@ const CodeVerification = () => {
     const [form] = Form.useForm();
 
     useEffect(() => {
-      
       form.setFieldsValue({
-        email: location.state?.email
+        email: location.state?.email // If the user was navigated after signup, keep their email as input to avoid retyping
       });
   
     }, [form, location.state?.email]);
     
+    // Request user account verification from server
     const onFinish = async (values) => {
       try {
         const response = await fetch('api/users/auth/verify', {
@@ -51,13 +51,14 @@ const CodeVerification = () => {
           body: JSON.stringify(values),
         });
         if (!response.ok) throw new Error('Code verification failed');
-        navigate('/signin', { state: { successMessage: 'Verification successful. Please sign in.' } });
+        navigate('/signin', { state: { successMessage: 'Verification successful. Please sign in.' } }); // If the user is verified, navigate them back to sign in page
       } catch (error) {
         console.error(error);
         setErrorMessage(error.message);
       }
     };
 
+    // Request reset verification email process from server
     const resetVerification = async () => {
       const email = form.getFieldValue('email');
       try {
@@ -69,7 +70,7 @@ const CodeVerification = () => {
           body: JSON.stringify({email: email}),
         });
         if (!response.ok) throw new Error('Error while resending verification');
-        message.success('Verification email resent!');      
+        message.success('Verification email resent!'); // The user should receive an email shortly after this message
       } catch (error) {
         console.error(error);
         message.error(error.message);

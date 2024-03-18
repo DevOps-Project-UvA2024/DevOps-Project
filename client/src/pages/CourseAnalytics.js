@@ -17,6 +17,7 @@ const CourseAnalytics = () => {
     const [loadingTopUploaders, setLoadingTopUploaders] = useState(true);
     const [loadingTopFiles, setLoadingTopFiles] = useState(true); 
 
+    // Requests top uploaders from the server
     const fetchTopUploaders = useCallback(() => {
         fetch(`/api/courses/${courseid}/course-analytics/top-uploaders`, {
             method: 'GET',
@@ -35,6 +36,7 @@ const CourseAnalytics = () => {
         .catch(error => console.error('Error fetching files:', error));
     }, [courseid]);
 
+    // Requests top files from the server
     const fetchTopFiles = useCallback(() => {
       fetch(`/api/courses/${courseid}/course-analytics/top-files`, {
           method: 'GET',
@@ -49,6 +51,7 @@ const CourseAnalytics = () => {
       .catch(error => console.error('Error fetching files:', error));
     }, [courseid]);
 
+    // Requests overall subscriptions, contributors, contributions from 7 days and activity status of course from the server
     const fetchMainCourseAnalytics = useCallback(() => {
         fetch(`/api/courses/${courseid}/course-analytics/main-course-analytics`, {
             method: 'GET',
@@ -67,6 +70,7 @@ const CourseAnalytics = () => {
         fetchMainCourseAnalytics();
     }, [fetchTopUploaders, fetchTopFiles, fetchMainCourseAnalytics]);
 
+    // Maps prizes to indexes for top uploaders
     const getPrizeImage = (index) => {
         switch (index) {
             case 0: return firstPrizeImage;
@@ -76,10 +80,8 @@ const CourseAnalytics = () => {
         }
     };
 
-    console.log()
+    // If the status of the course is active then add a fire image, if not an ice image
     const imageSrc = mainCourseAnalytics.contributionsPastWeek ? fireImage : iceImage;
-
-
 
     return (
         <div className='course-analytics'>
