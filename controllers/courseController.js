@@ -1,6 +1,14 @@
 const db = require('../models/index.js');
 const moment = require('moment');
 
+/**
+ * Fetches all courses based on search parameters and filters them by user subscription.
+ * 
+ * @param {Object} searchParameters - Criteria to filter courses (e.g., name, department).
+ * @param {number} userId - The ID of the user to filter subscribed courses.
+ * @returns {Promise<Array>} A promise that resolves to an array of all matching courses.
+ * @throws {Error} Throws an error if fetching courses fails.
+ */
 const fetchAllCourses = async (searchParameters, userId) => {
   
   Object.keys(searchParameters).forEach(key => {
@@ -26,6 +34,13 @@ const fetchAllCourses = async (searchParameters, userId) => {
   }
 };
 
+/**
+ * Adds a new course if it does not exist in the database.
+ * 
+ * @param {Object} data - Course data including name, description, and department.
+ * @returns {Promise<Object>} A promise that resolves to the result of the findOrCreate operation.
+ * @throws {Error} Throws an error if adding the course fails.
+ */
 const addCourse = async (data) => {
   try {
       const result = await db.Course.findOrCreate({
@@ -43,6 +58,13 @@ const addCourse = async (data) => {
   }
 }
 
+/**
+ * Retrieves the top 5 uploaders for a given course based on the file count.
+ * 
+ * @param {Object} req - Express request object, containing the course ID as a parameter.
+ * @param {Object} res - Express response object, used to send the top uploaders data.
+ * @throws {Error} Throws an error if fetching top uploaders fails.
+ */
 const getTopUploaders = async (req,res) =>{
   try {
     const { courseid } = req.params;   
@@ -67,6 +89,13 @@ const getTopUploaders = async (req,res) =>{
   }
 }
 
+/**
+ * Retrieves the top 5 rated files for a given course based on votes.
+ * 
+ * @param {Object} req - Express request object, containing the course ID as a parameter.
+ * @param {Object} res - Express response object, used to send the top files data.
+ * @throws {Error} Throws an error if fetching top-rated files fails.
+ */
 const getTopFiles = async (req,res) =>{
   try {
     const { courseid } = req.params;   
@@ -99,6 +128,14 @@ const getTopFiles = async (req,res) =>{
   }
 }
 
+/**
+ * Provides analytics for a given course, including the number of contributors, subscribers,
+ * and contributions made in the past week, along with an activity status.
+ * 
+ * @param {Object} req - Express request object, containing the course ID as a parameter.
+ * @param {Object} res - Express response object, used to send course analytics data.
+ * @throws {Error} Throws an error if fetching course analytics fails.
+ */
 const getCourseAnalytics = async (req,res) =>{
   try {
     const { courseid } = req.params;   

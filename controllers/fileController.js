@@ -1,6 +1,15 @@
 const db = require('../models/index.js');
 const s3 = require('../amazon/s3.js');
 
+/**
+ * Fetches course files based on provided search parameters and the role of the user.
+ * 
+ * @param {number} role - The role ID of the user (e.g., 2 for admin).
+ * @param {number} course_id - The ID of the course to fetch files from.
+ * @param {Object} inputParameters - Additional search parameters for filtering files.
+ * @returns {Promise<Array>} A promise that resolves to an array of course files matching the search criteria.
+ * @throws {Error} Throws an error if fetching files fails.
+ */
 const fetchCoursesFiles = async (role, course_id, inputParameters) => {
 
     let searchParameters = { course_id: course_id };
@@ -56,6 +65,14 @@ const fetchCoursesFiles = async (role, course_id, inputParameters) => {
     }
   };
 
+/**
+ * Fetches the rating a logged-in user has given to a specific file.
+ * 
+ * @param {number} fileId - The ID of the file to fetch the rating for.
+ * @param {number} userId - The ID of the user whose rating is to be fetched.
+ * @returns {Promise<Object|null>} A promise that resolves to the user's rating for the file or null if not rated.
+ * @throws {Error} Throws an error if fetching the rating fails.
+ */
 const fetchLoggedUserRating = async (fileId, userId) => {
   try {
     const userRating = await db.Voting.findOne({
@@ -73,6 +90,15 @@ const fetchLoggedUserRating = async (fileId, userId) => {
   }
 }
 
+/**
+ * Allows a logged-in user to rate a file, updating the rating if it already exists or creating a new one otherwise.
+ * 
+ * @param {number} fileId - The ID of the file to be rated.
+ * @param {number} rating - The rating value.
+ * @param {number} userId - The ID of the user rating the file.
+ * @returns {Promise<Object>} A promise that resolves to the outcome of the rating operation.
+ * @throws {Error} Throws an error if the rating operation fails.
+ */
 const rateFileByLoggedUser = async (fileId, rating, userId) => {
   try {
     const userRating = await db.Voting.findOne({
@@ -102,6 +128,14 @@ const rateFileByLoggedUser = async (fileId, rating, userId) => {
   }
 }
 
+/**
+ * Generates a signed URL for accessing a file stored in an AWS S3 bucket.
+ * 
+ * @param {string} bucket - The name of the S3 bucket.
+ * @param {string} fileKey - The key of the file in the bucket.
+ * @returns {Promise<string>} A promise that resolves to a signed URL for the file.
+ * @throws {Error} Throws an error if generating the signed URL fails.
+ */
 const getSignedUrl = (bucket, fileKey) => {
   const params = {
     Bucket: bucket,
@@ -120,6 +154,13 @@ const getSignedUrl = (bucket, fileKey) => {
   });
 };
 
+/**
+ * Handles the upload of files to AWS S3 and stores their metadata in a database.
+ * 
+ * @param {Object} req - The request object, containing the file(s) to upload and metadata.
+ * @param {Object} res - The response object, used to send back the upload result.
+ * @throws {Error} Throws an error if file upload or metadata storage fails.
+ */
 const uploadFileAndStoreMetadata = async (req, res) => {
   const { course_id, user_id, username } = req.body;
 
