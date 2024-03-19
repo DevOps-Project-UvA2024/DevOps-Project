@@ -1,3 +1,9 @@
 /node_modules
 .env
 /coverage
+
+/Terraform/terraform.exe
+/Terraform/.terraform
+/Terraform/*.tfstate
+/Terraform/*.tfstate.*
+/Terraform/.terraform.lock.hcl
