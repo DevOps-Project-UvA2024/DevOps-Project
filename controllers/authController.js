@@ -32,6 +32,7 @@ const signUp = async (email, password, name) => {
         return data; // Contains user details and metadata
     } catch (error) {
         console.log(error);
+        throw error
     }
 };
 
@@ -58,7 +59,7 @@ const signIn = async (username, password) => {
         return data.AuthenticationResult; // Contains tokens and the user returned from the mysql
     } catch (error) {
         console.log("Sign in failed:",error);
-        return error;
+        throw error;
     }
 };
 
@@ -83,6 +84,7 @@ const verifyUser = async (email, code) => {
         return data; // Confirmation result
     } catch (error) {
         console.log(error);
+        throw error
     }
 };
 
@@ -102,6 +104,7 @@ const resendConfirmationCode = async (email) => {
         console.log("Confirmation code resent successfully:", response);
     } catch (error) {
         console.error("Error resending confirmation code:", error);
+        throw error
     }
 }
 
@@ -123,6 +126,7 @@ const initiateReset = async (email) => {
       console.log("Password reset initiated:", response);
     } catch (error) {
       console.error("Error initiating password reset:", error);
+      throw error
     }
 };
 

@@ -50,7 +50,10 @@ const CodeVerification = () => {
           },
           body: JSON.stringify(values),
         });
-        if (!response.ok) throw new Error('Code verification failed');
+        if (!response.ok) {
+          const error = await response.json()
+          throw new Error(error.error);
+        }
         navigate('/signin', { state: { successMessage: 'Verification successful. Please sign in.' } }); // If the user is verified, navigate them back to sign in page
       } catch (error) {
         console.error(error);
@@ -69,7 +72,10 @@ const CodeVerification = () => {
           },
           body: JSON.stringify({email: email}),
         });
-        if (!response.ok) throw new Error('Error while resending verification');
+        if (!response.ok) {
+          const error = await response.json()
+          throw new Error(error.error);
+        }
         message.success('Verification email resent!'); // The user should receive an email shortly after this message
       } catch (error) {
         console.error(error);
