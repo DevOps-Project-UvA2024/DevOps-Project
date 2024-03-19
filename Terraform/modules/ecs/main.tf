@@ -170,9 +170,9 @@ resource "aws_appautoscaling_policy" "ecs_service_scale_out_frontend" {
   policy_type        = "TargetTrackingScaling"
 
   target_tracking_scaling_policy_configuration {
-    target_value       = 85
-    scale_in_cooldown  = 300
-    scale_out_cooldown = 300
+    target_value       = 70
+    scale_in_cooldown  = 60
+    scale_out_cooldown = 60
     predefined_metric_specification {
       predefined_metric_type = "ECSServiceAverageCPUUtilization"
     }
@@ -187,9 +187,9 @@ resource "aws_appautoscaling_policy" "ecs_service_scale_out_backend" {
   policy_type        = "TargetTrackingScaling"
 
   target_tracking_scaling_policy_configuration {
-    target_value       = 85
-    scale_in_cooldown  = 300
-    scale_out_cooldown = 300
+    target_value       = 70
+    scale_in_cooldown  = 60
+    scale_out_cooldown = 60
     predefined_metric_specification {
       predefined_metric_type = "ECSServiceAverageCPUUtilization"
     }
