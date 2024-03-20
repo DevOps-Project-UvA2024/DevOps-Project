@@ -7,3 +7,5 @@
 /Terraform/*.tfstate
 /Terraform/*.tfstate.*
 /Terraform/.terraform.lock.hcl
+
+/k6/prometheus.sh

@@ -1,0 +1,80 @@
+- name: Execute k6 load test on workers
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Check if GPG is installed
+      ansible.builtin.shell: |
+        gpg -k
+      ignore_errors: yes
+
+    - name: Import k6 public key
+      ansible.builtin.shell: |
+        sudo gpg --no-default-keyring --keyring /usr/share/keyrings/k6-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
+
+    - name: Add k6 repository
+      ansible.builtin.shell: |
+        echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: Install k6
+      ansible.builtin.apt:
+        name: k6
+        state: present
+
+    - name: Copy k6 script to worker nodes
+      copy:
+        src: loadtest.js
+        dest: /home/ubuntu/loadtest.js
+
+    - name: Run k6 script with Prometheus remote write
+      shell: |
+        export K6_PROMETHEUS_RW_USERNAME='1481527'
+        export K6_PROMETHEUS_RW_PASSWORD=
+        export K6_PROMETHEUS_RW_SERVER_URL='https://prometheus-prod-24-prod-eu-west-2.grafana.net/api/prom/push'
+        k6 run -o experimental-prometheus-rw /home/ubuntu/loadtest.js
+      args:
+        chdir: /home/ubuntu/
+        executable: /bin/bash
+
+# - hosts: worker1
+#   become: yes
+#   tasks:
+#     - name: Run specific scenario on worker1
+#       shell: |
+#         export K6_PROMETHEUS_RW_USERNAME='1481527'
+#         export K6_PROMETHEUS_RW_PASSWORD=
+#         export K6_PROMETHEUS_RW_SERVER_URL='https://your_prometheus_endpoint_here'
+#         k6 run -o experimental-prometheus-rw --env scenario=loginFlow /home/ubuntu/loadtest.js
+#       args:
+#         chdir: /home/ubuntu/
+#         executable: /bin/bash
+
+# - hosts: worker2
+#   become: yes
+#   tasks:
+#     - name: Run specific scenario on worker2
+#       shell: |
+#         export K6_PROMETHEUS_RW_USERNAME='1481527'
+#         export K6_PROMETHEUS_RW_PASSWORD=
+#         export K6_PROMETHEUS_RW_SERVER_URL='https://your_prometheus_endpoint_here'
+#         k6 run -o experimental-prometheus-rw --env scenario=resourceDownloadFlow /home/ubuntu/loadtest.js
+#       args:
+#         chdir: /home/ubuntu/
+#         executable: /bin/bash
+
+# - hosts: worker3
+#   become: yes
+#   tasks:
+#     - name: Run specific scenario on worker3
+#       shell: |
+#         export K6_PROMETHEUS_RW_USERNAME='1481527'
+#         export K6_PROMETHEUS_RW_PASSWORD=
+#         export K6_PROMETHEUS_RW_SERVER_URL='https://your_prometheus_endpoint_here'
+#         k6 run -o experimental-prometheus-rw --env scenario=resourceVoteFlow /home/ubuntu/loadtest.js
+#       args:
+#         chdir: /home/ubuntu/
+#         executable: /bin/bash
