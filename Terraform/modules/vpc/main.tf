@@ -115,14 +115,3 @@ resource "aws_route_table" "eduapp_private_rt" {
     Name = "eduapp_private_rt"
   }
 }
-
-# # Route Table Associations for private subnets
-# resource "aws_route_table_association" "eduapp_private_rta_1" {
-#   subnet_id      = aws_subnet.eduapp_private_subnet_1.id
-#   route_table_id = aws_route_table.eduapp_private_rt.id
-# }
-
-# resource "aws_route_table_association" "eduapp_private_rta_2" {
-#   subnet_id      = aws_subnet.eduapp_private_subnet_2.id
-#   route_table_id = aws_route_table.eduapp_private_rt.id
-# }

@@ -106,7 +106,7 @@ resource "aws_ecs_service" "backend_service" {
   name            = "backend-service"
   cluster         = aws_ecs_cluster.eduapp_cluster.id
   task_definition = aws_ecs_task_definition.backend_task.arn
-  desired_count   = 1
+  desired_count   = 10
   launch_type     = "FARGATE"
 
   network_configuration {
@@ -128,7 +128,7 @@ resource "aws_ecs_service" "frontend_service" {
   name            = "frontend-service"
   cluster         = aws_ecs_cluster.eduapp_cluster.id
   task_definition = aws_ecs_task_definition.frontend_task.arn
-  desired_count   = 1
+  desired_count   = 10
   launch_type     = "FARGATE"
 
   network_configuration {
@@ -147,16 +147,16 @@ resource "aws_ecs_service" "frontend_service" {
 }
 
 resource "aws_appautoscaling_target" "ecs_service_target_frontend" {
-  max_capacity       = 5
-  min_capacity       = 1
+  max_capacity       = 20
+  min_capacity       = 10
   resource_id        = "service/${aws_ecs_cluster.eduapp_cluster.name}/${aws_ecs_service.frontend_service.name}"
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"
 }
 
 resource "aws_appautoscaling_target" "ecs_service_target_backend" {
-  max_capacity       = 5
-  min_capacity       = 1
+  max_capacity       = 20
+  min_capacity       = 10
   resource_id        = "service/${aws_ecs_cluster.eduapp_cluster.name}/${aws_ecs_service.backend_service.name}"
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"
